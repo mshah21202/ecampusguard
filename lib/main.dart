@@ -1,4 +1,5 @@
 import 'package:ecampusguard/features/home/home.dart';
+import 'package:ecampusguard/features/login/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,9 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ecampusguard',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
+
+
+
+
