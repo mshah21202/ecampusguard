@@ -1,0 +1,10 @@
+{
+    "enumUnknownDefaultCase": true,
+    "pubAuthor": "Mohamad Shahin",
+    "pubAuthorEmail": "mohamad.shahin2002@gmail.com",
+    "pubDescription": "An auto-generated client library for eCampusGuard",
+    "pubLibrary": "ecampusguardapi.api",
+    "pubName": "ecampusguardapi",
+    "pubVersion": "1.1.0",
+    "useEnumExtension": true
+}
