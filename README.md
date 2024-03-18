@@ -2,9 +2,33 @@
 
 eCampusGuard is a smart entry system for campus parking.
 
+## Generate using OpenAPI
+
+To (re-)generate the API client library (ecampusguardapi) run the following command:
+
+```sh
+# Make sure you're in the project's root directory
+cd ecampusguard
+
+# Generate files
+# Make sure to increment the version number in the `openapi-config.json` before running the command
+openapi-generator-cli generate -g dart-dio -i <PATH_TO_OPENAPI.JSON> -c openapi-config.json -o <OUTPUT_PATH>
+
+# Navigate to the API client library directory
+cd <OUTPUT_PATH>
+
+# Get dependencies
+flutter pub get
+
+# Build executables
+flutter pub run build_runner build
+
+# Commit and push changes to the github
+```
+
 ## How to add new features
 
-Adding new features with the least amount of effort is a project goal. Therefore we have used tools for ease of adding new features. One of the main tools is called mason. 
+Adding new features with the least amount of effort is a project goal. Therefore we have used tools for ease of adding new features. One of the main tools is called mason.
 
 ### Before you start
 
