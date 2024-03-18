@@ -13,7 +13,9 @@ class LoadingAuthentication extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {}
 
-class FailedAuthentication extends AuthenticationState {}
+class FailedAuthentication extends AuthenticationState {
+  const FailedAuthentication({String? message});
+}
 
 class Unauthenticated extends AuthenticationState {}
 
