@@ -31,7 +31,23 @@ class LoginView extends StatelessWidget {
         ),
         backgroundColor: const Color(0xFF565992),
       ),
-          body:
+          body: Stack(
+            children: [
+            Positioned(
+            left: -150,
+            bottom: -150,
+
+            child: Opacity(
+              opacity: 0.2,
+              child: Image.asset(
+                'assets/images/ecampusLogo.png',
+             /*   fit: BoxFit.cover,*/
+/*                width: screenSize.width * 0.5,
+                height: screenSize.height * 0.5,*/
+              ),
+            ),
+          ),
+
           BlocConsumer<AuthenticationCubit, AuthenticationState>(
               listener: (context, state) {
 
@@ -71,7 +87,7 @@ class LoginView extends StatelessWidget {
                              BoxShadow(
                                color: Colors.black12,
                                blurRadius: 15.0,
-                               offset: Offset(0, 10),
+
                              ),
                            ],
                          ),
@@ -167,6 +183,7 @@ class LoginView extends StatelessWidget {
 
                );
              }),
+   ]),
     );
   }
 }
