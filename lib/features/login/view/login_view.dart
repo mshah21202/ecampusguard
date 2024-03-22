@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../global/theme/cubit/theme_cubit.dart';
 import '../../authentication/cubit/authentication_cubit.dart';
 import '../../home/view/home_view.dart';
 import '../../login/cubit/login_cubit.dart';
+import '../../../global/router/routes.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({
@@ -32,16 +34,19 @@ class LoginView extends StatelessWidget {
           body:
           BlocConsumer<AuthenticationCubit, AuthenticationState>(
               listener: (context, state) {
+
+/*
                 if (state is Authenticated) {
                   // Navigate to the HomeView on successful authentication
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomeView()), // Update this with your HomeView
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HomePage()), // Update this with your HomeView
                   );
                 } else if (state is FailedAuthentication) {
                   // Show an error message on failed authentication
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login Failed:')),
+                    const SnackBar(content: Text('Login Failed:')),
                   );}
+*/
 
            },
              builder: (context, state) {
@@ -111,19 +116,38 @@ class LoginView extends StatelessWidget {
                                const SizedBox(height: 30),
                                ElevatedButton.icon(
                                  onPressed: () {
-                                   final authCubit = BlocProvider.of<AuthenticationCubit>(context);
+/*                                   final authCubit = BlocProvider.of<AuthenticationCubit>(context);
                                    authCubit.login(
                                      username: username.text,
                                      password: password.text,
-                                   );
+                                   );*/
+
                                  },
                                  icon: const Icon(Icons.login),
                                  label: const Text('Login'),
                                  style: ElevatedButton.styleFrom(
                                    foregroundColor: Colors.white,
-                                   backgroundColor: Theme
-                                       .of(context)
-                                       .primaryColor,
+                                   backgroundColor:  const Color(0xFF565992),
+                                   shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(30.0),
+                                   ),
+                                   padding: const EdgeInsets.symmetric(
+                                       horizontal: 30, vertical: 10),
+                                 ),
+                               ),
+                               const SizedBox(height: 30),
+
+                               //testing button
+                               //i still dont know how to deal with routes excuse me
+                               ElevatedButton.icon(
+                                 onPressed: () {
+                                   GoRouter.of(context).go(homeRoute);
+                                 },
+                                 icon: const Icon(Icons.login),
+                                 label: const Text('NEXT'),
+                                 style: ElevatedButton.styleFrom(
+                                   foregroundColor: Colors.white,
+                                   backgroundColor:  const Color(0xFF565992),
                                    shape: RoundedRectangleBorder(
                                      borderRadius: BorderRadius.circular(30.0),
                                    ),

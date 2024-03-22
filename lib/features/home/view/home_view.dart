@@ -14,18 +14,11 @@ class HomeView extends StatelessWidget {
     final cubit = context.read<HomeCubit>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('eCampusGuard'),
+        title: const Text('TEST'),
         backgroundColor: const Color(0xFF504e70),
       ),
-      body: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: const [
-          Card(
 
-      ),
-      SizedBox(height: 16),
-    ]
-      )
+
     );
   }
 }
