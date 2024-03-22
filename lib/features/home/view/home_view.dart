@@ -12,8 +12,20 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
-    return Container(
-      child: null,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('eCampusGuard'),
+        backgroundColor: const Color(0xFF504e70),
+      ),
+      body: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: const [
+          Card(
+
+      ),
+      SizedBox(height: 16),
+    ]
+      )
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../authentication/cubit/authentication_cubit.dart';
 import '../login.dart';
 import 'login_view.dart';
 
@@ -12,9 +14,13 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginCubit(),
-      child: const LoginView(),
+
+    final authCubit = BlocProvider.of<AuthenticationCubit>(context);
+    return Scaffold(
+      body: BlocProvider<AuthenticationCubit>.value(
+        value: authCubit,
+        child: const LoginView(),
+      ),
     );
   }
 }
