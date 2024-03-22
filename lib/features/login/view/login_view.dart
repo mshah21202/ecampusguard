@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../global/theme/cubit/theme_cubit.dart';
 import '../../authentication/cubit/authentication_cubit.dart';
-import '../../home/view/home_view.dart';
 import '../../login/cubit/login_cubit.dart';
 import '../../../global/router/routes.dart';
 
@@ -55,7 +54,7 @@ class LoginView extends StatelessWidget {
                 if (state is Authenticated) {
                   // Navigate to the HomeView on successful authentication
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomePage()), // Update this with your HomeView
+                    MaterialPageRoute(builder: (context) => HomePage()),
                   );
                 } else if (state is FailedAuthentication) {
                   // Show an error message on failed authentication
@@ -95,11 +94,9 @@ class LoginView extends StatelessWidget {
                            child: Column(
                              mainAxisSize: MainAxisSize.min,
                              children: [
-                               // Your logo here
                                Image.asset(
                                  'assets/images/ecampusLogo.png',
                                  width: 100,
-                                 // Set your width and height accordingly
                                  height: 100,
                                ),
                                const SizedBox(height: 20),
