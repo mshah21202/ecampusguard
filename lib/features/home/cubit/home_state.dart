@@ -8,3 +8,14 @@ class HomeState extends Equatable {
 }
 
 class HomeInitial extends HomeState {}
+class ApplicationStatusState extends HomeState {
+  final PermitApplicationStatus applicationStatus;
+
+  const ApplicationStatusState(this.applicationStatus);
+
+  @override
+  List<Object> get props => [applicationStatus];
+}
+
+//status we have
+enum PermitApplicationStatus { valid,withdraw, pending, awaitingPayment, approved, rejected }
