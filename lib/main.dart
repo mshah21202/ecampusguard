@@ -28,6 +28,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthenticationCubit()),
       ],
       child: MaterialApp.router(
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF000055)),
+            useMaterial3: false,
+            inputDecorationTheme: InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              border: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
+          ),
           title: 'ecampusguard',
           debugShowCheckedModeBanner: false,
           routerConfig: ecampusguard_router),
