@@ -39,6 +39,28 @@ class MyApp extends StatelessWidget {
                     BorderSide(color: Theme.of(context).colorScheme.outline),
               ),
             ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(const StadiumBorder()),
+                minimumSize: MaterialStateProperty.all(
+                  const Size(32, 52),
+                ),
+              ),
+            ),
+            filledButtonTheme: FilledButtonThemeData(
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(
+                  const Size(32, 52),
+                ),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(
+                  const Size(32, 52),
+                ),
+              ),
+            ),
           ),
           title: 'ecampusguard',
           debugShowCheckedModeBanner: false,
