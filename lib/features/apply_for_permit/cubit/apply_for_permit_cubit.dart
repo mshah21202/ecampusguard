@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:built_collection/src/list.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
@@ -19,11 +20,14 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     "Mon": false,
     "Tue": false,
     "Wed": false,
-    "Thu": false
+    "Thu": false,
   };
 
-  final attendingDaysController = TextEditingController();
-  final TextEditingController academicYearController = TextEditingController();
+  List<String> get attendingDays => _attendingDays.keys.toList();
+
+  List<String> selectedAttendingDays = [];
+
+  final TextEditingController attendingDaysController = TextEditingController();
 
   final TextEditingController drivingLicenseController =
       TextEditingController();
@@ -31,14 +35,26 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       TextEditingController();
   final TextEditingController selectedCarNationalityController =
       TextEditingController();
+  final TextEditingController studentIdController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController numberOfCompanionsController =
+      TextEditingController();
+  final TextEditingController plateNumberController = TextEditingController();
+  final TextEditingController carMakeController = TextEditingController();
+  final TextEditingController carYearController = TextEditingController();
+  final TextEditingController carModelController = TextEditingController();
+  final TextEditingController carColorController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  Country? selectedPhoneCountry;
+  Country? selectedCarNationality;
+  PermitDto? selectedPermit;
 
   bool acknowledged = false;
   int? academicYear;
-  PlatformFile? _drivingLicenseImgFile;
-  PlatformFile? _carRegistrationImgFile;
-  List<bool> get attendingDays => _attendingDays.values.toList();
-  List<String> get daysNames => _attendingDays.keys.toList();
+  PlatformFile? drivingLicenseImgFile;
+  bool get choosenDrivingLicense => drivingLicenseImgFile != null;
+  PlatformFile? carRegistrationImgFile;
+  bool get choosenCarRegistration => carRegistrationImgFile != null;
   List<String> get academicYears => [
         "First Year",
         "Second Year",
@@ -48,9 +64,6 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       ];
   List<PermitDto>? permits;
   List<Country> countries = [];
-  Country? selectedPhoneCountry;
-  Country? selectedCarNationality;
-  PermitDto? selectedPermit;
 
   void setAcknowledged(bool val) {
     acknowledged = val;
@@ -82,18 +95,18 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
   }
 
   void selectDrivingLicense(PlatformFile file) {
-    _drivingLicenseImgFile = file;
+    drivingLicenseImgFile = file;
     drivingLicenseController.text = file.name;
-    emit(UploadedFile(uploadedFile: _drivingLicenseImgFile));
+    emit(UploadedFile(uploadedFile: drivingLicenseImgFile));
   }
 
   void selectCarRegistration(PlatformFile file) {
-    _carRegistrationImgFile = file;
+    carRegistrationImgFile = file;
     carRegistrationController.text = file.name;
-    emit(UploadedFile(uploadedFile: _carRegistrationImgFile));
+    emit(UploadedFile(uploadedFile: carRegistrationImgFile));
   }
 
-  void setSelectedPhoneCountry(Country country) {
+  void setSelectedPhoneCountry(Country? country) {
     selectedPhoneCountry = country;
     emit(ApplyForPermitUpdated(selectedCountry: selectedPhoneCountry));
   }
@@ -103,24 +116,58 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     emit(ApplyForPermitUpdated(selectedCountry: selectedCarNationality));
   }
 
-  void handleAttendingDays() {
-    _setAttendingDaysText();
+  void onChangedAttendingDay(List<String> items) {
+    selectedAttendingDays = items;
+
+    _attendingDays.updateAll((key, value) => false);
+
+    for (String day in selectedAttendingDays) {
+      _attendingDays[day] = true;
+    }
+
+    emit(ApplyForPermitUpdated(attendingDays: selectedAttendingDays));
   }
 
-  void _setAttendingDaysText() {
-    Map<String, bool> days = Map<String, bool>.from(_attendingDays);
-    days.removeWhere((key, value) => !value);
+  Future<void> onSubmit() async {
+    emit(LoadingApplyForPermitState());
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
 
-    List<String> daysStrings = days.keys.toList();
+    try {
+      var result = await _api
+          .getPermitApplicationApi()
+          .permitApplicationApplyPost(
+              createPermitApplicationDto: CreatePermitApplicationDto((b) {
+        b.academicYear = AcademicYearEnum.values.toList()[academicYear ?? 0];
+        b.attendingDays = ListBuilder(_attendingDays.values);
+        b.licenseImgPath = drivingLicenseImgFile!.name;
+        b.permitId = selectedPermit!.id;
+        b.phoneNumber =
+            "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}";
+        b.siblingsCount = int.parse(numberOfCompanionsController.text);
+        b.vehicle = VehicleDto((b) {
+          b.color = carColorController.text;
+          b.make = carMakeController.text;
+          b.model = carModelController.text;
+          b.nationality = selectedCarNationality!.isoCode;
+          b.plateNumber = plateNumberController.text;
+          b.registrationDocImgPath = drivingLicenseImgFile!.name;
+          b.year = int.parse(carYearController.text);
+        }).toBuilder();
+      }));
 
-    attendingDaysController.text = daysStrings.join(',');
+      if (result.data == null) {
+        return;
+      }
+      emit(LoadedApplyForPermitState(
+          snackBarMessage: result.data!.message.toString()));
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void onChangedAttendingDay(int index) {
-    _attendingDays[_attendingDays.keys.elementAt(index)] =
-        !_attendingDays[_attendingDays.keys.elementAt(index)]!;
-
-    _setAttendingDaysText();
-    emit(ApplyForPermitUpdated(attendingDays: _attendingDays.values.toList()));
+  void disableEditingHandler(String prevStr, TextEditingController controller) {
+    controller.text = prevStr;
   }
 }

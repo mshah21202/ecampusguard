@@ -48,6 +48,9 @@ dependencies:
   multi_dropdown: ^2.1.4
   country_state_city: ^0.1.6
   file_picker: ^8.0.0+1
+  multiselect:
+    git:
+      url: https://github.com/mshah21202/multiselect.git
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +78,7 @@ flutter:
 
   assets:
     - assets/images/ecampusLogo.png
+    - assets/data/phoneNumberData.json
   fonts:
     - family: KumbhSans
       fonts:

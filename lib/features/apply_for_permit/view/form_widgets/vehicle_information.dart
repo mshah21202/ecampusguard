@@ -12,6 +12,7 @@ class VehicleDetailsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<ApplyForPermitCubit>();
     var theme = Theme.of(context);
     return Row(
       children: [
@@ -21,13 +22,22 @@ class VehicleDetailsForm extends StatelessWidget {
             gap: 25,
             children: [
               TextFormField(
+                controller: cubit.plateNumberController,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "This is required";
+                  }
+
+                  return null;
+                },
                 decoration:
                     const InputDecoration(label: Text("Car Number Plate")),
               ),
               BlocBuilder<ApplyForPermitCubit, ApplyForPermitState>(
                   builder: (context, state) {
-                var cubit = context.read<ApplyForPermitCubit>();
+                cubit = context.read<ApplyForPermitCubit>();
                 return DropdownMenu(
+                  // TODO: Change this to dropdownbuttonformfield for validator
                   menuHeight: MediaQuery.of(context).size.height * 0.5,
                   onSelected: (country) {
                     cubit.setSelectedCarNationality(
@@ -36,6 +46,7 @@ class VehicleDetailsForm extends StatelessWidget {
                   expandedInsets: EdgeInsets.zero,
                   label: const Text("Car Nationality"),
                   controller: cubit.selectedCarNationalityController,
+                  enableFilter: true,
                   leadingIcon: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
@@ -75,17 +86,49 @@ class VehicleDetailsForm extends StatelessWidget {
                 );
               }),
               TextFormField(
+                controller: cubit.carMakeController,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "This is required";
+                  }
+
+                  return null;
+                },
                 decoration:
                     const InputDecoration(label: Text("Car Make (Company)")),
               ),
               TextFormField(
+                controller: cubit.carYearController,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "This is required";
+                  }
+
+                  return null;
+                },
                 decoration:
                     const InputDecoration(label: Text("Year of Production")),
               ),
               TextFormField(
+                controller: cubit.carModelController,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "This is required";
+                  }
+
+                  return null;
+                },
                 decoration: const InputDecoration(label: Text("Car Model")),
               ),
               TextFormField(
+                controller: cubit.carColorController,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "This is required";
+                  }
+
+                  return null;
+                },
                 decoration: const InputDecoration(label: Text("Color")),
               ),
               BlocBuilder<ApplyForPermitCubit, ApplyForPermitState>(
@@ -96,21 +139,31 @@ class VehicleDetailsForm extends StatelessWidget {
                     FilePickerResult? result = await FilePickerWeb.platform
                         .pickFiles(type: FileType.image);
                     if (result != null) {
-                      cubit.selectDrivingLicense(result.files.single);
+                      cubit.selectCarRegistration(result.files.single);
                     }
                   },
-                  child: TextFormField(
-                    enabled: false,
-                    controller: cubit.drivingLicenseController,
-                    style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
-                    decoration: InputDecoration(
-                        labelText: "Valid Car Registration",
-                        labelStyle: TextStyle(
-                            color: theme.colorScheme.onSurfaceVariant),
-                        suffixIcon: Icon(
-                          Icons.file_upload,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        )),
+                  child: IgnorePointer(
+                    child: TextFormField(
+                      enabled: true,
+                      controller: cubit.carRegistrationController,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return "This is required";
+                        }
+
+                        return null;
+                      },
+                      style:
+                          TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                      decoration: InputDecoration(
+                          labelText: "Valid Car Registration",
+                          labelStyle: TextStyle(
+                              color: theme.colorScheme.onSurfaceVariant),
+                          suffixIcon: Icon(
+                            Icons.file_upload,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          )),
+                    ),
                   ),
                 );
               }),

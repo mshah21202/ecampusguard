@@ -6,13 +6,15 @@ class ApplyForPermitState extends Equatable {
       this.selectedCountry,
       this.uploadedFile,
       this.selectedPermit,
-      this.acknowledged});
+      this.acknowledged,
+      this.snackBarMessage});
 
-  final List<bool>? attendingDays;
+  final List<String>? attendingDays;
   final Country? selectedCountry;
   final PlatformFile? uploadedFile;
   final PermitDto? selectedPermit;
   final bool? acknowledged;
+  final String? snackBarMessage;
 
   @override
   List<Object> get props => [
@@ -43,7 +45,9 @@ class ApplyForPermitUpdated extends ApplyForPermitState {
 
 class LoadingApplyForPermitState extends ApplyForPermitState {}
 
-class LoadedApplyForPermitState extends ApplyForPermitState {}
+class LoadedApplyForPermitState extends ApplyForPermitState {
+  LoadedApplyForPermitState({super.snackBarMessage});
+}
 
 class UploadedFile extends ApplyForPermitState {
   UploadedFile({super.uploadedFile});
