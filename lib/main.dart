@@ -5,12 +5,13 @@ import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {
   var getIt = GetIt.instance;
-  var api = Ecampusguardapi(basePathOverride: "https://localhost:7163");
+  var api = Ecampusguardapi(
+      basePathOverride:
+          "https://0685fb90-1c5f-44e6-b91e-b7c7d126453b.mock.pstmn.io");
   setPathUrlStrategy();
   getIt.registerSingleton<Ecampusguardapi>(api);
 

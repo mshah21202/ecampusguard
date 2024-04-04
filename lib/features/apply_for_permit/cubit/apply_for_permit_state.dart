@@ -1,13 +1,18 @@
 part of 'apply_for_permit_cubit.dart';
 
 class ApplyForPermitState extends Equatable {
-  const ApplyForPermitState({
-    this.attendingDays,
-    this.selectedCountry,
-  });
+  const ApplyForPermitState(
+      {this.attendingDays,
+      this.selectedCountry,
+      this.uploadedFile,
+      this.selectedPermit,
+      this.acknowledged});
 
   final List<bool>? attendingDays;
   final Country? selectedCountry;
+  final PlatformFile? uploadedFile;
+  final PermitDto? selectedPermit;
+  final bool? acknowledged;
 
   @override
   List<Object> get props => [
@@ -28,13 +33,18 @@ class ApplyForPermitState extends Equatable {
 class ApplyForPermitInitial extends ApplyForPermitState {}
 
 class ApplyForPermitUpdated extends ApplyForPermitState {
-  const ApplyForPermitUpdated({super.attendingDays});
+  const ApplyForPermitUpdated({
+    super.attendingDays,
+    super.selectedCountry,
+    super.selectedPermit,
+    super.acknowledged,
+  });
 }
 
-class LoadingCountriesState extends ApplyForPermitState {}
+class LoadingApplyForPermitState extends ApplyForPermitState {}
 
-class LoadedCountriesState extends ApplyForPermitState {}
+class LoadedApplyForPermitState extends ApplyForPermitState {}
 
-class SelectedCountryState extends ApplyForPermitState {
-  SelectedCountryState({super.selectedCountry});
+class UploadedFile extends ApplyForPermitState {
+  UploadedFile({super.uploadedFile});
 }
