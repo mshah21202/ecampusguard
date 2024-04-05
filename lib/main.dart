@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/authentication/authentication.dart';
 import 'package:ecampusguard/global/router/router.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
+import 'package:ecampusguard/global/theme/cubit/theme_cubit.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,48 +34,55 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthenticationCubit()),
+        BlocProvider(create: (_) => ThemeCubit()),
       ],
-      child: Builder(builder: (context) {
-        return MaterialApp.router(
-            theme: ThemeData(
-              colorScheme:
-                  ColorScheme.fromSeed(seedColor: const Color(0xFF000055)),
-              useMaterial3: false,
-              inputDecorationTheme: InputDecorationTheme(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                border: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.outline),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          var themeCubit = context.read<ThemeCubit>();
+          return MaterialApp.router(
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: const Color(0xFF000055),
+                  brightness:
+                      themeCubit.darkMode ? Brightness.dark : Brightness.light,
                 ),
-              ),
-              outlinedButtonTheme: OutlinedButtonThemeData(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(const StadiumBorder()),
-                  minimumSize: MaterialStateProperty.all(
-                    const Size(32, 52),
+                useMaterial3: false,
+                inputDecorationTheme: InputDecorationTheme(
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline),
+                  ),
+                ),
+                outlinedButtonTheme: OutlinedButtonThemeData(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(const StadiumBorder()),
+                    minimumSize: MaterialStateProperty.all(
+                      const Size(32, 52),
+                    ),
+                  ),
+                ),
+                filledButtonTheme: FilledButtonThemeData(
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all(
+                      const Size(32, 52),
+                    ),
+                  ),
+                ),
+                textButtonTheme: TextButtonThemeData(
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all(
+                      const Size(32, 52),
+                    ),
                   ),
                 ),
               ),
-              filledButtonTheme: FilledButtonThemeData(
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(
-                    const Size(32, 52),
-                  ),
-                ),
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(
-                    const Size(32, 52),
-                  ),
-                ),
-              ),
-            ),
-            title: 'ecampusguard',
-            debugShowCheckedModeBanner: false,
-            routerConfig:
-                appRouter(authCubit: context.read<AuthenticationCubit>()));
-      }),
+              title: 'ecampusguard',
+              debugShowCheckedModeBanner: false,
+              routerConfig:
+                  appRouter(authCubit: context.read<AuthenticationCubit>()));
+        },
+      ),
     );
   }
 }

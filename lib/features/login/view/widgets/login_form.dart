@@ -2,6 +2,7 @@ import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.
 import 'package:ecampusguard/features/login/cubit/login_cubit.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/router/routes.dart';
+import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -28,9 +29,11 @@ class LoginForm extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.colorScheme.background,
                 borderRadius: BorderRadius.circular(8.0),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: theme.colorScheme.brightness == Brightness.light
+                        ? theme.colorScheme.shadow.withOpacity(0.25)
+                        : theme.colorScheme.secondaryContainer.withOpacity(0.5),
                     blurRadius: 15.0,
                   ),
                 ],
@@ -40,8 +43,8 @@ class LoginForm extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(
-                      'assets/images/ecampusLogo.png',
+                    AppLogo(
+                      darkMode: theme.colorScheme.brightness == Brightness.dark,
                       width: 100,
                       height: 100,
                     ),
@@ -117,7 +120,7 @@ class LoginForm extends StatelessWidget {
                           ),
                           FilledButton.tonalIcon(
                             onPressed: () {
-                              GoRouter.of(context).push(registerRoute);
+                              GoRouter.of(context).go(registerRoute);
                             },
                             icon: const Icon(Icons.edit),
                             label: const Text('Register'),

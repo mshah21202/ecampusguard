@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/features/register/cubit/register_cubit.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
+import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -38,8 +39,8 @@ class RegisterForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    'assets/images/ecampusLogo.png',
+                  AppLogo(
+                    darkMode: theme.colorScheme.brightness == Brightness.dark,
                     width: 100,
                     height: 100,
                   ),
