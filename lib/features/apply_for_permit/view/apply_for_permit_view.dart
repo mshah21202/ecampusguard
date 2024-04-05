@@ -1,10 +1,10 @@
-import 'dart:ui';
-
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/permit_information.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/personal_information.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/vehicle_information.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
+import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,19 +60,7 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
                 state is FailedApplyForPermitState) &&
             state.snackBarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.snackBarMessage!,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant),
-              ),
-              elevation: 12,
-              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.symmetric(horizontal: 120, vertical: 25),
-              showCloseIcon: true,
-              closeIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+            appSnackBar(state.snackBarMessage!, context),
           );
         }
       },
@@ -123,27 +111,8 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
             ),
             BlocBuilder<ApplyForPermitCubit, ApplyForPermitState>(
                 builder: (context, state) {
-              return Visibility(
+              return FullScreenLoadingIndicator(
                 visible: state is LoadingApplyForPermitState,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 1.2,
-                    sigmaY: 1.2,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB((255 * 0.50).toInt(), 0, 0, 0),
-                    ),
-                    child: LinearProgressIndicator(
-                      minHeight: 3,
-                      color: Theme.of(context).colorScheme.secondary,
-                      backgroundColor: Theme.of(context).colorScheme.background,
-                    ),
-                  ),
-                ),
               );
             }),
           ],

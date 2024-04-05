@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:built_collection/src/list.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
 import 'package:dio/dio.dart';
@@ -142,28 +141,23 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     }
 
     try {
-      var result =
-          await _api.getPermitApplicationApi().permitApplicationApplyPost(
-              headers: {"x-mock-response-name": "Fail"},
-              createPermitApplicationDto: CreatePermitApplicationDto((b) {
-                b.academicYear =
-                    AcademicYearEnum.values.toList()[academicYear ?? 0];
-                b.attendingDays = ListBuilder(_attendingDays.values);
-                b.licenseImgPath = drivingLicenseImgFile!.name;
-                b.permitId = selectedPermit!.id;
-                b.phoneNumber =
-                    "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}";
-                b.siblingsCount = int.parse(numberOfCompanionsController.text);
-                b.vehicle = VehicleDto((b) {
-                  b.color = carColorController.text;
-                  b.make = carMakeController.text;
-                  b.model = carModelController.text;
-                  b.nationality = selectedCarNationality!.isoCode;
-                  b.plateNumber = plateNumberController.text;
-                  b.registrationDocImgPath = drivingLicenseImgFile!.name;
-                  b.year = int.parse(carYearController.text);
-                }).toBuilder();
-              }));
+      var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
+          createPermitApplicationDto: CreatePermitApplicationDto(
+              academicYear: AcademicYearEnum.values.toList()[academicYear ?? 0],
+              attendingDays: _attendingDays.values.toList(),
+              licenseImgPath: drivingLicenseImgFile!.name,
+              permitId: selectedPermit!.id,
+              phoneNumber:
+                  "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
+              siblingsCount: int.parse(numberOfCompanionsController.text),
+              vehicle: VehicleDto(
+                  color: carColorController.text,
+                  make: carMakeController.text,
+                  model: carModelController.text,
+                  nationality: selectedCarNationality!.isoCode,
+                  plateNumber: plateNumberController.text,
+                  registrationDocImgPath: drivingLicenseImgFile!.name,
+                  year: int.parse(carYearController.text))));
 
       if (result.data == null) {
         emit(FailedApplyForPermitState(snackBarMessage: result.statusMessage));
@@ -178,8 +172,12 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
           snackBarMessage: result.data!.message.toString()));
     } catch (e) {
       if (e is DioException && (e).response != null) {
-        emit(FailedApplyForPermitState(
-            snackBarMessage: ((e).response!.data)["message"].toString()));
+        emit(
+          FailedApplyForPermitState(
+            snackBarMessage: (ResponseDto.fromJson((e).response!.data))
+                .toString(), // TODO: Test this
+          ),
+        );
       }
     }
   }

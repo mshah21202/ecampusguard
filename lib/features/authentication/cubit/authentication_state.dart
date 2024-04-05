@@ -13,8 +13,16 @@ class LoadingAuthentication extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {}
 
-class FailedAuthentication extends AuthenticationState {
-  const FailedAuthentication({String? message});
+class LoginFailedAuthentication extends AuthenticationState {
+  const LoginFailedAuthentication({this.message});
+
+  final String? message;
+}
+
+class RegisterFailedAuthentication extends AuthenticationState {
+  const RegisterFailedAuthentication({this.message});
+
+  final String? message;
 }
 
 class Unauthenticated extends AuthenticationState {}

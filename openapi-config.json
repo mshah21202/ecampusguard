@@ -6,5 +6,6 @@
     "pubLibrary": "ecampusguardapi.api",
     "pubName": "ecampusguardapi",
     "pubVersion": "1.0.1",
+    "serializationLibrary": "json_serializable",
     "useEnumExtension": true
 }

@@ -52,6 +52,8 @@ dependencies:
   multiselect:
     git:
       url: https://github.com/mshah21202/multiselect.git
+  shared_preferences: ^2.2.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:
