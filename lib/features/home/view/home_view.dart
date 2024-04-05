@@ -1,3 +1,4 @@
+import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<HomeCubit>();
+    // final cubit = context.read<HomeCubit>();
     return Scaffold(
       backgroundColor: const Color(0xFFFBF8FF),
       appBar: AppBar(
@@ -20,6 +21,12 @@ class HomeView extends StatelessWidget {
             "TEST",
             style: TextStyle(color: Colors.white),
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: () {
+            context.read<AuthenticationCubit>().logout();
+          },
         ),
         backgroundColor: const Color(0xFF565992),
       ),
@@ -34,10 +41,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
 
-
-
-
-      /*    BlocBuilder<HomeCubit, HomeState>(
+          /*    BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               return Center(
                 child: Column(
