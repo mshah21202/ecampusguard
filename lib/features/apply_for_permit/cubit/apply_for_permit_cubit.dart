@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:built_collection/src/list.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -75,7 +76,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     countries = await getAllCountries();
     selectedPhoneCountry =
         countries.firstWhere((country) => country.isoCode == "JO");
-    emit(LoadedApplyForPermitState());
+    emit(const LoadedApplyForPermitState());
   }
 
   void loadPermits() async {
@@ -86,7 +87,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       permits = result.data?.toList();
     }
 
-    emit(LoadedApplyForPermitState());
+    emit(const LoadedApplyForPermitState());
   }
 
   void selectPermitType(PermitDto permit) {
@@ -128,42 +129,58 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     emit(ApplyForPermitUpdated(attendingDays: selectedAttendingDays));
   }
 
+  void testSnackBar() {
+    emit(const LoadedApplyForPermitState(snackBarMessage: "Test"));
+  }
+
   Future<void> onSubmit() async {
     emit(LoadingApplyForPermitState());
-    if (!formKey.currentState!.validate()) {
+    if (!formKey.currentState!.validate() && !acknowledged) {
+      emit(const FailedApplyForPermitState(
+          snackBarMessage: "Please fill in the required fields"));
       return;
     }
 
     try {
-      var result = await _api
-          .getPermitApplicationApi()
-          .permitApplicationApplyPost(
+      var result =
+          await _api.getPermitApplicationApi().permitApplicationApplyPost(
+              headers: {"x-mock-response-name": "Fail"},
               createPermitApplicationDto: CreatePermitApplicationDto((b) {
-        b.academicYear = AcademicYearEnum.values.toList()[academicYear ?? 0];
-        b.attendingDays = ListBuilder(_attendingDays.values);
-        b.licenseImgPath = drivingLicenseImgFile!.name;
-        b.permitId = selectedPermit!.id;
-        b.phoneNumber =
-            "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}";
-        b.siblingsCount = int.parse(numberOfCompanionsController.text);
-        b.vehicle = VehicleDto((b) {
-          b.color = carColorController.text;
-          b.make = carMakeController.text;
-          b.model = carModelController.text;
-          b.nationality = selectedCarNationality!.isoCode;
-          b.plateNumber = plateNumberController.text;
-          b.registrationDocImgPath = drivingLicenseImgFile!.name;
-          b.year = int.parse(carYearController.text);
-        }).toBuilder();
-      }));
+                b.academicYear =
+                    AcademicYearEnum.values.toList()[academicYear ?? 0];
+                b.attendingDays = ListBuilder(_attendingDays.values);
+                b.licenseImgPath = drivingLicenseImgFile!.name;
+                b.permitId = selectedPermit!.id;
+                b.phoneNumber =
+                    "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}";
+                b.siblingsCount = int.parse(numberOfCompanionsController.text);
+                b.vehicle = VehicleDto((b) {
+                  b.color = carColorController.text;
+                  b.make = carMakeController.text;
+                  b.model = carModelController.text;
+                  b.nationality = selectedCarNationality!.isoCode;
+                  b.plateNumber = plateNumberController.text;
+                  b.registrationDocImgPath = drivingLicenseImgFile!.name;
+                  b.year = int.parse(carYearController.text);
+                }).toBuilder();
+              }));
 
       if (result.data == null) {
+        emit(FailedApplyForPermitState(snackBarMessage: result.statusMessage));
+        return;
+      } else if (result.data!.responseCode == ResponseCodeEnum.Failed) {
+        emit(FailedApplyForPermitState(
+            snackBarMessage: result.data!.message.toString()));
         return;
       }
+
       emit(LoadedApplyForPermitState(
           snackBarMessage: result.data!.message.toString()));
     } catch (e) {
-      print(e);
+      if (e is DioException && (e).response != null) {
+        emit(FailedApplyForPermitState(
+            snackBarMessage: ((e).response!.data)["message"].toString()));
+      }
     }
   }
 

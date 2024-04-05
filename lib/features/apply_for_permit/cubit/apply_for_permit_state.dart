@@ -46,9 +46,13 @@ class ApplyForPermitUpdated extends ApplyForPermitState {
 class LoadingApplyForPermitState extends ApplyForPermitState {}
 
 class LoadedApplyForPermitState extends ApplyForPermitState {
-  LoadedApplyForPermitState({super.snackBarMessage});
+  const LoadedApplyForPermitState({super.snackBarMessage});
+}
+
+class FailedApplyForPermitState extends ApplyForPermitState {
+  const FailedApplyForPermitState({super.snackBarMessage});
 }
 
 class UploadedFile extends ApplyForPermitState {
-  UploadedFile({super.uploadedFile});
+  const UploadedFile({super.uploadedFile});
 }
