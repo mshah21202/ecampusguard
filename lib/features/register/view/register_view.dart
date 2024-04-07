@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/features/register/view/widgets/register_form.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
+import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class RegisterView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: appBar,
-          backgroundColor: theme.colorScheme.background,
+          // backgroundColor: theme.colorScheme.background,
           body: Stack(
             children: [
               Positioned(
@@ -31,8 +32,8 @@ class RegisterView extends StatelessWidget {
                 bottom: -150,
                 child: Opacity(
                   opacity: 0.2,
-                  child: Image.asset(
-                    'assets/images/ecampusLogo.png',
+                  child: AppLogo(
+                    darkMode: theme.colorScheme.brightness == Brightness.dark,
                   ),
                 ),
               ),

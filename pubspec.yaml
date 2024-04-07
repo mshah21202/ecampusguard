@@ -81,6 +81,7 @@ flutter:
 
   assets:
     - assets/images/ecampusLogo.png
+    - assets/images/ecampusLogoWhite.png
     - assets/data/phoneNumberData.json
   fonts:
     - family: KumbhSans
