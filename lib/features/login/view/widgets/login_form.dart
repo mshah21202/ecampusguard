@@ -118,9 +118,9 @@ class LoginForm extends StatelessWidget {
                             icon: const Icon(Icons.login),
                             label: const Text('Login'),
                           ),
-                          FilledButton.tonalIcon(
+                          TextButton.icon(
                             onPressed: () {
-                              GoRouter.of(context).go(registerRoute);
+                              GoRouter.of(context).push(registerRoute);
                             },
                             icon: const Icon(Icons.edit),
                             label: const Text('Register'),

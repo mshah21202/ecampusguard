@@ -36,53 +36,62 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthenticationCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          var themeCubit = context.read<ThemeCubit>();
-          return MaterialApp.router(
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(
-                  seedColor: const Color(0xFF000055),
-                  brightness:
-                      themeCubit.darkMode ? Brightness.dark : Brightness.light,
-                ),
-                useMaterial3: false,
-                inputDecorationTheme: InputDecorationTheme(
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline),
-                  ),
-                ),
-                outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(const StadiumBorder()),
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(32, 52),
+      child: Builder(builder: (context) {
+        return MaterialApp.router(
+            builder: (context, child) {
+              return BlocBuilder<ThemeCubit, ThemeState>(
+                  builder: (context, state) {
+                var themeCubit = context.read<ThemeCubit>();
+                return Theme(
+                    data: ThemeData(
+                      colorScheme: ColorScheme.fromSeed(
+                        seedColor: const Color(0xFF000055),
+                        brightness: themeCubit.darkMode
+                            ? Brightness.dark
+                            : Brightness.light,
+                      ),
+                      useMaterial3: false,
+                      inputDecorationTheme: InputDecorationTheme(
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.outline),
+                        ),
+                      ),
+                      outlinedButtonTheme: OutlinedButtonThemeData(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all(const StadiumBorder()),
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(32, 52),
+                          ),
+                        ),
+                      ),
+                      filledButtonTheme: FilledButtonThemeData(
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(32, 52),
+                          ),
+                        ),
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all(const StadiumBorder()),
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(32, 52),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                filledButtonTheme: FilledButtonThemeData(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(32, 52),
-                    ),
-                  ),
-                ),
-                textButtonTheme: TextButtonThemeData(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(32, 52),
-                    ),
-                  ),
-                ),
-              ),
-              title: 'ecampusguard',
-              debugShowCheckedModeBanner: false,
-              routerConfig:
-                  appRouter(authCubit: context.read<AuthenticationCubit>()));
-        },
-      ),
+                    child: child ?? Center());
+              });
+            },
+            title: 'ecampusguard',
+            debugShowCheckedModeBanner: false,
+            routerConfig:
+                appRouter(authCubit: context.read<AuthenticationCubit>()));
+      }),
     );
   }
 }

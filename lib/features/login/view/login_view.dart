@@ -20,7 +20,7 @@ class LoginView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: appBar,
-          backgroundColor: theme.colorScheme.background,
+          // backgroundColor: theme.colorScheme.background,
           body: Stack(
             children: [
               Positioned(

@@ -27,9 +27,11 @@ class RegisterForm extends StatelessWidget {
             decoration: BoxDecoration(
               color: theme.colorScheme.background,
               borderRadius: BorderRadius.circular(8.0),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: Colors.black12,
+                  color: theme.colorScheme.brightness == Brightness.light
+                      ? theme.colorScheme.shadow.withOpacity(0.25)
+                      : theme.colorScheme.secondaryContainer.withOpacity(0.5),
                   blurRadius: 15.0,
                 ),
               ],
@@ -128,7 +130,7 @@ class RegisterForm extends StatelessWidget {
                           icon: const Icon(Icons.edit),
                           label: const Text('Register'),
                         ),
-                        FilledButton.tonalIcon(
+                        TextButton.icon(
                           onPressed: () {
                             GoRouter.of(context).pop();
                           },
