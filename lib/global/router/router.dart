@@ -53,7 +53,7 @@ GoRouter appRouter({
         }
 
         if (loggingIn) {
-          return homeRoute;
+          return applyForPermitRoute;
         }
         return null;
       },
