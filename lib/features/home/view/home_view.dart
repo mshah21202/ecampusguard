@@ -15,7 +15,10 @@ import 'package:flutter/cupertino.dart';
     Widget build(BuildContext context) {
       final theme = Theme.of(context);
       final cubit = context.read<HomeCubit>();
+      final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
       return Scaffold(
+        key: scaffoldKey,
+
         backgroundColor:theme.colorScheme.background,
         appBar: AppBar(
           title: const Center(
@@ -29,7 +32,7 @@ import 'package:flutter/cupertino.dart';
             icon: const Icon(Icons.menu),
             color:theme.colorScheme.onPrimary,
             onPressed: () {
-              // do smth
+              scaffoldKey.currentState?.openDrawer();
             },
           ),
           actions: [
@@ -42,13 +45,71 @@ import 'package:flutter/cupertino.dart';
             ),
           ],
         ),
-        body:
 
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                ),
+                child: Text(
+                  'eCampusGuard',
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimary,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Home'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.badge),
+                title: const Text('Permit'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.apps),
+                title: const Text('Applications'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('My Profile'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+
+        body:
         Stack(
 
           children: [
-
-
             BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
                 if (state is HomeInitial) {
@@ -162,7 +223,6 @@ import 'package:flutter/cupertino.dart';
 
   Widget _buildPreviousPermitsList(BuildContext context,List<dynamic> permits) {
     final theme = Theme.of(context);
-
     //Student has no previous permit
     if (permits.isEmpty) {
 
