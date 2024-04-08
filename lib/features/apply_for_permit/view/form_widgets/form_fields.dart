@@ -23,6 +23,7 @@ class FormFields extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(20),
+        color: theme.colorScheme.background,
       ),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
