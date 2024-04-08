@@ -8,11 +8,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 part 'authentication_state.dart';
 
+enum Role {
+  user,
+  admin,
+  gateStaff,
+}
+
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  AuthenticationCubit() : super(AuthenticationInitial());
+  AuthenticationCubit() : super(AuthenticationInitial()) {
+    loadTokensFromPrefs();
+  }
 
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
   final SharedPreferences _prefs = GetIt.instance.get<SharedPreferences>();
+  Role? role;
 
   void login({required String username, required String password}) async {
     emit(LoadingAuthentication());
@@ -103,7 +112,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   ///   - [AuthenticatedState] if token is valid.
   ///   - [UnauthenticatedState] if token is not valid (expired, corrupt, etc).
   ///   or if token was not found in shared preferences.
-  Future<bool> loadTokensFromPrefs() async {
+  bool loadTokensFromPrefs() {
     emit(LoadingAuthentication());
     String? token = _prefs.getString(USER_TOKEN_KEY);
 
@@ -137,9 +146,24 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (token != null && token != '') {
       _prefs.setString(USER_TOKEN_KEY, token);
 
+      var roleToken = JwtDecoder.decode(token)["role"];
+
+      switch (roleToken as String) {
+        case "Admin":
+          role = Role.admin;
+          break;
+        case "GateStaff":
+          role = Role.gateStaff;
+          break;
+        default:
+          role = Role.user;
+          break;
+      }
+
       _api.setBearerAuth('Bearer', token);
     } else {
       _prefs.remove(USER_TOKEN_KEY);
+      role = null;
 
       (_api.dio.interceptors
                   .firstWhere((element) => element is BearerAuthInterceptor)
