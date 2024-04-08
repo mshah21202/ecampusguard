@@ -27,6 +27,7 @@ class FormFields extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             title,
@@ -61,7 +62,7 @@ class CustomGridView extends StatelessWidget {
     super.key,
     required this.gap,
     required this.children,
-    required this.singleColumn,
+    this.singleColumn = false,
   });
 
   final double gap;
@@ -83,11 +84,29 @@ class CustomGridView extends StatelessWidget {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(child: children[index]),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SizedBox(
+                      width: constraints.maxWidth,
+                      child: children[index],
+                    );
+                  },
+                ),
+              ),
               SizedBox(
                 width: gap,
               ),
-              Expanded(child: children[index + 1]),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SizedBox(
+                      width: constraints.maxWidth,
+                      child: children[index + 1],
+                    );
+                  },
+                ),
+              ),
             ],
           );
         } else {
@@ -96,7 +115,11 @@ class CustomGridView extends StatelessWidget {
       },
       separatorBuilder: (BuildContext context, int index) {
         return SizedBox(
-          height: (index % 2 != 0 && index != 0) ? gap : 0,
+          height: (singleColumn
+              ? gap
+              : (index % 2 != 0 && index != 0)
+                  ? gap
+                  : 0),
         );
       },
     );

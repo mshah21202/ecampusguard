@@ -1,9 +1,12 @@
+import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/acknowledgement.dart';
+import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/permit_information.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/personal_information.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/vehicle_information.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,13 @@ class ApplyForPermitView extends StatefulWidget {
 }
 
 class _ApplyForPermitViewState extends State<ApplyForPermitView> {
+  final List<Widget> formFields = [
+    PersonalDetailsForm(),
+    const VehicleDetailsForm(),
+    const PermitInformationForm(),
+    const Acknowledgement(),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -70,8 +80,9 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
           children: [
             SingleChildScrollView(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 64, vertical: 32),
+                padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveWidget.defaultPadding(context),
+                    vertical: ResponsiveWidget.smallPadding(context)),
                 child: Form(
                   key: cubit.formKey,
                   child: Column(
@@ -82,9 +93,11 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
                         style: theme.textTheme.headlineLarge
                             ?.copyWith(color: theme.colorScheme.onBackground),
                       ),
-                      const PersonalDetailsForm(),
-                      const VehicleDetailsForm(),
-                      const PermitInformationForm(),
+                      CustomGridView(
+                        gap: ResponsiveWidget.smallPadding(context),
+                        singleColumn: !ResponsiveWidget.isLargeScreen(context),
+                        children: formFields,
+                      ),
                       Row(
                         children: [
                           FilledButton.icon(
