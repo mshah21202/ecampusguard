@@ -15,7 +15,17 @@ class ApplicationStatusState extends HomeState {
 
   @override
   List<Object> get props => [applicationStatus];
+
 }
 
-//status we have
-enum PermitApplicationStatus { valid,withdraw, pending, awaitingPayment, approved, rejected }
+//5 status we have
+enum PermitApplicationStatus { Valid,Withdraw, Pending, AwaitingPayment, Expired}
+
+class PreviousPermitsState extends HomeState {
+  final List<dynamic> permits;
+
+  const PreviousPermitsState(this.permits);
+
+  @override
+  List<Object> get props => [permits];
+}

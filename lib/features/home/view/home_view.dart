@@ -1,101 +1,335 @@
-import 'package:flutter/material.dart';
+  import 'package:ecampusguard/global/widgets/BackgroundLogo.dart';
+import 'package:flutter/cupertino.dart';
+  import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+  import 'package:flutter_bloc/flutter_bloc.dart';
+  import '../home.dart';
 
-import '../home.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({
-    Key? key,
-  }) : super(key: key);
+  class HomeView extends StatelessWidget {
+    const HomeView({
+      Key? key,
+    }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<HomeCubit>();
-    return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "TEST",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        backgroundColor: const Color(0xFF565992),
-      ),
-      body: Stack(
-        children: [
-          Positioned(
-            left: -150,
-            bottom: -150,
-            child: Opacity(
-              opacity: 0.2,
-              child: Image.asset('assets/images/ecampusLogo.png'),
+    @override
+    Widget build(BuildContext context) {
+      final theme = Theme.of(context);
+      final cubit = context.read<HomeCubit>();
+      return Scaffold(
+        backgroundColor:theme.colorScheme.background,
+        appBar: AppBar(
+          title: const Center(
+            child: Text(
+              "eCampusGuard",
+              style: TextStyle(color: Colors.white),
             ),
           ),
+          backgroundColor:theme.colorScheme.primary,
+          leading: IconButton(
+            icon: const Icon(Icons.menu),
+            color:theme.colorScheme.onPrimary,
+            onPressed: () {
+              // do smth
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              color:theme.colorScheme.onPrimary,
+              onPressed: () {
+                // do smth
+              },
+            ),
+          ],
+        ),
+        body:
+
+        Stack(
+
+          children: [
+
+
+            BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                if (state is HomeInitial) {
+                  return _buildInitialApplicationView(context, cubit,[]);
+                } else if (state is PreviousPermitsState) {
+                  return _buildPreviousPermitsList(context, state.permits);
+                }
+                else if (state is ApplicationStatusState) {
+                  switch (state.applicationStatus) {
+                    case PermitApplicationStatus.Pending:
+                      return _buildPendingView(context, cubit);
+                    case PermitApplicationStatus.AwaitingPayment:
+                      return _buildAwaitingPaymentView(context, cubit);
+                    case PermitApplicationStatus.Valid:
+                      return _buildValidPermitView(context, cubit);
+                    default:
+                      return _buildUnknownStatusView(context);
+                  }
+                }
+                return const Center(child: Text('ERROR!!.'));
+              },
+            ),
+            const BackgroundLogo()
+          ],
+
+        ),
+      );
+    }
+  }
 
 
 
-
-      /*    BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      _getIconData(state.applicationStatus),
-                      size: 48,
-                    ),
-                    SizedBox(height: 8),
-
-                    Text(
-                      _getTextBasedOnStatus(state.applicationStatus),
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    SizedBox(height: 24),
-
-                    ElevatedButton(
-                      onPressed: cubit.fetchApplicationStatus,
-                      child: const Text('Check Application Status'),
+  Widget _buildInitialApplicationView(BuildContext context, HomeCubit cubit,List<dynamic> permits) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.background,
+                  borderRadius: BorderRadius.circular(25.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.19),
+                      blurRadius: 25.0,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      child: Expanded(
+
+                        child: Text(
+                          'Apply for a permit',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: theme.colorScheme.onBackground,
+                          ),
+                        ),
+                        
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // do smth
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: theme.colorScheme.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Apply now',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Previous Permits',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              _buildPreviousPermitsList(context, permits),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPreviousPermitsList(BuildContext context,List<dynamic> permits) {
+    final theme = Theme.of(context);
+
+    //Student has no previous permit
+    if (permits.isEmpty) {
+
+      return const Center(
+        child: Text(
+          "You have no previous permits.",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black54,
+          ),
+        ),
+      );
+    }
+
+    //Student has permits
+    else {
+
+      return Expanded(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ListView.separated(
+            itemCount: permits.length,
+            separatorBuilder: (context, index) => const Divider(),
+            itemBuilder: (context, index) {
+              final permit = permits[index];
+              return ListTile(
+                title: Text(permit.name),
+                subtitle: Text('Valid for ${permit.days} days - \$${permit.price.toStringAsFixed(2)}'),
+                trailing: Text('Occupied: ${permit.occupied}/${permit.capacity}'),
               );
             },
-          ),*/
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _buildPendingView(BuildContext context,HomeCubit cubit) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.hourglass_empty, size: 48),
+          const SizedBox(height: 8),
+          const Text('Pending', style: TextStyle(fontSize: 18, color: Colors.black87)),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+             //do smth
+            },
+            child: const Text('Check Application'),
+          ),
         ],
       ),
     );
   }
-}
 
-IconData _getIconData(PermitApplicationStatus status) {
-  switch (status) {
-    case PermitApplicationStatus.valid:
-      return Icons.check_circle_outline;
-    case PermitApplicationStatus.pending:
-      return Icons.hourglass_empty;
-    case PermitApplicationStatus.awaitingPayment:
-      return Icons.payment;
-    default:
-      return Icons.help_outline;
+  Widget _buildAwaitingPaymentView(BuildContext context,HomeCubit cubit) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.payment, size: 48),
+          const SizedBox(height: 8),
+          const Text('Awaiting Payment', style: TextStyle(fontSize: 18, color: Colors.black87)),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              //do smth
+            },
+            child: const Text('Pay Now'),
+          ),
+        ],
+      ),
+    );
   }
-}
 
-String _getTextBasedOnStatus(PermitApplicationStatus status) {
-  switch (status) {
-    case PermitApplicationStatus.valid:
-      return 'Application is Valid';
-    case PermitApplicationStatus.pending:
-      return 'Application Pending';
-    case PermitApplicationStatus.awaitingPayment:
-      return 'Awaiting Payment';
-    default:
-      return 'Status Unknown';
+  Widget _buildUnknownStatusView(BuildContext context) {
+
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.help_outline, size: 48),
+          SizedBox(height: 8),
+        ],
+      ),
+    );
   }
-}
+
+
+  //---------    !!!needs changes!!!
+  /*
+  * 1- days
+  * 2- Previous permit applications
+  * 3- enter/ exit logs of the student
+  * */
+  Widget _buildValidPermitView(BuildContext context,HomeCubit cubit) {
+    return  const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.check, size: 48),
+          SizedBox(height: 8),
+          Text('Valid', style: TextStyle(fontSize: 18, color: Colors.black87)),
+
+        ],
+      ),
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // //icon functions
+  // IconData? _getIconData(PermitApplicationStatus status) {
+  //   switch (status) {
+  //     case PermitApplicationStatus.Valid:
+  //       return Icons.check_circle_outline;
+  //     case PermitApplicationStatus.Pending:
+  //       return Icons.hourglass_empty;
+  //     case PermitApplicationStatus.AwaitingPayment:
+  //       return Icons.payment;
+  //     case PermitApplicationStatus.Expired:
+  //       return Icons.alarm;
+  //     default:
+  //       return Icons.help_outline;
+  //   }
+  // }
+
+  // String _getTextBasedOnStatus(PermitApplicationStatus status) {
+  //   switch (status) {
+  //     case PermitApplicationStatus.Valid:
+  //       return 'Application is Valid';
+  //     case PermitApplicationStatus.Pending:
+  //       return 'Application Pending';
+  //     case PermitApplicationStatus.AwaitingPayment:
+  //       return 'Awaiting Payment';
+  //     case PermitApplicationStatus.Expired:
+  //       return 'Permit Expired';
+  //     default:
+  //       return '';
+  //   }
+  // }

@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthenticationCubit()),
       ],
       child: MaterialApp.router(
+          theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF000055))),
           title: 'ecampusguard',
+
           debugShowCheckedModeBanner: false,
           routerConfig: ecampusguard_router),
     );
