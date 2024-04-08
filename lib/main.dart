@@ -14,7 +14,7 @@ Future<void> main() async {
   var getIt = GetIt.instance;
   var api = Ecampusguardapi(
       basePathOverride:
-          "https://0685fb90-1c5f-44e6-b91e-b7c7d126453b.mock.pstmn.io");
+          "https://d1f08383-5e3c-419c-8bff-8d42e22f513e.mock.pstmn.io");
   var phoneNumberValidator = PhoneNumberValidator();
   var prefs = await SharedPreferences.getInstance();
   setPathUrlStrategy();
