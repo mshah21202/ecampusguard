@@ -1,10 +1,11 @@
+import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
+import 'package:ecampusguard/features/login/view/widgets/login_form.dart';
+import 'package:ecampusguard/global/widgets/app_bar.dart';
+import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import '../../../global/theme/cubit/theme_cubit.dart';
-import '../../authentication/cubit/authentication_cubit.dart';
-import '../../login/cubit/login_cubit.dart';
-import '../../../global/router/routes.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({
@@ -13,180 +14,39 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
 
-    final screenSize = MediaQuery.of(context).size;
-    // Controllers
-    final username = TextEditingController();
-    final password = TextEditingController();
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "eCampusGuard",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        backgroundColor: const Color(0xFF565992),
-      ),
+    return BlocConsumer<AuthenticationCubit, AuthenticationState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: appBar,
+          // backgroundColor: theme.colorScheme.background,
           body: Stack(
             children: [
-            Positioned(
-            left: -150,
-            bottom: -150,
-
-            child: Opacity(
-              opacity: 0.2,
-              child: Image.asset(
-                'assets/images/ecampusLogo.png',
-             /*   fit: BoxFit.cover,*/
-/*                width: screenSize.width * 0.5,
-                height: screenSize.height * 0.5,*/
+              Positioned(
+                left: -150,
+                bottom: -150,
+                child: Opacity(
+                  opacity: 0.2,
+                  child: AppLogo(
+                    darkMode: theme.colorScheme.brightness == Brightness.dark,
+                  ),
+                ),
               ),
-            ),
+              const LoginForm(),
+              FullScreenLoadingIndicator(
+                  visible: state is LoadingAuthentication)
+            ],
           ),
-
-          BlocConsumer<AuthenticationCubit, AuthenticationState>(
-              listener: (context, state) {
-
-/*
-                if (state is Authenticated) {
-                  // Navigate to the HomeView on successful authentication
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                } else if (state is FailedAuthentication) {
-                  // Show an error message on failed authentication
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Login Failed:')),
-                  );}
-*/
-
-           },
-             builder: (context, state) {
-               if (state is LoginLaoding) {
-                 return const Center(child: CircularProgressIndicator());
-               }
-
-               return Center(
-                 child: SingleChildScrollView(
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: [
-                       SizedBox(height: screenSize.height * 0.1),
-                       Container(
-                         width: screenSize.width > 600 ? 400 : screenSize
-                             .width * 0.9,
-                         padding: const EdgeInsets.all(20.0),
-                         decoration: BoxDecoration(
-                           color: Colors.white,
-                           borderRadius: BorderRadius.circular(8.0),
-                           boxShadow: const [
-                             BoxShadow(
-                               color: Colors.black12,
-                               blurRadius: 15.0,
-
-                             ),
-                           ],
-                         ),
-                         child: Form(
-                           child: Column(
-                             mainAxisSize: MainAxisSize.min,
-                             children: [
-                               Image.asset(
-                                 'assets/images/ecampusLogo.png',
-                                 width: 100,
-                                 height: 100,
-                               ),
-                               const SizedBox(height: 20),
-                               const Text(
-                                 'Login to eCampusGuard',
-                                 style: TextStyle(
-                                   fontSize: 20,
-                                   fontWeight: FontWeight.bold,
-                                 ),
-                               ),
-                               const SizedBox(height: 20),
-                               TextFormField(
-                                 controller: username,
-                                 decoration: const InputDecoration(
-                                   labelText: 'Username',
-                                   prefixIcon: Icon(Icons.person),
-                                   border: OutlineInputBorder(),
-                                 ),
-                               ),
-                               const SizedBox(height: 20),
-                               TextFormField(
-                                 controller: password,
-                                 obscureText: true,
-                                 decoration: const InputDecoration(
-                                   labelText: 'Password',
-                                   prefixIcon: Icon(Icons.lock),
-                                   border: OutlineInputBorder(),
-                                 ),
-                               ),
-                               const SizedBox(height: 30),
-                               ElevatedButton.icon(
-                                 onPressed: () {
-/*                                   final authCubit = BlocProvider.of<AuthenticationCubit>(context);
-                                   authCubit.login(
-                                     username: username.text,
-                                     password: password.text,
-                                   );*/
-
-                                 },
-                                 icon: const Icon(Icons.login),
-                                 label: const Text('Login'),
-                                 style: ElevatedButton.styleFrom(
-                                   foregroundColor: Colors.white,
-                                   backgroundColor:  const Color(0xFF565992),
-                                   shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(30.0),
-                                   ),
-                                   padding: const EdgeInsets.symmetric(
-                                       horizontal: 30, vertical: 10),
-                                 ),
-                               ),
-                               const SizedBox(height: 30),
-
-                               //testing button
-                               //i still dont know how to deal with routes excuse me
-                               ElevatedButton.icon(
-                                 onPressed: () {
-                                   GoRouter.of(context).go(homeRoute);
-                                 },
-                                 icon: const Icon(Icons.login),
-                                 label: const Text('NEXT'),
-                                 style: ElevatedButton.styleFrom(
-                                   foregroundColor: Colors.white,
-                                   backgroundColor:  const Color(0xFF565992),
-                                   shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(30.0),
-                                   ),
-                                   padding: const EdgeInsets.symmetric(
-                                       horizontal: 30, vertical: 10),
-                                 ),
-                               ),
-                             ],
-                           ),
-                         ),
-                       ),
-
-                       SizedBox(height: screenSize.height * 0.1),
-                     ],
-                   ),
-                 ),
-
-               );
-             }),
-   ]),
+        );
+      },
+      listener: (BuildContext context, AuthenticationState state) {
+        if (state is LoginFailedAuthentication && state.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            appSnackBar((state).message!, context),
+          );
+        }
+      },
     );
   }
 }
-
-
-
-
-
-

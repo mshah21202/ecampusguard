@@ -10,12 +10,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
 
-
-
   void fetchApplicationStatus() async {
     try {
       var status = await _fetchStatusFromBackend();
-      emit(ApplicationStatusState(status));
+      emit(ApplicationStatusState(applicationStatus: status));
     } catch (error) {
       //error
     }
@@ -23,17 +21,16 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<PermitApplicationStatus> _fetchStatusFromBackend() async {
     //for now
-    return PermitApplicationStatus.Pending;
+    return PermitApplicationStatus.pending;
   }
 
-
-  void fetchPreviousPermits(int userId) async {
-    try {
-      //for now (crying emoji)
-      var permits = [];
-      emit(PreviousPermitsState(permits));
-    } catch (error) {
-      //error
-    }
-  }
+  // void fetchPreviousPermits(int userId) async {
+  //   try {
+  //     //for now (crying emoji)
+  //     var permits = [];
+  //     emit(PreviousPermitsState(permits));
+  //   } catch (error) {
+  //     //error
+  //   }
+  // }
 }

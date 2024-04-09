@@ -1,32 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../authentication/cubit/authentication_cubit.dart';
+import 'package:flutter/material.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
+  LoginCubit() : super(LoginInitial());
 
-  LoginCubit(this.AuthCubit) : super(LoginInitial());
-
-  final AuthenticationCubit AuthCubit;
-
-  void login(String username,String password){
-    emit(LoginLaoding());
-
-    AuthCubit.login(username: username, password: password);
-
-    AuthCubit.stream.listen((state) {
-
-      if(state is Authenticated) {
-        emit(LoginSuccess());
-      }
-        else if(state is FailedAuthentication){
-        emit(LoginFailure(error: 'ERROR'));
-      }
-
-
-
-      }
-
-    );
-  }
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 }
