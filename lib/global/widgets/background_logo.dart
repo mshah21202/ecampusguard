@@ -1,3 +1,4 @@
+import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundLogo extends StatelessWidget {
@@ -5,15 +6,14 @@ class BackgroundLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Positioned(
       left: -150,
       bottom: -150,
       child: Opacity(
         opacity: 0.2,
-        child: Image.asset(
-          'assets/images/ecampusLogo.png',
-
-         /* fit: BoxFit.contain,*/
+        child: AppLogo(
+          darkMode: theme.colorScheme.brightness == Brightness.dark,
         ),
       ),
     );
