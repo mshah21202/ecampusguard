@@ -6,9 +6,7 @@ import 'package:get_it/get_it.dart';
 part 'home_admin_state.dart';
 
 class HomeAdminCubit extends Cubit<HomeAdminState> {
-  HomeAdminCubit() : super(HomeAdminInitial()) {
-    loadData();
-  }
+  HomeAdminCubit() : super(HomeAdminInitial());
 
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
 

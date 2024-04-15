@@ -6,8 +6,8 @@ import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
 import 'package:ecampusguard/features/register/register.dart';
 import 'package:ecampusguard/global/extensions/go_router_extension.dart';
+import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
-import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:go_router/go_router.dart';
 
 GoRouter appRouter({
@@ -74,14 +74,11 @@ GoRouter appRouter({
               GoRoute(
                 path: adminApplicationsRoute,
                 builder: (context, state) {
-                  final status = state.uri.queryParameters["Status"] != null
-                      ? int.parse(state.uri.queryParameters["Status"]!)
-                      : null;
+                  PermitApplicationsParams params =
+                      PermitApplicationsParams.fromUri(state.uri);
 
                   return PermitApplicationsPage(
-                    status: status != null
-                        ? PermitApplicationStatusEnum.values[status]
-                        : null,
+                    params: params,
                   );
                 },
               ),

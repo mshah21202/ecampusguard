@@ -5,7 +5,7 @@
     "pubDescription": "An auto-generated client library for eCampusGuard",
     "pubLibrary": "ecampusguardapi.api",
     "pubName": "ecampusguardapi",
-    "pubVersion": "1.0.3",
+    "pubVersion": "1.0.7",
     "serializationLibrary": "json_serializable",
     "useEnumExtension": true
 }

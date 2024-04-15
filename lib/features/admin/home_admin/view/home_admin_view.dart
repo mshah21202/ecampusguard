@@ -1,3 +1,4 @@
+import 'package:ecampusguard/features/admin/home_admin/cubit/home_admin_cubit.dart';
 import 'package:ecampusguard/features/admin/home_admin/view/widgets/applications_summary.dart';
 import 'package:ecampusguard/features/admin/home_admin/view/widgets/areas_summary.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
@@ -5,20 +6,32 @@ import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../home_admin.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeAdminView extends StatelessWidget {
+// import '../home_admin.dart';
+
+class HomeAdminView extends StatefulWidget {
   const HomeAdminView({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<HomeAdminView> createState() => _HomeAdminViewState();
+}
+
+class _HomeAdminViewState extends State<HomeAdminView> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<HomeAdminCubit>();
+    cubit.loadData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    final cubit = context.read<HomeAdminCubit>();
     return Scaffold(
       appBar: appBar,
       body: Stack(

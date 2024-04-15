@@ -143,7 +143,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     try {
       var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
           createPermitApplicationDto: CreatePermitApplicationDto(
-              academicYear: AcademicYearEnum.values.toList()[academicYear ?? 0],
+              academicYear: AcademicYear.values.toList()[academicYear ?? 0],
               attendingDays: _attendingDays.values.toList(),
               licenseImgPath: drivingLicenseImgFile!.name,
               permitId: selectedPermit!.id,
@@ -162,7 +162,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       if (result.data == null) {
         emit(FailedApplyForPermitState(snackBarMessage: result.statusMessage));
         return;
-      } else if (result.data!.responseCode == ResponseCodeEnum.Failed) {
+      } else if (result.data!.responseCode == ResponseCode.Failed) {
         emit(FailedApplyForPermitState(
             snackBarMessage: result.data!.message.toString()));
         return;

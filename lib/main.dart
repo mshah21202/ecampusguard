@@ -12,9 +12,7 @@ import 'package:url_strategy/url_strategy.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var getIt = GetIt.instance;
-  var api = Ecampusguardapi(
-      basePathOverride:
-          "https://d1f08383-5e3c-419c-8bff-8d42e22f513e.mock.pstmn.io");
+  var api = Ecampusguardapi(basePathOverride: "http://localhost:8001");
   var phoneNumberValidator = PhoneNumberValidator();
   var prefs = await SharedPreferences.getInstance();
   setPathUrlStrategy();

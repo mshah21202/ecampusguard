@@ -28,9 +28,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     try {
       var result = await _api.getAuthenticationApi().authenticationLoginPost(
-        headers: {
-          "x-mock-response-name": "LoggedIn",
-        },
+        headers: {"role": "admin"},
         loginDto: LoginDto(username: username, password: password),
       );
 
@@ -50,6 +48,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       }
     } catch (e) {
       emit(LoginFailedAuthentication(message: e.toString()));
+      print(e);
     }
   }
 
