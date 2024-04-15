@@ -80,7 +80,7 @@ GoRouter appRouter({
 
                   return PermitApplicationsPage(
                     status: status != null
-                        ? PermitApplicationStatusEnum.values[status]
+                        ? PermitApplicationStatus.values[status]
                         : null,
                   );
                 },

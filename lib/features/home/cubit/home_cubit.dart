@@ -33,7 +33,7 @@ class HomeCubit extends Cubit<HomeState> {
       // );
 
       var result =
-          await _testApplicationStatus(PermitApplicationStatusEnum.Pending);
+          await _testApplicationStatus(PermitApplicationStatus.Pending);
       emit(ApplicationStatusState(status: result));
     } catch (error) {}
   }
@@ -58,8 +58,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   /// Testing purposes only
-  Future<PermitApplicationStatusEnum> _testApplicationStatus(
-      PermitApplicationStatusEnum status) async {
+  Future<PermitApplicationStatus> _testApplicationStatus(
+      PermitApplicationStatus status) async {
     await Future.delayed(const Duration(milliseconds: 100));
     return status;
   }

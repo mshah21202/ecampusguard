@@ -12,7 +12,7 @@ class PermitApplicationsPage extends StatelessWidget {
     this.status,
   }) : super(key: key);
 
-  final PermitApplicationStatusEnum? status;
+  final PermitApplicationStatus? status;
 
   @override
   Widget build(BuildContext context) {

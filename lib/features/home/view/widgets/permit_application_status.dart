@@ -9,10 +9,15 @@ import 'package:flutter/material.dart';
 class PermitApplicationStatusWidget extends StatelessWidget {
   const PermitApplicationStatusWidget({super.key, required this.status});
 
-  final PermitApplicationStatusEnum status;
+  final PermitApplicationStatus status;
   @override
   Widget build(BuildContext context) {
+    return _buildApplyNow(context);
+  }
+
+  Widget _buildApplyNow(BuildContext context) {
     var theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.background,
