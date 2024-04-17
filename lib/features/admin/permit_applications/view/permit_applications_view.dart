@@ -42,6 +42,10 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
               "$adminHomeRoute/$adminApplicationsRoute?${cubit.params.toString()}";
           context.go(url);
         }
+
+        if (state is RowTappedState) {
+          context.go("$adminHomeRoute/$adminApplicationsRoute/${state.id}");
+        }
       },
       listenWhen: (previous, current) {
         return previous != current;

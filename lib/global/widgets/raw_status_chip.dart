@@ -16,13 +16,14 @@ class RawStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Center(
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6, right: 12),
+        padding: const EdgeInsets.only(left: 8, top: 6, bottom: 6, right: 12),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -35,7 +36,7 @@ class RawStatusChip extends StatelessWidget {
             ),
             Text(
               label,
-              style: TextStyle(
+              style: theme.textTheme.bodyLarge!.copyWith(
                 color: foregroundColor,
               ),
               overflow: TextOverflow.fade,

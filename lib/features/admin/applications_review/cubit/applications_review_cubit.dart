@@ -2,16 +2,22 @@ import 'package:bloc/bloc.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-part 'apply_for_permit_state.dart';
+part 'applications_review_state.dart';
 
-class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
-  ApplyForPermitCubit() : super(ApplyForPermitInitial());
+class ApplicationsReviewCubit extends Cubit<ApplicationsReviewState> {
+  ApplicationsReviewCubit({required this.applicationId})
+      : super(ApplicationsReviewInitial()) {
+    populateFields();
+  }
+
+  final int applicationId;
 
   final Ecampusguardapi _api = GetIt.I.get<Ecampusguardapi>();
 
@@ -64,34 +70,103 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       ];
   List<PermitDto>? permits;
   List<Country> countries = [];
+  PermitApplicationDto? permitApplication;
+
+  TextEditingController selectedPermitController = TextEditingController();
+
+  Future<void> _getPermitApplication() async {
+    emit(LoadingApplicationsReviewState());
+    try {
+      var result = await _api
+          .getPermitApplicationApi()
+          .permitApplicationIdGet(id: applicationId);
+
+      if (result.data != null) {
+        emit(const LoadedApplicationsReviewState());
+        permitApplication = result.data!;
+      }
+    } catch (e) {
+      emit(FailedApplicationsReviewState(snackBarMessage: e.toString()));
+    }
+  }
+
+  void populateFields() async {
+    await _getPermitApplication();
+    await loadCountries();
+    await loadPermits();
+    if (permitApplication != null) {
+      studentIdController.text = permitApplication!.studentId!.toString();
+
+      Map<String, bool> attendingDays = {
+        "Sun": permitApplication!.attendingDays!.elementAtOrNull(0) ?? false,
+        "Mon": permitApplication!.attendingDays!.elementAtOrNull(1) ?? false,
+        "Tue": permitApplication!.attendingDays!.elementAtOrNull(2) ?? false,
+        "Wed": permitApplication!.attendingDays!.elementAtOrNull(3) ?? false,
+        "Thu": permitApplication!.attendingDays!.elementAtOrNull(4) ?? false,
+      };
+
+      _attendingDays = Map.from(attendingDays);
+
+      selectedAttendingDays = _attendingDays.entries
+          .where((element) => element.value)
+          .map((e) => e.key)
+          .toList();
+
+      attendingDaysController.text = selectedAttendingDays.join(",");
+
+      setSelectedCarNationality((await getCountryFromCode(
+          permitApplication!.vehicle!.nationality!))!);
+      selectPermitType(permitApplication!.permit!);
+
+      phoneNumberController.text =
+          (permitApplication!.phoneNumber!).substring(0);
+
+      numberOfCompanionsController.text =
+          permitApplication!.siblingsCount!.toString();
+
+      plateNumberController.text = permitApplication!.vehicle!.plateNumber!;
+
+      academicYear = permitApplication!.academicYear!.index;
+
+      selectPermitType(permits!.firstWhere(
+          (element) => element.id == permitApplication!.permit!.id,
+          orElse: () => permits!.first));
+
+      carMakeController.text = permitApplication!.vehicle!.make!;
+      carModelController.text = permitApplication!.vehicle!.model!;
+      carColorController.text = permitApplication!.vehicle!.color!;
+      carYearController.text = permitApplication!.vehicle!.year!.toString();
+    }
+  }
 
   void setAcknowledged(bool val) {
     acknowledged = val;
-    emit(ApplyForPermitUpdated(acknowledged: acknowledged));
+    emit(ApplicationsReviewUpdated(acknowledged: acknowledged));
   }
 
-  void loadCountries() async {
-    emit(LoadingApplyForPermitState());
+  Future<void> loadCountries() async {
+    emit(LoadingApplicationsReviewState());
     countries = await getAllCountries();
     selectedPhoneCountry =
         countries.firstWhere((country) => country.isoCode == "JO");
-    emit(const LoadedApplyForPermitState());
+    emit(const LoadedApplicationsReviewState());
   }
 
-  void loadPermits() async {
-    emit(LoadingApplyForPermitState());
+  Future<void> loadPermits() async {
+    emit(LoadingApplicationsReviewState());
     var result = await _api.getPermitsApi().permitsGet();
 
     if (result.data != null) {
       permits = result.data?.toList();
     }
 
-    emit(const LoadedApplyForPermitState());
+    emit(const LoadedApplicationsReviewState());
   }
 
   void selectPermitType(PermitDto permit) {
     selectedPermit = permit;
-    emit(ApplyForPermitUpdated(selectedPermit: selectedPermit));
+    selectedPermitController.text = selectedPermit!.name!;
+    emit(ApplicationsReviewUpdated(selectedPermit: selectedPermit));
   }
 
   void selectDrivingLicense(PlatformFile file) {
@@ -106,14 +181,21 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     emit(UploadedFile(uploadedFile: carRegistrationImgFile));
   }
 
-  void setSelectedPhoneCountry(Country? country) {
+  void setSelectedPhoneCountry(Country? country) async {
+    if (countries.isEmptyOrNull) {
+      await loadCountries();
+    }
     selectedPhoneCountry = country;
-    emit(ApplyForPermitUpdated(selectedCountry: selectedPhoneCountry));
+    emit(ApplicationsReviewUpdated(selectedCountry: selectedPhoneCountry));
   }
 
-  void setSelectedCarNationality(Country country) {
+  void setSelectedCarNationality(Country country) async {
+    if (countries.isEmptyOrNull) {
+      await loadCountries();
+    }
     selectedCarNationality = country;
-    emit(ApplyForPermitUpdated(selectedCountry: selectedCarNationality));
+    selectedCarNationalityController.text = selectedCarNationality!.name;
+    emit(ApplicationsReviewUpdated(selectedCountry: selectedCarNationality));
   }
 
   void onChangedAttendingDay(List<String> items) {
@@ -125,17 +207,17 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       _attendingDays[day] = true;
     }
 
-    emit(ApplyForPermitUpdated(attendingDays: selectedAttendingDays));
+    emit(ApplicationsReviewUpdated(attendingDays: selectedAttendingDays));
   }
 
   void testSnackBar() {
-    emit(const LoadedApplyForPermitState(snackBarMessage: "Test"));
+    emit(const LoadedApplicationsReviewState(snackBarMessage: "Test"));
   }
 
   Future<void> onSubmit() async {
-    emit(LoadingApplyForPermitState());
+    emit(LoadingApplicationsReviewState());
     if (!formKey.currentState!.validate() && !acknowledged) {
-      emit(const FailedApplyForPermitState(
+      emit(const FailedApplicationsReviewState(
           snackBarMessage: "Please fill in the required fields"));
       return;
     }
@@ -143,7 +225,6 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     try {
       var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
           createPermitApplicationDto: CreatePermitApplicationDto(
-              studentId: int.parse(studentIdController.text),
               academicYear: AcademicYear.values.toList()[academicYear ?? 0],
               attendingDays: _attendingDays.values.toList(),
               licenseImgPath: drivingLicenseImgFile!.name,
@@ -161,20 +242,21 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
                   year: int.parse(carYearController.text))));
 
       if (result.data == null) {
-        emit(FailedApplyForPermitState(snackBarMessage: result.statusMessage));
+        emit(FailedApplicationsReviewState(
+            snackBarMessage: result.statusMessage));
         return;
       } else if (result.data!.responseCode == ResponseCode.Failed) {
-        emit(FailedApplyForPermitState(
+        emit(FailedApplicationsReviewState(
             snackBarMessage: result.data!.message.toString()));
         return;
       }
 
-      emit(LoadedApplyForPermitState(
+      emit(LoadedApplicationsReviewState(
           snackBarMessage: result.data!.message.toString()));
     } catch (e) {
       if (e is DioException && (e).response != null) {
         emit(
-          FailedApplyForPermitState(
+          FailedApplicationsReviewState(
             snackBarMessage: (ResponseDto.fromJson((e).response!.data))
                 .toString(), // TODO: Test this
           ),

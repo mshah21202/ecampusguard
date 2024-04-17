@@ -12,6 +12,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
       : super(PermitApplicationsInitial()) {
     applicationsDataSource = PermitApplicationsDataSource.fromApi(
       fetchFunction: getPermitApplications,
+      cubit: this,
     );
   }
 
@@ -21,6 +22,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
   late PermitApplicationsDataSource applicationsDataSource;
   PermitApplicationsParams params;
   int? sortColumnIndex;
+  List<bool> selectedRows = [];
 
   void loadPermits() async {
     emit(LoadingPermitApplications());
@@ -31,6 +33,20 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     }
 
     emit(const LoadedPermitApplications());
+  }
+
+  void onRowSelectChange(int index, bool selected) {
+    if (selectedRows.isEmpty || selectedRows.length < (params.pageSize ?? 0)) {
+      _buildSelectedRowsList();
+    }
+
+    selectedRows[index] = selected;
+    applicationsDataSource.refreshDatasource();
+    emit(SelectedRowState(selectedRows: selectedRows));
+  }
+
+  void _buildSelectedRowsList() {
+    selectedRows = List.generate(params.pageSize ?? 10, (index) => false);
   }
 
   void setQueryParams({
@@ -92,12 +108,16 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
         emit(ErrorPermitApplications(snackBarMessage: result.statusMessage));
         return [];
       }
-
+      applications = result.data!;
       emit(LoadedPermitApplications(applications: result.data));
       return result.data!;
     } catch (e) {
       emit(ErrorPermitApplications(snackBarMessage: e.toString()));
       return [];
     }
+  }
+
+  void onRowTap(int index) {
+    emit(RowTappedState(id: applications[index].id!));
   }
 }

@@ -48,8 +48,8 @@ class PermitApplicationStatusChip extends StatelessWidget {
     return RawStatusChip(
       label: 'Denied',
       leadingIcon: Icons.cancel,
-      backgroundColor: theme.colorScheme.tertiaryContainer,
-      foregroundColor: theme.colorScheme.onTertiaryContainer,
+      backgroundColor: theme.colorScheme.errorContainer,
+      foregroundColor: theme.colorScheme.onErrorContainer,
     );
   }
 

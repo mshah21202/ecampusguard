@@ -12,7 +12,7 @@ class AppDataTable extends StatefulWidget {
     this.sortAscending,
   });
 
-  final DataTableSource dataSource;
+  final AsyncDataTableSource dataSource;
   final List<DataColumn> columns;
   final int rowsPerPage;
   final int? sortColumnIndex;
@@ -39,6 +39,11 @@ class _AppDataTableState extends State<AppDataTable> {
         color: theme.colorScheme.background,
       ),
       child: AsyncPaginatedDataTable2(
+        onSelectAll: (value) {
+          (value ?? false)
+              ? widget.dataSource.selectAll()
+              : widget.dataSource.deselectAll();
+        },
         sortArrowAlwaysVisible: true,
         sortColumnIndex: widget.sortColumnIndex,
         sortAscending: widget.sortAscending ?? true,

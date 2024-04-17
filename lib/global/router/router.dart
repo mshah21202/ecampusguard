@@ -1,3 +1,4 @@
+import 'package:ecampusguard/features/admin/applications_review/applications_review.dart';
 import 'package:ecampusguard/features/admin/home_admin/view/home_admin_page.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/permit_applications_page.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/apply_for_permit_page.dart';
@@ -72,16 +73,24 @@ GoRouter appRouter({
             },
             routes: [
               GoRoute(
-                path: adminApplicationsRoute,
-                builder: (context, state) {
-                  PermitApplicationsParams params =
-                      PermitApplicationsParams.fromUri(state.uri);
+                  path: adminApplicationsRoute,
+                  builder: (context, state) {
+                    PermitApplicationsParams params =
+                        PermitApplicationsParams.fromUri(state.uri);
 
-                  return PermitApplicationsPage(
-                    params: params,
-                  );
-                },
-              ),
+                    return PermitApplicationsPage(
+                      params: params,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminApplicationReviewRoute,
+                      builder: (context, state) {
+                        int id = int.parse(state.pathParameters["id"]!);
+                        return ApplicationsReviewPage(applicationId: id);
+                      },
+                    )
+                  ]),
             ])
       ],
       redirect: (context, state) async {

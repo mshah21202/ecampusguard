@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, must_be_immutable
 
+import 'package:ecampusguard/features/admin/permit_applications/view/widgets/application_status_chip.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
@@ -169,12 +170,21 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                         decoration: const InputDecoration(
                           labelText: "Status",
                         ),
+                        selectedItemBuilder: (context) {
+                          return List.generate(
+                            PermitApplicationStatus.values.length,
+                            (index) => Text(
+                              PermitApplicationStatus.values[index].name,
+                            ),
+                          );
+                        },
                         items: List.generate(
                           PermitApplicationStatus.values.length - 1,
                           (index) => DropdownMenuItem(
                             value: PermitApplicationStatus.values[index],
-                            child: Text(
-                                PermitApplicationStatus.values[index].name),
+                            child: PermitApplicationStatusChip(
+                              status: PermitApplicationStatus.values[index],
+                            ),
                           ),
                         ),
                         onChanged: (value) {

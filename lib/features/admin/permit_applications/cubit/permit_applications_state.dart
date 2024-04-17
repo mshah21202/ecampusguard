@@ -13,6 +13,8 @@ class PermitApplicationsState extends Equatable {
     this.status,
     this.orderBy,
     this.orderByDirection,
+    this.selectedRows,
+    this.id,
   });
 
   final List<PermitApplicationInfoDto>? applications;
@@ -26,6 +28,8 @@ class PermitApplicationsState extends Equatable {
   final PermitApplicationStatus? status;
   final PermitApplicationOrderBy? orderBy;
   final String? orderByDirection;
+  final List<bool>? selectedRows;
+  final int? id;
 
   @override
   List<Object> get props => [
@@ -40,6 +44,8 @@ class PermitApplicationsState extends Equatable {
         status ?? PermitApplicationStatus.unknownDefaultOpenApi,
         orderBy ?? PermitApplicationOrderBy.unknownDefaultOpenApi,
         orderByDirection ?? "ASC",
+        selectedRows ?? [],
+        id ?? 0,
       ];
 }
 
@@ -53,6 +59,14 @@ class LoadingPermitApplications extends PermitApplicationsState {}
 
 class ErrorPermitApplications extends PermitApplicationsState {
   const ErrorPermitApplications({super.snackBarMessage});
+}
+
+class SelectedRowState extends PermitApplicationsState {
+  const SelectedRowState({super.selectedRows});
+}
+
+class RowTappedState extends PermitApplicationsState {
+  const RowTappedState({required super.id});
 }
 
 class SetQueryParamsPermitApplications extends PermitApplicationsState {
