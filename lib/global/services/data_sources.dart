@@ -1,6 +1,8 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:ecampusguard/features/admin/areas/cubit/areas_cubit.dart';
 import 'package:ecampusguard/features/admin/permit_applications/cubit/permit_applications_cubit.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/application_status_chip.dart';
+import 'package:ecampusguard/features/admin/permits/permits.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,13 @@ class PermitApplicationsDataSource extends AsyncDataTableSource {
       int startIndex, int count) fetchFunction;
 
   final PermitApplicationsCubit cubit;
+
+  List<String> academicYears = [
+    "First Year",
+    "Second Year",
+    "Third Year",
+    "Forth+ Year",
+  ];
 
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
@@ -43,7 +52,7 @@ class PermitApplicationsDataSource extends AsyncDataTableSource {
               Text(applications[index].studentName ?? ""),
             ),
             DataCell(
-              Text(applications[index].academicYear ?? ""),
+              Text(academicYears[applications[index].academicYear!.index]),
             ),
             DataCell(
               Text(applications[index].permitName ?? ""),
@@ -54,30 +63,134 @@ class PermitApplicationsDataSource extends AsyncDataTableSource {
                     PermitApplicationStatus.unknownDefaultOpenApi),
               ),
             ),
+          ],
+        );
+      },
+    );
+
+    return AsyncRowsResponse(cubit.totalRows, rows);
+  }
+}
+
+class AreasDataSource extends AsyncDataTableSource {
+  AreasDataSource.fromApi({
+    required this.fetchFunction,
+    required this.cubit,
+  });
+
+  final Future<List<AreaDto>> Function(int startIndex, int count) fetchFunction;
+
+  final AreasCubit cubit;
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    List<AreaDto> areas = await fetchFunction(startIndex, count);
+
+    List<DataRow> rows = List.generate(
+      areas.length,
+      (index) {
+        var rowKey = ValueKey(index);
+        return DataRow2(
+          key: rowKey,
+          onSelectChanged: (value) {
+            setRowSelection(rowKey, value ?? false);
+          },
+          selected: selectionState == SelectionState.include
+              ? selectionRowKeys.contains(rowKey)
+              : !selectionRowKeys.contains(rowKey),
+          onTap: () {
+            cubit.onRowTap(index);
+          },
+          cells: [
             DataCell(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              Text(areas[index].id.toString()),
+            ),
+            DataCell(
+              Text(areas[index].name!),
+            ),
+            DataCell(
+              Text(areas[index].capacity.toString()),
+            ),
+            DataCell(
+              Text(areas[index].gate!),
+            ),
+            DataCell(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () {},
-                          child: const Text("Accept"),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () {},
-                          child: const Text("Deny"),
-                        ),
-                      ),
-                    ],
-                  )
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      cubit.onDelete(index: index);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return AsyncRowsResponse(rows.length, rows);
+  }
+}
+
+class PermitsDataSource extends AsyncDataTableSource {
+  PermitsDataSource.fromApi({
+    required this.fetchFunction,
+    required this.cubit,
+  });
+
+  final Future<List<PermitDto>> Function(int startIndex, int count)
+      fetchFunction;
+
+  final PermitsCubit cubit;
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    List<PermitDto> permits = await fetchFunction(startIndex, count);
+
+    List<DataRow> rows = List.generate(
+      permits.length,
+      (index) {
+        var rowKey = ValueKey(index);
+        return DataRow2(
+          key: rowKey,
+          onSelectChanged: (value) {
+            setRowSelection(rowKey, value ?? false);
+          },
+          selected: selectionState == SelectionState.include
+              ? selectionRowKeys.contains(rowKey)
+              : !selectionRowKeys.contains(rowKey),
+          onTap: () {
+            cubit.onRowTap(index);
+          },
+          cells: [
+            DataCell(
+              Text(permits[index].id.toString()),
+            ),
+            DataCell(
+              Text(permits[index].name!),
+            ),
+            DataCell(
+              Text(permits[index].area!.name!.toString()),
+            ),
+            DataCell(
+              Text(cubit.attendingDaysString(permits[index].days!)),
+            ),
+            DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      cubit.onDelete(index: index);
+                    },
+                  ),
                 ],
               ),
             ),

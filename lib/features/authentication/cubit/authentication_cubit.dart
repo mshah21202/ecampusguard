@@ -28,9 +28,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     try {
       var result = await _api.getAuthenticationApi().authenticationLoginPost(
-        headers: {"role": "admin"},
-        loginDto: LoginDto(username: username, password: password),
-      );
+            loginDto: LoginDto(username: username, password: password),
+            validateStatus: (status) => true,
+          );
 
       if (result.data == null) {
         throw Exception(result.statusMessage);

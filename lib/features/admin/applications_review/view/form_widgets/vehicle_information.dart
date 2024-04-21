@@ -141,9 +141,9 @@ class VehicleDetailsForm extends StatelessWidget {
                 enabled: true,
                 controller: cubit.carRegistrationController,
                 validator: (value) {
-                  if (value == null || value == "") {
-                    return "This is required";
-                  }
+                  // if (value == null || value == "") {
+                  //   return "This is required";
+                  // }
 
                   return null;
                 },

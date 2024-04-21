@@ -47,19 +47,21 @@ class _HomeAdminViewState extends State<HomeAdminView> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: ResponsiveWidget.defaultPadding(context),
-              vertical: ResponsiveWidget.smallPadding(context),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const ApplicationsSummary(),
-                const AreasSummary(),
-              ].addElementBetweenElements(
-                SizedBox(
-                  height: ResponsiveWidget.defaultPadding(context),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveWidget.defaultPadding(context),
+                vertical: ResponsiveWidget.smallPadding(context),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const ApplicationsSummary(),
+                  const AreasSummary(),
+                ].addElementBetweenElements(
+                  SizedBox(
+                    height: ResponsiveWidget.defaultPadding(context),
+                  ),
                 ),
               ),
             ),

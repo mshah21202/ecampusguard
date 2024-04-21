@@ -59,8 +59,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
         "First Year",
         "Second Year",
         "Third Year",
-        "Forth Year",
-        "Fifth Year (Engineering Students)"
+        "Forth+ Year",
       ];
   List<PermitDto>? permits;
   List<Country> countries = [];

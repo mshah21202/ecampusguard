@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ApplicationFilterDialog extends StatefulWidget {
-  ApplicationFilterDialog({
+  const ApplicationFilterDialog({
     super.key,
     this.onSave,
     required this.permits,
@@ -33,7 +33,7 @@ class ApplicationFilterDialog extends StatefulWidget {
 
 class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
   final TextEditingController _studentIdController = TextEditingController();
-
+  final TextEditingController _permitTypeController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
   AcademicYear? _academicYear;
@@ -49,6 +49,10 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
         "Forth Year",
         "Fifth Year (Engineering Students)"
       ];
+
+  final GlobalKey<FormFieldState> _academicYearKey =
+      GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> _statusKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
@@ -102,6 +106,12 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                           labelText: "Student ID",
                         ),
                       ),
+                      trailing: TextButton(
+                        onPressed: () {
+                          _studentIdController.clear();
+                        },
+                        child: const Text("Clear"),
+                      ),
                     ),
                     ListTile(
                       title: TextFormField(
@@ -110,14 +120,20 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                           labelText: "Name",
                         ),
                       ),
+                      trailing: TextButton(
+                        onPressed: () {
+                          _nameController.clear();
+                        },
+                        child: const Text("Clear"),
+                      ),
                     ),
                     ListTile(
                       title: LayoutBuilder(builder: (context, constraints) {
                         return DropdownButtonFormField(
+                          key: _academicYearKey,
                           onChanged: (index) {
                             _academicYear = AcademicYear.values[index ?? 0];
                           },
-                          // expandedInsets: EdgeInsets.zero,
                           validator: (value) {
                             if (value == null) {
                               return "This is required";
@@ -144,6 +160,13 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                           ),
                         );
                       }),
+                      trailing: TextButton(
+                        onPressed: () {
+                          _academicYear = null;
+                          _academicYearKey.currentState!.didChange(null);
+                        },
+                        child: const Text("Clear"),
+                      ),
                     ),
                     ListTile(
                       title: DropdownMenu(
@@ -152,10 +175,9 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                         expandedInsets: EdgeInsets.zero,
                         label: const Text("Permit Type"),
                         onSelected: (index) {
-                          // cubit.selectPermitType(cubit.permits![index ?? 0]);
                           _permitId = widget.permits[index ?? 0].id;
-                          print(_permitId);
                         },
+                        controller: _permitTypeController,
                         dropdownMenuEntries: List.generate(
                           widget.permits.length,
                           (index) => DropdownMenuEntry(
@@ -163,9 +185,17 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                               label: widget.permits[index].name ?? ""),
                         ),
                       ),
+                      trailing: TextButton(
+                        onPressed: () {
+                          _permitId = null;
+                          _permitTypeController.clear();
+                        },
+                        child: const Text("Clear"),
+                      ),
                     ),
                     ListTile(
                       title: DropdownButtonFormField(
+                        key: _statusKey,
                         value: _status,
                         decoration: const InputDecoration(
                           labelText: "Status",
@@ -191,42 +221,64 @@ class _ApplicationFilterDialogState extends State<ApplicationFilterDialog> {
                           _status = value;
                         },
                       ),
+                      trailing: TextButton(
+                        onPressed: () {
+                          _status = null;
+                          _statusKey.currentState!.didChange(null);
+                        },
+                        child: const Text("Clear"),
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 18,
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FilledButton.icon(
-                    onPressed: () {
-                      if (widget.onSave != null) {
-                        context.pop();
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      FilledButton.icon(
+                        onPressed: () {
+                          if (widget.onSave != null) {
+                            context.pop();
 
-                        widget.onSave!(
-                          _studentIdController.text,
-                          _nameController.text,
-                          _academicYear,
-                          _permitId,
-                          _status,
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.check),
-                    label: const Text("Apply"),
+                            widget.onSave!(
+                              _studentIdController.text,
+                              _nameController.text,
+                              _academicYear,
+                              _permitId,
+                              _status,
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.check),
+                        label: const Text("Apply"),
+                      ),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        icon: const Icon(Icons.close),
+                        label: const Text("Cancel"),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  FilledButton.tonalIcon(
+                  TextButton(
                     onPressed: () {
-                      context.pop();
+                      _studentIdController.clear();
+                      _nameController.clear();
+                      _academicYearKey.currentState!.didChange(null);
+                      _academicYear = null;
+                      _permitId = null;
+                      _permitTypeController.clear();
+                      _statusKey.currentState!.didChange(null);
+                      _status = null;
                     },
-                    icon: const Icon(Icons.close),
-                    label: const Text("Cancel"),
+                    child: const Text("Clear All"),
                   ),
                 ],
               ),

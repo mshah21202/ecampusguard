@@ -3,6 +3,17 @@ import 'dart:core';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 
 class PermitApplicationsParams {
+  PermitApplicationsParams.empty(
+      {this.pageSize,
+      this.currentPage,
+      this.studentId,
+      this.name,
+      this.academicYear,
+      this.permitId,
+      this.status,
+      this.orderBy,
+      this.orderByDirection});
+
   PermitApplicationsParams(
       {required this.pageSize,
       required this.currentPage,

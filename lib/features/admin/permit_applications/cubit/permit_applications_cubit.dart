@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/services/data_sources.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
@@ -14,6 +17,8 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
       fetchFunction: getPermitApplications,
       cubit: this,
     );
+
+    loadPermits();
   }
 
   List<PermitApplicationInfoDto> applications = [];
@@ -22,7 +27,8 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
   late PermitApplicationsDataSource applicationsDataSource;
   PermitApplicationsParams params;
   int? sortColumnIndex;
-  List<bool> selectedRows = [];
+  int totalRows = 0;
+  PaginatorController controller = PaginatorController();
 
   void loadPermits() async {
     emit(LoadingPermitApplications());
@@ -33,20 +39,6 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     }
 
     emit(const LoadedPermitApplications());
-  }
-
-  void onRowSelectChange(int index, bool selected) {
-    if (selectedRows.isEmpty || selectedRows.length < (params.pageSize ?? 0)) {
-      _buildSelectedRowsList();
-    }
-
-    selectedRows[index] = selected;
-    applicationsDataSource.refreshDatasource();
-    emit(SelectedRowState(selectedRows: selectedRows));
-  }
-
-  void _buildSelectedRowsList() {
-    selectedRows = List.generate(params.pageSize ?? 10, (index) => false);
   }
 
   void setQueryParams({
@@ -60,31 +52,22 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     PermitApplicationOrderBy? orderBy,
     int? sortColumnIndex,
     String? orderByDirection,
+    bool updateDatasource = true,
   }) {
     params = PermitApplicationsParams(
       pageSize: pageSize ?? params.pageSize,
       currentPage: currentPage ?? params.currentPage,
-      studentId: studentId ?? params.studentId,
-      name: name ?? params.name,
-      status: status ?? params.status,
-      academicYear: academicYear ?? params.academicYear,
-      permitId: permitId ?? params.permitId,
+      studentId: studentId,
+      name: name,
+      status: status,
+      academicYear: academicYear,
+      permitId: permitId,
       orderBy: orderBy ?? params.orderBy,
       orderByDirection: orderByDirection ?? params.orderByDirection,
     );
     this.sortColumnIndex = sortColumnIndex ?? this.sortColumnIndex;
-    applicationsDataSource.refreshDatasource();
-    emit(SetQueryParamsPermitApplications(
-      pageSize: params.pageSize,
-      currentPage: params.currentPage,
-      studentId: params.studentId,
-      name: params.name,
-      status: params.status,
-      academicYear: params.academicYear,
-      permitId: params.permitId,
-      orderBy: params.orderBy,
-      orderByDirection: params.orderByDirection,
-    ));
+    updateDatasource ? applicationsDataSource.refreshDatasource() : null;
+    emit(SetQueryParamsPermitApplications(params: params));
   }
 
   Future<List<PermitApplicationInfoDto>> getPermitApplications(
@@ -92,22 +75,24 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     emit(LoadingPermitApplications());
     try {
       var result = await _api.getPermitApplicationApi().permitApplicationGet(
-        headers: {"x-mock-response-name": "Success2"},
-        pageSize: params.pageSize,
-        pageNumber: params.currentPage,
-        status: params.status,
-        studentId: params.studentId,
-        name: params.name,
-        year: params.academicYear,
-        permitId: params.permitId,
-        orderBy: params.orderBy,
-        orderByDirection: params.orderByDirection,
-      );
+            pageSize: count,
+            pageNumber: startIndex ~/ count,
+            status: params.status,
+            studentId: params.studentId,
+            name: params.name,
+            year: params.academicYear,
+            permitId: params.permitId,
+            orderBy: params.orderBy,
+            orderByDirection: params.orderByDirection,
+          );
 
       if (result.data == null) {
         emit(ErrorPermitApplications(snackBarMessage: result.statusMessage));
         return [];
       }
+
+      var pagination = jsonDecode(result.headers["pagination"]!.join(","));
+      totalRows = pagination["totalItems"];
       applications = result.data!;
       emit(LoadedPermitApplications(applications: result.data));
       return result.data!;

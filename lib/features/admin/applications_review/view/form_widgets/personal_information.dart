@@ -73,7 +73,7 @@ class PersonalDetailsForm extends StatelessWidget {
               PhoneNumberValidator validator =
                   GetIt.I.get<PhoneNumberValidator>();
               if (!validator.isPhoneNumberValid(
-                  cubit.selectedPhoneCountry!.isoCode, "0$value", false)) {
+                  cubit.selectedPhoneCountry!.isoCode, "0$value", true)) {
                 return "Invalid format";
               }
               return null;
@@ -150,11 +150,11 @@ class PersonalDetailsForm extends StatelessWidget {
                 enabled: true,
                 controller: cubit.drivingLicenseController,
                 validator: (value) {
-                  if (value == null ||
-                      value == "" ||
-                      !cubit.choosenCarRegistration) {
-                    return "This is required";
-                  }
+                  // if (value == null ||
+                  //     value == "" ||
+                  //     !cubit.choosenCarRegistration) {
+                  //   return "This is required";
+                  // }
 
                   return null;
                 },

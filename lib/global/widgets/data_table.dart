@@ -8,8 +8,10 @@ class AppDataTable extends StatefulWidget {
     required this.columns,
     required this.rowsPerPage,
     required this.onPageChanged,
+    this.controller,
     this.sortColumnIndex,
     this.sortAscending,
+    this.initialFirstRowIndex,
   });
 
   final AsyncDataTableSource dataSource;
@@ -18,6 +20,8 @@ class AppDataTable extends StatefulWidget {
   final int? sortColumnIndex;
   final bool? sortAscending;
   final void Function(int) onPageChanged;
+  final PaginatorController? controller;
+  final int? initialFirstRowIndex;
 
   @override
   State<AppDataTable> createState() => _AppDataTableState();
@@ -39,6 +43,8 @@ class _AppDataTableState extends State<AppDataTable> {
         color: theme.colorScheme.background,
       ),
       child: AsyncPaginatedDataTable2(
+        initialFirstRowIndex: widget.initialFirstRowIndex,
+        controller: widget.controller,
         onSelectAll: (value) {
           (value ?? false)
               ? widget.dataSource.selectAll()

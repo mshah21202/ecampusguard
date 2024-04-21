@@ -214,32 +214,40 @@ class ApplicationsReviewCubit extends Cubit<ApplicationsReviewState> {
     emit(const LoadedApplicationsReviewState(snackBarMessage: "Test"));
   }
 
-  Future<void> onSubmit() async {
+  Future<void> onSubmit(bool accept) async {
     emit(LoadingApplicationsReviewState());
-    if (!formKey.currentState!.validate() && !acknowledged) {
+    if (!formKey.currentState!.validate()) {
       emit(const FailedApplicationsReviewState(
           snackBarMessage: "Please fill in the required fields"));
       return;
     }
 
     try {
-      var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
-          createPermitApplicationDto: CreatePermitApplicationDto(
-              academicYear: AcademicYear.values.toList()[academicYear ?? 0],
-              attendingDays: _attendingDays.values.toList(),
-              licenseImgPath: drivingLicenseImgFile!.name,
-              permitId: selectedPermit!.id,
-              phoneNumber:
-                  "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
-              siblingsCount: int.parse(numberOfCompanionsController.text),
-              vehicle: VehicleDto(
-                  color: carColorController.text,
-                  make: carMakeController.text,
-                  model: carModelController.text,
-                  nationality: selectedCarNationality!.isoCode,
-                  plateNumber: plateNumberController.text,
-                  registrationDocImgPath: drivingLicenseImgFile!.name,
-                  year: int.parse(carYearController.text))));
+      var result =
+          await _api.getPermitApplicationApi().permitApplicationResponseIdPost(
+                id: applicationId,
+                permitApplicationDto: PermitApplicationDto(
+                  status: accept
+                      ? PermitApplicationStatus.AwaitingPayment
+                      : PermitApplicationStatus.Denied,
+                  academicYear: AcademicYear.values.toList()[academicYear ?? 0],
+                  attendingDays: _attendingDays.values.toList(),
+                  // licenseImgPath: drivingLicenseImgFile!.name,
+                  permit: selectedPermit!,
+                  phoneNumber:
+                      "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
+                  siblingsCount: int.parse(numberOfCompanionsController.text),
+                  vehicle: VehicleDto(
+                    color: carColorController.text,
+                    make: carMakeController.text,
+                    model: carModelController.text,
+                    nationality: selectedCarNationality!.isoCode,
+                    plateNumber: plateNumberController.text,
+                    // registrationDocImgPath: drivingLicenseImgFile!.name,
+                    year: int.parse(carYearController.text),
+                  ),
+                ),
+              );
 
       if (result.data == null) {
         emit(FailedApplicationsReviewState(

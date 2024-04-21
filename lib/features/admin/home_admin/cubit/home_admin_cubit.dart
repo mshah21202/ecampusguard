@@ -44,9 +44,7 @@ class HomeAdminCubit extends Cubit<HomeAdminState> {
     emit(HomeAdminLoading());
 
     try {
-      var result = await _api.getAreaApi().areaGet(headers: {
-        "x-mock-response-name": "S",
-      });
+      var result = await _api.getAreaApi().areaGet();
 
       if (result.data == null) {
         throw Exception(result.statusMessage);

@@ -25,13 +25,6 @@ class PermitApplicationsView extends StatefulWidget {
 
 class _PermitApplicationsViewState extends State<PermitApplicationsView> {
   @override
-  void initState() {
-    final cubit = context.read<PermitApplicationsCubit>();
-    cubit.loadPermits();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final cubit = context.read<PermitApplicationsCubit>();
     var theme = Theme.of(context);
@@ -39,7 +32,7 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
       listener: (context, state) {
         if (state is SetQueryParamsPermitApplications) {
           String url =
-              "$adminHomeRoute/$adminApplicationsRoute?${cubit.params.toString()}";
+              "$adminHomeRoute/$adminApplicationsRoute?${state.params.toString()}";
           context.go(url);
         }
 
@@ -70,55 +63,66 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: ResponsiveWidget.defaultPadding(context),
-                  vertical: ResponsiveWidget.mediumPadding(context),
+                  vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Applications",
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return ApplicationFilterDialog(
-                                    permits: cubit.permits,
-                                    params: cubit.params,
-                                    onSave: (studentId, name, academicYear,
-                                        permitId, status) {
-                                      cubit.setQueryParams(
-                                        pageSize: cubit.params.pageSize,
-                                        currentPage: cubit.params.currentPage,
-                                        studentId: studentId,
-                                        status: status,
-                                        name: name,
-                                        academicYear: academicYear,
-                                        permitId: permitId,
-                                        orderBy: cubit.params.orderBy,
-                                        orderByDirection:
-                                            cubit.params.orderByDirection,
-                                      );
-                                    },
-                                  );
-                                });
-                          },
-                          icon: const Icon(Icons.filter_alt),
-                        ),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: ResponsiveWidget.smallPadding(context),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Applications",
+                            style: theme.textTheme.headlineSmall,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ApplicationFilterDialog(
+                                      permits: cubit.permits,
+                                      params: cubit.params,
+                                      onSave: (studentId, name, academicYear,
+                                          permitId, status) {
+                                        cubit.setQueryParams(
+                                          pageSize: cubit.params.pageSize,
+                                          currentPage: cubit.params.currentPage,
+                                          studentId: studentId,
+                                          status: status,
+                                          name: name,
+                                          academicYear: academicYear,
+                                          permitId: permitId,
+                                          orderBy: cubit.params.orderBy,
+                                          orderByDirection:
+                                              cubit.params.orderByDirection,
+                                        );
+                                      },
+                                    );
+                                  });
+                            },
+                            icon: const Icon(Icons.filter_alt),
+                          ),
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: AppDataTable(
+                        controller: cubit.controller,
+                        initialFirstRowIndex: cubit.params.currentPage != null
+                            ? cubit.params.currentPage! *
+                                (cubit.params.pageSize ?? 10)
+                            : null,
                         sortColumnIndex: cubit.sortColumnIndex,
                         sortAscending: cubit.params.orderByDirection == "ASC",
                         dataSource: cubit.applicationsDataSource,
                         onPageChanged: (page) {
                           cubit.setQueryParams(
                             currentPage: page ~/ (cubit.params.pageSize ?? 10),
+                            updateDatasource: false,
                           );
                         },
                         rowsPerPage: cubit.params.pageSize ?? 10,
@@ -177,10 +181,6 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                                 sortColumnIndex: columnIndex,
                               );
                             },
-                          ),
-                          const DataColumn2(
-                            size: ColumnSize.L,
-                            label: Text("Action"),
                           ),
                         ],
                       ),
