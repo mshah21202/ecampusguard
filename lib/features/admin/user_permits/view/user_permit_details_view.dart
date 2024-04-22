@@ -17,7 +17,7 @@ class UserPermitDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<UserPermitsCubit>();
+    // final cubit = context.read<UserPermitsCubit>();
     var theme = Theme.of(context);
     return Scaffold(
       appBar: appBar,
