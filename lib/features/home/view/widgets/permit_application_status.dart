@@ -1,4 +1,7 @@
+import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
+import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// This widget displays the permit application's status.
@@ -10,14 +13,154 @@ class PermitApplicationStatusWidget extends StatelessWidget {
   const PermitApplicationStatusWidget({super.key, required this.status});
 
   final PermitApplicationStatus status;
-  @override
-  Widget build(BuildContext context) {
-    return _buildApplyNow(context);
+
+
+  //pending stat
+  Widget _buildPendingStatus(ThemeData theme) {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+
+             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Application Sent',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+
+                ),
+
+                const SizedBox(height: 8),
+                Text('Status: ', style: TextStyle(fontSize: 16)),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.tertiaryContainer,
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                  ),
+
+                  child:const Row(
+                    children: [
+                      Icon(Icons.pending_outlined, ),
+                      const SizedBox(width: 10),
+                      Text('Pending', style: TextStyle(fontSize: 16,)),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+            const SizedBox(width: 500),
+            Column(
+              children: [
+                FilledButton(
+                  onPressed: () {
+                    // Student check his application
+                  },
+                        child: const Text(
+                        'Check Application',
+                        style: TextStyle(fontSize: 16),
+                        ),
+                ),
+              ],
+            ),
+          ].addElementBetweenElements(const SizedBox(width: 30),),
+        ),
+      );
   }
 
-  Widget _buildApplyNow(BuildContext context) {
+
+
+
+//Awaiting stat
+  Widget _buildAwaitingPaymentStatus(ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Application Sent',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('Status: ', style: TextStyle(fontSize: 16)),
+                  Icon(Icons.payment, ),
+                  Text('Awaiting Payment', style: TextStyle(fontSize: 16,)),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(width: 500),
+          Column(
+            children: [
+              FilledButton(
+                onPressed: () {
+                  // payment
+                },
+                child: const Text(
+                  'Pay Now',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ].addElementBetweenElements(const SizedBox(width: 30),),
+      ),
+    );
+  }
+
+  Widget _buildDeniedStatus(ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Application Sent',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('Status: ', style: TextStyle(fontSize: 16)),
+                  Icon(Icons.error_outline, ),
+                  Text('Denied', style: TextStyle(fontSize: 16,)),
+                ],
+              ),
+            ],
+          ),
+
+        ].addElementBetweenElements(const SizedBox(width: 30),),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
+    Widget statusWidget;
+    switch (status) {
+
+      case PermitApplicationStatus.Pending:
+         statusWidget = _buildPendingStatus(theme);
+      case PermitApplicationStatus.AwaitingPayment:
+         statusWidget = _buildAwaitingPaymentStatus(theme);
+      case PermitApplicationStatus.Denied:
+         statusWidget = _buildDeniedStatus(theme);
+
+      default:
+        return Container();
+    }
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.background,
@@ -34,37 +177,12 @@ class PermitApplicationStatusWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 100,
-            child: Text(
-              'Apply for a permit',
-              style: TextStyle(
-                fontSize: 24,
-                color: theme.colorScheme.onBackground,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // do smth
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: theme.colorScheme.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
-              elevation: 0,
-            ),
-            child: const Text(
-              'Apply now',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+          statusWidget,
         ],
       ),
     );
+
   }
+
+
 }

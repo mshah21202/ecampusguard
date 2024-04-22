@@ -20,13 +20,16 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: appBar,
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: Stack(
         children: [
+
+
           BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               return Column(
                 children: [
+                  const SizedBox(height: 20,),
                   if (state.applicationStatus != null)
                     PermitApplicationStatusWidget(
                       status: state.applicationStatus!,
@@ -39,10 +42,15 @@ class HomeView extends StatelessWidget {
               );
             },
           ),
+
           const BackgroundLogo()
         ],
+
+
       ),
+
     );
+
   }
 }
 
@@ -63,33 +71,3 @@ class HomeView extends StatelessWidget {
 
 
 
-  // //icon functions
-  // IconData? _getIconData(PermitApplicationStatus status) {
-  //   switch (status) {
-  //     case PermitApplicationStatus.Valid:
-  //       return Icons.check_circle_outline;
-  //     case PermitApplicationStatus.Pending:
-  //       return Icons.hourglass_empty;
-  //     case PermitApplicationStatus.AwaitingPayment:
-  //       return Icons.payment;
-  //     case PermitApplicationStatus.Expired:
-  //       return Icons.alarm;
-  //     default:
-  //       return Icons.help_outline;
-  //   }
-  // }
-
-  // String _getTextBasedOnStatus(PermitApplicationStatus status) {
-  //   switch (status) {
-  //     case PermitApplicationStatus.Valid:
-  //       return 'Application is Valid';
-  //     case PermitApplicationStatus.Pending:
-  //       return 'Application Pending';
-  //     case PermitApplicationStatus.AwaitingPayment:
-  //       return 'Awaiting Payment';
-  //     case PermitApplicationStatus.Expired:
-  //       return 'Permit Expired';
-  //     default:
-  //       return '';
-  //   }
-  // }

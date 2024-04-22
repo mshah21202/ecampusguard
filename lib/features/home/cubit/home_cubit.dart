@@ -13,8 +13,8 @@ class HomeCubit extends Cubit<HomeState> {
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
 
   void _loadData() async {
-    await fetchApplicationStatus();
-    // await fetchPermitStatus();
+     // await fetchApplicationStatus();
+    await fetchPermitStatus();
   }
 
   Future<void> fetchApplicationStatus() async {

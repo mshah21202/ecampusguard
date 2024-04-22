@@ -1,7 +1,7 @@
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
-class PreviousPermits extends StatelessWidget {
+  class PreviousPermits extends StatelessWidget {
   const PreviousPermits({super.key, required this.permits});
 
   final List<PermitDto> permits;
@@ -22,6 +22,7 @@ class PreviousPermits extends StatelessWidget {
           ),
         ),
         Builder(builder: (context) {
+
           //Student has no previous permit
           if (permits.isEmpty) {
             return const Center(
