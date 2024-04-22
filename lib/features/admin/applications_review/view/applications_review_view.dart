@@ -4,6 +4,7 @@ import 'package:ecampusguard/features/admin/applications_review/view/form_widget
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class ApplicationsReviewView extends StatelessWidget {
         }
       },
       child: Scaffold(
+        drawer: const AdminAppDrawer(),
         appBar: appBar,
         body: BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
             builder: (context, state) {

@@ -7,6 +7,7 @@ class PermitsState extends Equatable {
     this.areas,
     this.permit,
     this.selectedPermits,
+    this.selectedDays,
   });
 
   final String? snackbarMessage;
@@ -14,6 +15,7 @@ class PermitsState extends Equatable {
   final List<PermitDto>? selectedPermits;
   final List<AreaDto>? areas;
   final PermitDto? permit;
+  final List<String>? selectedDays;
 
   @override
   List<Object> get props => [
@@ -22,6 +24,7 @@ class PermitsState extends Equatable {
         areas ?? [],
         permit ?? 0,
         selectedPermits ?? [],
+        selectedDays ?? [],
       ];
 }
 
@@ -33,7 +36,9 @@ class PermitsLoaded extends PermitsState {
   const PermitsLoaded({
     super.snackbarMessage,
     super.permits,
+    super.permit,
     super.areas,
+    super.selectedDays,
   });
 }
 

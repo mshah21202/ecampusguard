@@ -4,6 +4,7 @@ import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
@@ -32,12 +33,14 @@ class _AreasListViewState extends State<AreasListView> {
     cubit.areasDataSource.addListener(cubit.selectedRowsListener);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    final cubit = context.read<AreasCubit>();
-    cubit.areasDataSource.removeListener(cubit.selectedRowsListener);
-  }
+  // @override
+  // void dispose() {
+  //   if (mounted) {
+  //     final cubit = context.read<AreasCubit>();
+  //     cubit.areasDataSource.removeListener(cubit.selectedRowsListener);
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +63,7 @@ class _AreasListViewState extends State<AreasListView> {
       },
       listenWhen: (previous, current) => true,
       child: Scaffold(
+        drawer: const AdminAppDrawer(),
         appBar: appBar,
         body: BlocBuilder<AreasCubit, AreasState>(builder: (context, state) {
           return Stack(

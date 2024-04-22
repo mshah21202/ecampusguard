@@ -14,6 +14,8 @@ cd ecampusguard
 # Make sure to increment the version number in the `openapi-config.json` before running the command
 openapi-generator-cli generate -g dart-dio -i <PATH_TO_OPENAPI.JSON> -c openapi-config.json -o <OUTPUT_PATH>
 
+openapi-generator-cli generate -g dart-dio -i ~/Downloads/openapi.json -c openapi-config.json -o ~/Development/ecampusguard_api
+
 # Navigate to the API client library directory
 cd <OUTPUT_PATH>
 

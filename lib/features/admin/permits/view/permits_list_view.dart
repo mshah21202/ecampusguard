@@ -4,6 +4,7 @@ import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
@@ -31,18 +32,19 @@ class _PermitsListViewState extends State<PermitsListView> {
     cubit.permitsDataSource.addListener(cubit.selectedRowsListener);
   }
 
-  @override
-  void dispose() {
-    final cubit = context.read<PermitsCubit>();
-    cubit.permitsDataSource.addListener(cubit.selectedRowsListener);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   final cubit = context.read<PermitsCubit>();
+  //   cubit.permitsDataSource.addListener(cubit.selectedRowsListener);
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<PermitsCubit>();
     var theme = Theme.of(context);
     return Scaffold(
+      drawer: const AdminAppDrawer(),
       appBar: appBar,
       body: BlocConsumer<PermitsCubit, PermitsState>(
         listenWhen: (previous, current) => true,

@@ -15,3 +15,6 @@ const String adminCreateAreaRoute = 'create';
 const String adminPermitsRoute = 'permits';
 const String adminPermitDetailsRoute = ':id';
 const String adminCreatePermitRoute = 'create';
+
+const String adminUserPermitsRoute = 'user-permits';
+const String adminUserPermitDetailsRoute = ':id';

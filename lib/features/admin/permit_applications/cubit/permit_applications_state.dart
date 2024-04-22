@@ -38,6 +38,6 @@ class RowTappedState extends PermitApplicationsState {
   const RowTappedState({required super.id});
 }
 
-class SetQueryParamsPermitApplications extends PermitApplicationsState {
-  const SetQueryParamsPermitApplications({super.params});
+class PermitApplicationsParamsUpdate extends PermitApplicationsState {
+  const PermitApplicationsParamsUpdate({required super.params});
 }

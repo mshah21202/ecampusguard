@@ -67,7 +67,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     );
     this.sortColumnIndex = sortColumnIndex ?? this.sortColumnIndex;
     updateDatasource ? applicationsDataSource.refreshDatasource() : null;
-    emit(SetQueryParamsPermitApplications(params: params));
+    emit(PermitApplicationsParamsUpdate(params: params));
   }
 
   Future<List<PermitApplicationInfoDto>> getPermitApplications(

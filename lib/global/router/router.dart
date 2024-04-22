@@ -6,6 +6,7 @@ import 'package:ecampusguard/features/admin/home_admin/view/home_admin_page.dart
 import 'package:ecampusguard/features/admin/permit_applications/view/permit_applications_page.dart';
 import 'package:ecampusguard/features/admin/permits/permits.dart';
 import 'package:ecampusguard/features/admin/permits/view/permit_details_view.dart';
+import 'package:ecampusguard/features/admin/user_permits/user_permits.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/apply_for_permit_page.dart';
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/features/login/view/login_page.dart';
@@ -13,6 +14,7 @@ import 'package:ecampusguard/features/home/view/home_page.dart';
 import 'package:ecampusguard/features/register/register.dart';
 import 'package:ecampusguard/global/extensions/go_router_extension.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
+import 'package:ecampusguard/global/helpers/user_permits_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -156,6 +158,35 @@ GoRouter appRouter({
                       path: adminCreatePermitRoute,
                       builder: (context, state) {
                         return const PermitDetailsView();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            ShellRoute(
+              builder: (context, state, child) {
+                UserPermitsParams params = UserPermitsParams.fromUri(state.uri);
+                return BlocProvider(
+                  create: (_) => UserPermitsCubit(params: params),
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: adminUserPermitsRoute,
+                  builder: (context, state) {
+                    return const UserPermitsListView();
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminUserPermitDetailsRoute,
+                      builder: (context, state) {
+                        int? id =
+                            int.tryParse(state.pathParameters["id"] ?? "");
+                        return UserPermitDetailsView(
+                          permitId: id!,
+                        );
                       },
                     ),
                   ],

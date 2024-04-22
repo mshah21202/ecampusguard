@@ -94,10 +94,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: c6810cea03dd8dd3d93300985ca4f92a7d007140
+      resolved-ref: "2549264bcc5cc20c247eabb34fc86b825ba444d5"
       url: "https://github.com/mshah21202/ecampusguard_api.git"
     source: git
-    version: "1.0.9"
+    version: "1.0.11"
   equatable:
     dependency: "direct main"
     description:
@@ -215,7 +215,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"

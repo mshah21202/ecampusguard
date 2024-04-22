@@ -4,6 +4,7 @@ import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
@@ -30,7 +31,7 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
     var theme = Theme.of(context);
     return BlocListener<PermitApplicationsCubit, PermitApplicationsState>(
       listener: (context, state) {
-        if (state is SetQueryParamsPermitApplications) {
+        if (state is PermitApplicationsParamsUpdate) {
           String url =
               "$adminHomeRoute/$adminApplicationsRoute?${state.params.toString()}";
           context.go(url);
@@ -45,6 +46,7 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
       },
       child: Scaffold(
         appBar: appBar,
+        drawer: const AdminAppDrawer(),
         body: BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
           return Stack(

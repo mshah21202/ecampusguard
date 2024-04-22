@@ -3,8 +3,11 @@ import 'package:ecampusguard/features/admin/areas/cubit/areas_cubit.dart';
 import 'package:ecampusguard/features/admin/permit_applications/cubit/permit_applications_cubit.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/application_status_chip.dart';
 import 'package:ecampusguard/features/admin/permits/permits.dart';
+import 'package:ecampusguard/features/admin/user_permits/cubit/user_permits_cubit.dart';
+import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PermitApplicationsDataSource extends AsyncDataTableSource {
   PermitApplicationsDataSource.fromApi({
@@ -192,6 +195,66 @@ class PermitsDataSource extends AsyncDataTableSource {
                     },
                   ),
                 ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return AsyncRowsResponse(rows.length, rows);
+  }
+}
+
+class UserPermitsDataSource extends AsyncDataTableSource {
+  UserPermitsDataSource.fromApi({
+    required this.fetchFunction,
+    required this.cubit,
+  });
+
+  final Future<List<UserPermitDto>> Function(int startIndex, int count)
+      fetchFunction;
+
+  final UserPermitsCubit cubit;
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    List<UserPermitDto> userPermits = await fetchFunction(startIndex, count);
+
+    List<DataRow> rows = List.generate(
+      userPermits.length,
+      (index) {
+        var rowKey = ValueKey(index);
+        return DataRow2(
+          key: rowKey,
+          onSelectChanged: (value) {
+            setRowSelection(rowKey, value ?? false);
+          },
+          selected: selectionState == SelectionState.include
+              ? selectionRowKeys.contains(rowKey)
+              : !selectionRowKeys.contains(rowKey),
+          onTap: () {
+            cubit.onRowTap(index);
+          },
+          cells: [
+            DataCell(
+              Text(userPermits[index].user!.studentId!),
+            ),
+            DataCell(
+              Text(userPermits[index].user!.name!),
+            ),
+            DataCell(
+              Text(userPermits[index].vehicle!.plateNumber!),
+            ),
+            DataCell(
+              Text(DateFormat("dd/MM/y").format(userPermits[index].expiry!)),
+            ),
+            DataCell(
+              Text(userPermits[index].permit!.name!),
+            ),
+            DataCell(
+              UserPermitStatusChip(
+                status: userPermits[index].status!,
               ),
             ),
           ],
