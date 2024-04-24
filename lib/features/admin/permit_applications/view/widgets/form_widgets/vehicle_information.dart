@@ -1,4 +1,4 @@
-import 'package:ecampusguard/features/admin/applications_review/applications_review.dart';
+import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
@@ -12,7 +12,7 @@ class VehicleDetailsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = context.read<ApplicationsReviewCubit>();
+    var cubit = context.read<PermitApplicationsCubit>();
     var theme = Theme.of(context);
     return FormFields(
       title: "Vehicle Details",
@@ -29,9 +29,9 @@ class VehicleDetailsForm extends StatelessWidget {
           },
           decoration: const InputDecoration(label: Text("Car Number Plate")),
         ),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          cubit = context.read<ApplicationsReviewCubit>();
+          cubit = context.read<PermitApplicationsCubit>();
           return DropdownMenu(
             // TODO: Change this to dropdownbuttonformfield for validator
             menuHeight: MediaQuery.of(context).size.height * 0.5,
@@ -125,9 +125,9 @@ class VehicleDetailsForm extends StatelessWidget {
           },
           decoration: const InputDecoration(label: Text("Color")),
         ),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          var cubit = context.read<ApplicationsReviewCubit>();
+          var cubit = context.read<PermitApplicationsCubit>();
           return InkWell(
             onTap: () async {
               FilePickerResult? result =

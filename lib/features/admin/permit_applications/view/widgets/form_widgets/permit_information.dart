@@ -1,4 +1,4 @@
-import 'package:ecampusguard/features/admin/applications_review/applications_review.dart';
+import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +12,9 @@ class PermitInformationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+    return BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
         builder: (context, state) {
-      var cubit = context.read<ApplicationsReviewCubit>();
+      var cubit = context.read<PermitApplicationsCubit>();
       return FormFields(
         title: "Permit Information",
         gap: 25,
@@ -24,12 +24,12 @@ class PermitInformationForm extends StatelessWidget {
             expandedInsets: EdgeInsets.zero,
             label: const Text("Permit Type"),
             onSelected: (index) {
-              cubit.selectPermitType(cubit.permits![index ?? 0]);
+              cubit.selectPermitType(cubit.permits[index ?? 0]);
             },
             dropdownMenuEntries: List.generate(
-              cubit.permits != null ? cubit.permits!.length : 0,
+              cubit.permits.length,
               (index) => DropdownMenuEntry(
-                  value: index, label: cubit.permits![index].name ?? ""),
+                  value: index, label: cubit.permits[index].name ?? ""),
             ),
           ),
           const Center(),

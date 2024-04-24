@@ -6,23 +6,54 @@ class PermitApplicationsState extends Equatable {
     this.snackBarMessage,
     this.params,
     this.id,
+    this.attendingDays,
+    this.selectedCountry,
+    this.uploadedFile,
+    this.selectedPermit,
+    this.acknowledged,
+    this.selectedApplications,
   });
 
+  final List<String>? attendingDays;
+  final Country? selectedCountry;
+  final PlatformFile? uploadedFile;
+  final PermitDto? selectedPermit;
+  final bool? acknowledged;
   final List<PermitApplicationInfoDto>? applications;
+  final List<PermitApplicationInfoDto>? selectedApplications;
   final String? snackBarMessage;
   final PermitApplicationsParams? params;
   final int? id;
 
   @override
-  List<Object> get props => [
-        applications ?? [],
-        snackBarMessage ?? "",
-        params ?? PermitApplicationsParams.empty(),
-        id ?? 0,
+  List<Object?> get props => [
+        applications,
+        snackBarMessage,
+        params,
+        id,
+        attendingDays,
+        selectedCountry,
+        uploadedFile,
+        selectedPermit,
+        acknowledged,
+        selectedApplications,
       ];
 }
 
 class PermitApplicationsInitial extends PermitApplicationsState {}
+
+class PermitApplicationsUpdated extends PermitApplicationsState {
+  const PermitApplicationsUpdated({
+    super.attendingDays,
+    super.selectedCountry,
+    super.selectedPermit,
+    super.acknowledged,
+  });
+}
+
+class PermitApplicationsRowSelection extends PermitApplicationsState {
+  const PermitApplicationsRowSelection({super.selectedApplications});
+}
 
 class LoadedPermitApplications extends PermitApplicationsState {
   const LoadedPermitApplications({super.applications, super.snackBarMessage});
@@ -40,4 +71,8 @@ class RowTappedState extends PermitApplicationsState {
 
 class PermitApplicationsParamsUpdate extends PermitApplicationsState {
   const PermitApplicationsParamsUpdate({required super.params});
+}
+
+class UploadedFile extends PermitApplicationsState {
+  const UploadedFile({super.uploadedFile});
 }

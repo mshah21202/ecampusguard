@@ -25,6 +25,30 @@ class PermitApplicationsParams {
       required this.orderBy,
       required this.orderByDirection});
 
+  PermitApplicationsParams copyWith({
+    int? pageSize,
+    int? currentPage,
+    String? studentId,
+    String? name,
+    AcademicYear? academicYear,
+    int? permitId,
+    PermitApplicationStatus? status,
+    PermitApplicationOrderBy? orderBy,
+    String? orderByDirection,
+  }) {
+    return PermitApplicationsParams(
+      pageSize: pageSize ?? this.pageSize,
+      currentPage: currentPage ?? this.currentPage,
+      studentId: studentId ?? this.studentId,
+      name: name ?? this.name,
+      academicYear: academicYear ?? this.academicYear,
+      permitId: permitId ?? this.permitId,
+      status: status ?? this.status,
+      orderBy: orderBy ?? this.orderBy,
+      orderByDirection: orderByDirection ?? this.orderByDirection,
+    );
+  }
+
   PermitApplicationsParams.fromUri(Uri uri)
       : status = uri.queryParameters["status"] != null
             ? PermitApplicationStatus

@@ -3,10 +3,6 @@ import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../user_permits.dart';
-
 class UserPermitDetailsView extends StatelessWidget {
   const UserPermitDetailsView({
     Key? key,

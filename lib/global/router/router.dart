@@ -1,9 +1,8 @@
-import 'package:ecampusguard/features/admin/applications_review/applications_review.dart';
 import 'package:ecampusguard/features/admin/areas/areas.dart';
 import 'package:ecampusguard/features/admin/areas/view/area_details_view.dart';
 import 'package:ecampusguard/features/admin/areas/view/areas_list_view.dart';
 import 'package:ecampusguard/features/admin/home_admin/view/home_admin_page.dart';
-import 'package:ecampusguard/features/admin/permit_applications/view/permit_applications_page.dart';
+import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/admin/permits/permits.dart';
 import 'package:ecampusguard/features/admin/permits/view/permit_details_view.dart';
 import 'package:ecampusguard/features/admin/user_permits/user_permits.dart';
@@ -80,24 +79,31 @@ GoRouter appRouter({
             return const HomeAdminPage();
           },
           routes: [
-            GoRoute(
-              path: adminApplicationsRoute,
-              builder: (context, state) {
+            ShellRoute(
+              builder: (context, state, child) {
                 PermitApplicationsParams params =
                     PermitApplicationsParams.fromUri(state.uri);
-
-                return PermitApplicationsPage(
-                  params: params,
+                return BlocProvider(
+                  create: (_) => PermitApplicationsCubit(params: params),
+                  child: child,
                 );
               },
               routes: [
                 GoRoute(
-                  path: adminApplicationReviewRoute,
+                  path: adminApplicationsRoute,
                   builder: (context, state) {
-                    int id = int.parse(state.pathParameters["id"]!);
-                    return ApplicationsReviewPage(applicationId: id);
+                    return const PermitApplicationsListView();
                   },
-                )
+                  routes: [
+                    GoRoute(
+                      path: adminApplicationDetailsRoute,
+                      builder: (context, state) {
+                        int id = int.parse(state.pathParameters["id"]!);
+                        return PermitApplicationDetailsView(applicationId: id);
+                      },
+                    )
+                  ],
+                ),
               ],
             ),
             ShellRoute(

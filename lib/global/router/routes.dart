@@ -6,7 +6,7 @@ const String registerRoute = '/register';
 const String adminHomeRoute = '/admin';
 
 const String adminApplicationsRoute = 'applications';
-const String adminApplicationReviewRoute = ':id';
+const String adminApplicationDetailsRoute = ':id';
 
 const String adminAreasRoute = 'areas';
 const String adminAreaDetailsRoute = ':id';

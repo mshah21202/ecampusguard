@@ -38,12 +38,6 @@ class PermitApplicationsDataSource extends AsyncDataTableSource {
         var rowKey = ValueKey(index);
         return DataRow2(
           key: rowKey,
-          onSelectChanged: (value) {
-            setRowSelection(rowKey, value ?? false);
-          },
-          selected: selectionState == SelectionState.include
-              ? selectionRowKeys.contains(rowKey)
-              : !selectionRowKeys.contains(rowKey),
           onTap: () {
             cubit.onRowTap(index);
           },

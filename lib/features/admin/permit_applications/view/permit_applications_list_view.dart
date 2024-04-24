@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/applications_filter_dialog.dart';
+import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
@@ -15,16 +16,25 @@ import 'package:go_router/go_router.dart';
 
 import '../permit_applications.dart';
 
-class PermitApplicationsView extends StatefulWidget {
-  const PermitApplicationsView({
+class PermitApplicationsListView extends StatefulWidget {
+  const PermitApplicationsListView({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<PermitApplicationsView> createState() => _PermitApplicationsViewState();
+  State<PermitApplicationsListView> createState() =>
+      _PermitApplicationsListViewState();
 }
 
-class _PermitApplicationsViewState extends State<PermitApplicationsView> {
+class _PermitApplicationsListViewState
+    extends State<PermitApplicationsListView> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<PermitApplicationsCubit>();
+    cubit.applicationsDataSource.addListener(cubit.selectedRowsListener);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<PermitApplicationsCubit>();
@@ -90,17 +100,17 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                                       params: cubit.params,
                                       onSave: (studentId, name, academicYear,
                                           permitId, status) {
-                                        cubit.setQueryParams(
-                                          pageSize: cubit.params.pageSize,
-                                          currentPage: cubit.params.currentPage,
+                                        PermitApplicationsParams params =
+                                            cubit.params.copyWith(
                                           studentId: studentId,
                                           status: status,
                                           name: name,
                                           academicYear: academicYear,
                                           permitId: permitId,
-                                          orderBy: cubit.params.orderBy,
-                                          orderByDirection:
-                                              cubit.params.orderByDirection,
+                                        );
+
+                                        cubit.setQueryParams(
+                                          updatedParams: params,
                                         );
                                       },
                                     );
@@ -122,8 +132,20 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                         sortAscending: cubit.params.orderByDirection == "ASC",
                         dataSource: cubit.applicationsDataSource,
                         onPageChanged: (page) {
-                          cubit.setQueryParams(
+                          PermitApplicationsParams params =
+                              PermitApplicationsParams(
+                            pageSize: cubit.params.pageSize,
                             currentPage: page ~/ (cubit.params.pageSize ?? 10),
+                            studentId: cubit.params.studentId,
+                            status: cubit.params.status,
+                            name: cubit.params.name,
+                            academicYear: cubit.params.academicYear,
+                            permitId: cubit.params.permitId,
+                            orderBy: cubit.params.orderBy,
+                            orderByDirection: cubit.params.orderByDirection,
+                          );
+                          cubit.setQueryParams(
+                            updatedParams: params,
                             updateDatasource: false,
                           );
                         },
@@ -134,8 +156,10 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                             label: const Text("Student ID"),
                             onSort: (columnIndex, ascending) {
                               cubit.setQueryParams(
-                                orderBy: PermitApplicationOrderBy.StudentId,
-                                orderByDirection: ascending ? "ASC" : "DSC",
+                                updatedParams: cubit.params.copyWith(
+                                  orderBy: PermitApplicationOrderBy.StudentId,
+                                  orderByDirection: ascending ? "ASC" : "DSC",
+                                ),
                                 sortColumnIndex: columnIndex,
                               );
                             },
@@ -145,8 +169,10 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                             label: const Text("Name"),
                             onSort: (columnIndex, ascending) {
                               cubit.setQueryParams(
-                                orderBy: PermitApplicationOrderBy.Name,
-                                orderByDirection: ascending ? "ASC" : "DSC",
+                                updatedParams: cubit.params.copyWith(
+                                  orderBy: PermitApplicationOrderBy.Name,
+                                  orderByDirection: ascending ? "ASC" : "DSC",
+                                ),
                                 sortColumnIndex: columnIndex,
                               );
                             },
@@ -156,8 +182,11 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                             label: const Text("Academic Year"),
                             onSort: (columnIndex, ascending) {
                               cubit.setQueryParams(
-                                orderBy: PermitApplicationOrderBy.AcademicYear,
-                                orderByDirection: ascending ? "ASC" : "DSC",
+                                updatedParams: cubit.params.copyWith(
+                                  orderBy:
+                                      PermitApplicationOrderBy.AcademicYear,
+                                  orderByDirection: ascending ? "ASC" : "DSC",
+                                ),
                                 sortColumnIndex: columnIndex,
                               );
                             },
@@ -167,8 +196,10 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                             label: const Text("Permit Type"),
                             onSort: (columnIndex, ascending) {
                               cubit.setQueryParams(
-                                orderBy: PermitApplicationOrderBy.PermitType,
-                                orderByDirection: ascending ? "ASC" : "DSC",
+                                updatedParams: cubit.params.copyWith(
+                                  orderBy: PermitApplicationOrderBy.PermitType,
+                                  orderByDirection: ascending ? "ASC" : "DSC",
+                                ),
                                 sortColumnIndex: columnIndex,
                               );
                             },
@@ -178,8 +209,10 @@ class _PermitApplicationsViewState extends State<PermitApplicationsView> {
                             label: const Text("Status"),
                             onSort: (columnIndex, ascending) {
                               cubit.setQueryParams(
-                                orderBy: PermitApplicationOrderBy.Status,
-                                orderByDirection: ascending ? "ASC" : "DSC",
+                                updatedParams: cubit.params.copyWith(
+                                  orderBy: PermitApplicationOrderBy.Status,
+                                  orderByDirection: ascending ? "ASC" : "DSC",
+                                ),
                                 sortColumnIndex: columnIndex,
                               );
                             },

@@ -1,4 +1,4 @@
-import 'package:ecampusguard/features/admin/applications_review/cubit/applications_review_cubit.dart';
+import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
@@ -18,7 +18,7 @@ class PersonalDetailsForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var cubit = context.read<ApplicationsReviewCubit>();
+    var cubit = context.read<PermitApplicationsCubit>();
     // var width = MediaQuery.of(context).size.width;
     return FormFields(
       title: "Personal Details",
@@ -41,9 +41,9 @@ class PersonalDetailsForm extends StatelessWidget {
             return null;
           },
         ),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          cubit = context.read<ApplicationsReviewCubit>();
+          cubit = context.read<PermitApplicationsCubit>();
           return DropDownMultiSelect(
             validator: (value) {
               if (value == null || value == "") {
@@ -60,9 +60,9 @@ class PersonalDetailsForm extends StatelessWidget {
             },
           );
         }),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          cubit = context.read<ApplicationsReviewCubit>();
+          cubit = context.read<PermitApplicationsCubit>();
 
           return TextFormField(
             controller: cubit.phoneNumberController,
@@ -98,9 +98,9 @@ class PersonalDetailsForm extends StatelessWidget {
             return null;
           },
         ),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          var cubit = context.read<ApplicationsReviewCubit>();
+          var cubit = context.read<PermitApplicationsCubit>();
 
           return LayoutBuilder(builder: (context, constraints) {
             return DropdownButtonFormField(
@@ -134,9 +134,9 @@ class PersonalDetailsForm extends StatelessWidget {
             );
           });
         }),
-        BlocBuilder<ApplicationsReviewCubit, ApplicationsReviewState>(
+        BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
-          var cubit = context.read<ApplicationsReviewCubit>();
+          var cubit = context.read<PermitApplicationsCubit>();
           return InkWell(
             onTap: () async {
               FilePickerResult? result =
