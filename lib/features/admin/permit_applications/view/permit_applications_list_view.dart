@@ -5,7 +5,7 @@ import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
-import 'package:ecampusguard/global/widgets/drawer.dart';
+import 'package:ecampusguard/global/widgets/admin_drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
