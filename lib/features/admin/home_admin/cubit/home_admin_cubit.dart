@@ -6,9 +6,7 @@ import 'package:get_it/get_it.dart';
 part 'home_admin_state.dart';
 
 class HomeAdminCubit extends Cubit<HomeAdminState> {
-  HomeAdminCubit() : super(HomeAdminInitial()) {
-    loadData();
-  }
+  HomeAdminCubit() : super(HomeAdminInitial());
 
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
 
@@ -46,9 +44,7 @@ class HomeAdminCubit extends Cubit<HomeAdminState> {
     emit(HomeAdminLoading());
 
     try {
-      var result = await _api.getAreaApi().areaGet(headers: {
-        "x-mock-response-name": "S",
-      });
+      var result = await _api.getAreaApi().areaGet();
 
       if (result.data == null) {
         throw Exception(result.statusMessage);

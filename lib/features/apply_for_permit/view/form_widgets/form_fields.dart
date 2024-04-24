@@ -23,11 +23,12 @@ class FormFields extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(20),
+        color: theme.colorScheme.background,
       ),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Text(
             title,
@@ -83,6 +84,7 @@ class CustomGridView extends StatelessWidget {
         if (index + 1 < children.length && !singleColumn) {
           return Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: LayoutBuilder(
