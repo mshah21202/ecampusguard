@@ -35,7 +35,7 @@ GoRouter appRouter({
         GoRoute(
           path: registerRoute,
           builder: (context, state) {
-            return const RegisterPage();
+            return const HomePage();
           },
         ),
         GoRoute(

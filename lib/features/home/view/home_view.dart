@@ -1,8 +1,12 @@
-import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
+import 'package:ecampusguard/features/home/view/widgets/permit_application_status.dart';
+import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
+import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
+import 'package:ecampusguard/global/widgets/app_bar.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../home.dart';
 
 class HomeView extends StatelessWidget {
@@ -12,94 +16,59 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final cubit = context.read<HomeCubit>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "TEST",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.logout),
-          onPressed: () {
-            context.read<AuthenticationCubit>().logout();
-          },
-        ),
-        backgroundColor: const Color(0xFF565992),
-      ),
+      key: scaffoldKey,
+      appBar: appBar,
+      drawer: AppDrawer(),
       body: Stack(
         children: [
-          Positioned(
-            left: -150,
-            bottom: -150,
-            child: Opacity(
-              opacity: 0.2,
-              child: Image.asset('assets/images/ecampusLogo.png'),
-            ),
-          ),
 
-          /*    BlocBuilder<HomeCubit, HomeState>(
+
+          BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      _getIconData(state.applicationStatus),
-                      size: 48,
+              return Column(
+                children: [
+                  const SizedBox(height: 20,),
+                  if (state.applicationStatus != null)
+                    PermitApplicationStatusWidget(
+                      status: state.applicationStatus!,
                     ),
-                    SizedBox(height: 8),
-
-                    Text(
-                      _getTextBasedOnStatus(state.applicationStatus),
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    SizedBox(height: 24),
-
-                    ElevatedButton(
-                      onPressed: cubit.fetchApplicationStatus,
-                      child: const Text('Check Application Status'),
-                    ),
-                  ],
-                ),
+                  if (state.applicationStatus == null &&
+                      state.permitStatus != null)
+                    PermitStatusWidget(status: state.permitStatus!),
+                  const PreviousPermits(permits: [])
+                ],
               );
             },
-          ),*/
+          ),
+
+          const BackgroundLogo()
         ],
+
+
       ),
+
     );
+
   }
 }
 
-IconData _getIconData(PermitApplicationStatus status) {
-  switch (status) {
-    case PermitApplicationStatus.valid:
-      return Icons.check_circle_outline;
-    case PermitApplicationStatus.pending:
-      return Icons.hourglass_empty;
-    case PermitApplicationStatus.awaitingPayment:
-      return Icons.payment;
-    default:
-      return Icons.help_outline;
-  }
-}
 
-String _getTextBasedOnStatus(PermitApplicationStatus status) {
-  switch (status) {
-    case PermitApplicationStatus.valid:
-      return 'Application is Valid';
-    case PermitApplicationStatus.pending:
-      return 'Application Pending';
-    case PermitApplicationStatus.awaitingPayment:
-      return 'Awaiting Payment';
-    default:
-      return 'Status Unknown';
-  }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

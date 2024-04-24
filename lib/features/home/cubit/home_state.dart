@@ -1,21 +1,30 @@
 part of 'home_cubit.dart';
 
 class HomeState extends Equatable {
-  const HomeState();
+  const HomeState({this.applicationStatus, this.permitStatus});
+  final PermitApplicationStatus? applicationStatus;
+  final UserPermitStatus? permitStatus;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        applicationStatus ?? PermitApplicationStatus.unknownDefaultOpenApi,
+        permitStatus ?? UserPermitStatus.unknownDefaultOpenApi
+      ];
 }
 
 class HomeInitial extends HomeState {}
+
+class LoadingHomeState extends HomeState {}
+
 class ApplicationStatusState extends HomeState {
-  final PermitApplicationStatus applicationStatus;
+  const ApplicationStatusState({required this.status})
+      : super(applicationStatus: status);
 
-  const ApplicationStatusState(this.applicationStatus);
-
-  @override
-  List<Object> get props => [applicationStatus];
+  final PermitApplicationStatus status;
 }
 
-//status we have
-enum PermitApplicationStatus { valid,withdraw, pending, awaitingPayment, approved, rejected }
+class PermitStatusState extends HomeState {
+  const PermitStatusState({required this.status}) : super(permitStatus: status);
+
+  final UserPermitStatus status;
+}
