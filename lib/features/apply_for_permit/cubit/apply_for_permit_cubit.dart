@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:bloc/bloc.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
@@ -5,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -14,6 +17,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
   ApplyForPermitCubit() : super(ApplyForPermitInitial());
 
   final Ecampusguardapi _api = GetIt.I.get<Ecampusguardapi>();
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Map<String, bool> _attendingDays = {
     "Sun": false,
@@ -52,8 +56,10 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
   bool acknowledged = false;
   int? academicYear;
   PlatformFile? drivingLicenseImgFile;
+  String? drivingLicenseImgUrl;
   bool get choosenDrivingLicense => drivingLicenseImgFile != null;
   PlatformFile? carRegistrationImgFile;
+  String? carRegistrationImgUrl;
   bool get choosenCarRegistration => carRegistrationImgFile != null;
   List<String> get academicYears => [
         "First Year",
@@ -140,12 +146,14 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     }
 
     try {
+      await _uploadLicenseFile();
+      await _uploadRegistrationFile();
       var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
           createPermitApplicationDto: CreatePermitApplicationDto(
               studentId: int.parse(studentIdController.text),
               academicYear: AcademicYear.values.toList()[academicYear ?? 0],
               attendingDays: _attendingDays.values.toList(),
-              licenseImgPath: drivingLicenseImgFile!.name,
+              licenseImgPath: drivingLicenseImgUrl,
               permitId: selectedPermit!.id,
               phoneNumber:
                   "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
@@ -156,7 +164,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
                   model: carModelController.text,
                   nationality: selectedCarNationality!.isoCode,
                   plateNumber: plateNumberController.text,
-                  registrationDocImgPath: drivingLicenseImgFile!.name,
+                  registrationDocImgPath: carRegistrationImgUrl,
                   year: int.parse(carYearController.text))));
 
       if (result.data == null) {
@@ -174,11 +182,37 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
       if (e is DioException && (e).response != null) {
         emit(
           FailedApplyForPermitState(
-            snackBarMessage: (ResponseDto.fromJson((e).response!.data))
-                .toString(), // TODO: Test this
+            snackBarMessage:
+                (ResponseDto.fromJson((e).response!.data)).toString(),
           ),
         );
       }
+    }
+  }
+
+  Future<void> _uploadLicenseFile() async {
+    try {
+      var file =
+          _storage.ref().child("licenses/${drivingLicenseImgFile!.name}");
+
+      await file.putBlob(drivingLicenseImgFile!.bytes).then((p0) async {
+        drivingLicenseImgUrl = await file.getDownloadURL();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _uploadRegistrationFile() async {
+    try {
+      var file =
+          _storage.ref().child("registrations/${carRegistrationImgFile!.name}");
+
+      await file.putBlob(carRegistrationImgFile!.bytes).then((p0) async {
+        carRegistrationImgUrl = await file.getDownloadURL();
+      });
+    } catch (e) {
+      print(e);
     }
   }
 

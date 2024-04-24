@@ -1,8 +1,10 @@
 import 'package:ecampusguard/features/authentication/authentication.dart';
+import 'package:ecampusguard/firebase_options.dart';
 import 'package:ecampusguard/global/router/router.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
 import 'package:ecampusguard/global/theme/cubit/theme_cubit.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -10,6 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
+  FirebaseApp app = await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
   var getIt = GetIt.instance;
   var api = Ecampusguardapi(basePathOverride: "https://localhost:7136");

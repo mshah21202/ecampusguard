@@ -191,6 +191,7 @@ class PersonalDetailsForm extends StatelessWidget {
             onTap: () async {
               FilePickerResult? result =
                   await FilePickerWeb.platform.pickFiles(type: FileType.image);
+
               if (result != null) {
                 cubit.selectDrivingLicense(result.files.single);
               }
