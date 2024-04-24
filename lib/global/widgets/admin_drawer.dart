@@ -1,5 +1,7 @@
+import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AdminAppDrawer extends StatelessWidget {
@@ -64,6 +66,14 @@ class AdminAppDrawer extends StatelessWidget {
             onTap: () {
               context.pop();
               context.go("$adminHomeRoute/$adminApplicationsRoute");
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Log Out'),
+            onTap: () {
+              var cubit = context.read<AuthenticationCubit>();
+              cubit.logout();
             },
           ),
         ],
