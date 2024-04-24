@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
+// import 'package:get_it/get_it.dart';
 
 part 'home_state.dart';
 
@@ -10,11 +10,11 @@ class HomeCubit extends Cubit<HomeState> {
     _loadData();
   }
 
-  final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
+  // final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
 
   void _loadData() async {
-     // await fetchApplicationStatus();
-    await fetchPermitStatus();
+     await fetchApplicationStatus();
+    // await fetchPermitStatus();
   }
 
   Future<void> fetchApplicationStatus() async {
@@ -33,7 +33,7 @@ class HomeCubit extends Cubit<HomeState> {
       // );
 
       var result =
-          await _testApplicationStatus(PermitApplicationStatus.Pending);
+          await _testApplicationStatus(PermitApplicationStatus.AwaitingPayment);
       emit(ApplicationStatusState(status: result));
     } catch (error) {}
   }
@@ -52,7 +52,7 @@ class HomeCubit extends Cubit<HomeState> {
       // emit(
       //   ApplicationStatusState(applicationStatus: result.data!.first.status),
       // );
-      var result = await _testPermitStatus(UserPermitStatus.Valid);
+      var result = await _testPermitStatus(UserPermitStatus.Withdrawn);
       emit(PermitStatusState(status: result));
     } catch (error) {}
   }
