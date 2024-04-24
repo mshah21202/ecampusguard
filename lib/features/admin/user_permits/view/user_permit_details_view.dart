@@ -1,6 +1,6 @@
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
-import 'package:ecampusguard/global/widgets/admin_drawer.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class UserPermitDetailsView extends StatelessWidget {

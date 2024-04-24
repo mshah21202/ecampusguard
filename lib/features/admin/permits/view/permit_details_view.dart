@@ -2,7 +2,7 @@ import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fi
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/app_logo.dart';
-import 'package:ecampusguard/global/widgets/admin_drawer.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
