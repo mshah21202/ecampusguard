@@ -1,9 +1,12 @@
-import 'package:ecampusguard/features/home/view/widgets/permit_application_status.dart';
+import 'package:ecampusguard/features/home/view/widgets/enterexit_logs.dart';
 import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
+import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,53 +25,43 @@ class HomeView extends StatelessWidget {
       key: scaffoldKey,
       appBar: appBar,
       drawer: AppDrawer(),
-      body: Stack(
-        children: [
-
-
-          BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  const SizedBox(height: 20,),
-                  if (state.applicationStatus != null)
-                    PermitApplicationStatusWidget(
-                      status: state.applicationStatus!,
-                    ),
-                  if (state.applicationStatus == null &&
-                      state.permitStatus != null)
-                    PermitStatusWidget(status: state.permitStatus!),
-                  const PreviousPermits(permits: [])
-                ],
-              );
-            },
-          ),
-
-          const BackgroundLogo()
-        ],
-
-
+      body: BlocBuilder<HomeCubit, HomeState>(
+        buildWhen: (previous, current) {
+          return current.homeScreenDto != null;
+        },
+        builder: (context, state) {
+          return Stack(
+            children: [
+              const BackgroundLogo(),
+              if (state is! LoadingHomeState && state.homeScreenDto != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ResponsiveWidget.defaultPadding(context),
+                      vertical: ResponsiveWidget.smallPadding(context)),
+                  child: Column(
+                    children: [
+                      // if (state.homeScreenDto!.homeScreenWidgets!
+                      //     .contains(HomeScreenWidget.ApplicationStatus))
+                      //   PermitApplicationStatusWidget(
+                      //     status: state.applicationStatus!,
+                      //   ),
+                      if (state.homeScreenDto!.homeScreenWidgets!
+                          .contains(HomeScreenWidget.PermitStatus))
+                        const PermitStatusWidget(),
+                      if (state.homeScreenDto!.homeScreenWidgets!
+                          .contains(HomeScreenWidget.PreviousPermits))
+                        const PreviousPermits(permits: []),
+                      if (state.homeScreenDto!.homeScreenWidgets!
+                          .contains(HomeScreenWidget.AccessLogs))
+                        const AccessLogsList(),
+                    ],
+                  ),
+                ),
+              FullScreenLoadingIndicator(visible: state is LoadingHomeState),
+            ],
+          );
+        },
       ),
-
     );
-
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
