@@ -39,15 +39,10 @@ class HomeView extends StatelessWidget {
                 SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveWidget.defaultPadding(context),
-                        vertical: ResponsiveWidget.smallPadding(context)),
+                        horizontal: ResponsiveWidget.largePadding(context),
+                        vertical: ResponsiveWidget.mediumPadding(context)),
                     child: Column(
                       children: [
-                        // if (state.homeScreenDto!.homeScreenWidgets!
-                        //     .contains(HomeScreenWidget.ApplicationStatus))
-                        //   PermitApplicationStatusWidget(
-                        //     status: state.applicationStatus!,
-                        //   ),
                         if (state.homeScreenDto!.homeScreenWidgets!
                             .contains(HomeScreenWidget.PermitStatus))
                           const PermitStatusWidget(),
@@ -57,9 +52,11 @@ class HomeView extends StatelessWidget {
                         if (state.homeScreenDto!.homeScreenWidgets!
                             .contains(HomeScreenWidget.AccessLogs))
                           const AccessLogsList(),
-                      ].addElementBetweenElements(SizedBox(
-                        height: ResponsiveWidget.mediumPadding(context),
-                      )),
+                      ].addElementBetweenElements(
+                        SizedBox(
+                          height: ResponsiveWidget.mediumPadding(context),
+                        ),
+                      ),
                     ),
                   ),
                 ),

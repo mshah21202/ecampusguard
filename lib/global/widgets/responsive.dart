@@ -40,9 +40,19 @@ class ResponsiveWidget extends StatelessWidget {
     }
   }
 
+  static double largePadding(BuildContext context) {
+    if (isLargeScreen(context)) {
+      return 82;
+    } else if (isMediumScreen(context)) {
+      return 64;
+    } else {
+      return 24;
+    }
+  }
+
   static double mediumPadding(BuildContext context) {
     if (isLargeScreen(context)) {
-      return 48;
+      return 32;
     } else if (isMediumScreen(context)) {
       return 24;
     } else {
@@ -52,7 +62,7 @@ class ResponsiveWidget extends StatelessWidget {
 
   static double smallPadding(BuildContext context) {
     if (isLargeScreen(context)) {
-      return 24;
+      return 12;
     } else if (isMediumScreen(context)) {
       return 12;
     } else {

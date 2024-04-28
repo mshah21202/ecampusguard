@@ -1,6 +1,8 @@
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/home/home.dart';
+import 'package:ecampusguard/global/extensions/list_extension.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +38,11 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
         var cubit = context.read<HomeCubit>();
         if (state is! LoadingHomeState) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height *
+                (ResponsiveWidget.isLargeScreen(context) ||
+                        ResponsiveWidget.isMediumScreen(context)
+                    ? 0.27
+                    : 0.45),
             decoration: BoxDecoration(
               color: theme.colorScheme.background,
               borderRadius: BorderRadius.circular(25.0),
@@ -48,85 +54,27 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
                 ),
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          cubit.userPermit!.permit!.name!,
-                          style: theme.textTheme.headlineLarge!.copyWith(
-                            color: theme.colorScheme.onBackground,
-                          ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.06,
-                              child: Text('Status: ',
-                                  style: theme.textTheme.headlineSmall),
-                            ),
-                            UserPermitStatusChip(
-                              status: cubit.userPermit!.status!,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.06,
-                              child: Text('Days: ',
-                                  style: theme.textTheme.headlineSmall),
-                            ),
-                            DaysIndicator(
-                                days: cubit.userPermit!.permit!.days!),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          color: theme.colorScheme.outline.withOpacity(0.16),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FilledButton(
-                            onPressed: () {
-                              //do smth
-                            },
-                            child: const Text(
-                              "Update Details",
-                            ),
-                          ),
-                        ],
+            child: ResponsiveWidget.isLargeScreen(context) ||
+                    ResponsiveWidget.isMediumScreen(context)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _permitInformationWidget(cubit, theme),
+                      _permitActions(cubit, theme),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _permitInformationWidget(cubit, theme),
+                      _permitActions(cubit, theme),
+                    ].addElementBetweenElements(
+                      SizedBox(
+                        height: ResponsiveWidget.defaultPadding(context),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
           );
         } else {
           return const Center();
@@ -134,4 +82,123 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
       },
     );
   }
+
+  Widget _permitActions(HomeCubit cubit, ThemeData theme) => Flexible(
+        flex: ResponsiveWidget.isLargeScreen(context) ||
+                ResponsiveWidget.isMediumScreen(context)
+            ? 1
+            : 6,
+        fit: FlexFit.tight,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: ResponsiveWidget.isLargeScreen(context) ||
+                      ResponsiveWidget.isMediumScreen(context)
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.16),
+                      width: 2,
+                    )
+                  : BorderSide.none,
+              top: ResponsiveWidget.isLargeScreen(context) ||
+                      ResponsiveWidget.isMediumScreen(context)
+                  ? BorderSide.none
+                  : BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.16),
+                      width: 2,
+                    ),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FilledButton(
+                  onPressed: () {
+                    //do smth
+                  },
+                  child: const Text(
+                    "Update Details",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _permitInformationWidget(HomeCubit cubit, ThemeData theme) => Flexible(
+        flex: ResponsiveWidget.isLargeScreen(context) ||
+                ResponsiveWidget.isMediumScreen(context)
+            ? 3
+            : 12,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                cubit.userPermit!.permit!.name!,
+                style: theme.textTheme.headlineLarge!.copyWith(
+                  color: theme.colorScheme.onBackground,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: 44,
+                        child: Text('Status: ',
+                            style: theme.textTheme.headlineSmall),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: 44,
+                        child: Text('Days: ',
+                            style: theme.textTheme.headlineSmall),
+                      ),
+                    ].addElementBetweenElements(
+                      SizedBox(
+                        height: ResponsiveWidget.smallPadding(context),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: 44,
+                        child: UserPermitStatusChip(
+                          status: cubit.userPermit!.status!,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: 44,
+                        child: DaysIndicator(
+                            days: cubit.userPermit!.permit!.days!),
+                      ),
+                    ].addElementBetweenElements(
+                      SizedBox(
+                        height: ResponsiveWidget.smallPadding(context),
+                      ),
+                    ),
+                  ),
+                ].addElementBetweenElements(
+                  SizedBox(
+                    width: ResponsiveWidget.smallPadding(context),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }
