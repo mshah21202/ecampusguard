@@ -46,28 +46,31 @@ class HomeCubit extends Cubit<HomeState> {
       //   ApplicationStatusState(applicationStatus: result.data!.first.status),
       // );
 
-      var result =
-          await _testApplicationStatus(PermitApplicationStatus.AwaitingPayment);
+      // var result =
+      //     await _testApplicationStatus(PermitApplicationStatus.AwaitingPayment);
       // emit(ApplicationStatusState(status: result));
-    } catch (error) {}
+    } catch (e) {}
   }
 
-  Future<void> fetchPermitStatus() async {
+  Future<void> fetchUserPermitDto() async {
     emit(LoadingHomeState());
     try {
-      var result = await _api.getUserPermitApi().userPermitGet();
+      var result = await _api.getUserPermitApi().userPermitRelevantGet();
 
       if (result.data == null) {
-        throw Exception(result.statusMessage);
+        emit(ErrorHomeState(snackbarMessage: result.statusMessage));
+        return;
       }
 
       // var result = await _testPermitStatus(UserPermitStatus.Withdrawn);
-      userPermit = result.data?.first;
+      userPermit = result.data;
       emit(LoadedHomeState(
-        userPermit: result.data!.first,
+        userPermit: result.data,
         // homeScreenDto: homeScreenDto,
       ));
-    } catch (error) {}
+    } catch (e) {
+      emit(ErrorHomeState(snackbarMessage: e.toString()));
+    }
   }
 
   /// Testing purposes only

@@ -1,7 +1,6 @@
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/home/home.dart';
-import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +21,7 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
   void initState() {
     super.initState();
     var cubit = context.read<HomeCubit>();
-    cubit.fetchPermitStatus();
+    cubit.fetchUserPermitDto();
   }
 
   @override
@@ -37,6 +36,7 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
         var cubit = context.read<HomeCubit>();
         if (state is! LoadingHomeState) {
           return Container(
+            height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
               color: theme.colorScheme.background,
               borderRadius: BorderRadius.circular(25.0),
@@ -48,74 +48,84 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        cubit.userPermit!.permit!.name!,
-                        style: theme.textTheme.headlineLarge!.copyWith(
-                          color: theme.colorScheme.onBackground,
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.06,
-                                child: Text('Status: ',
-                                    style: theme.textTheme.headlineSmall),
-                              ),
-                              UserPermitStatusChip(
-                                status: cubit.userPermit!.status!,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.06,
-                                child: Text('Days: ',
-                                    style: theme.textTheme.headlineSmall),
-                              ),
-                              DaysIndicator(
-                                  days: cubit.userPermit!.permit!.days!),
-                            ],
-                          ),
-                        ].addElementBetweenElements(
-                          const SizedBox(
-                            height: 14,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          cubit.userPermit!.permit!.name!,
+                          style: theme.textTheme.headlineLarge!.copyWith(
+                            color: theme.colorScheme.onBackground,
                           ),
                         ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.06,
+                              child: Text('Status: ',
+                                  style: theme.textTheme.headlineSmall),
+                            ),
+                            UserPermitStatusChip(
+                              status: cubit.userPermit!.status!,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.06,
+                              child: Text('Days: ',
+                                  style: theme.textTheme.headlineSmall),
+                            ),
+                            DaysIndicator(
+                                days: cubit.userPermit!.permit!.days!),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          color: theme.colorScheme.outline.withOpacity(0.16),
+                          width: 2,
+                        ),
                       ),
-                    ].addElementBetweenElements(
-                      const SizedBox(
-                        height: 16,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FilledButton(
+                            onPressed: () {
+                              //do smth
+                            },
+                            child: const Text(
+                              "Update Details",
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      FilledButton(
-                        onPressed: () {
-                          //do smth
-                        },
-                        child: const Text(
-                          "Update Details",
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         } else {
