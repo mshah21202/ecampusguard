@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/home/view/widgets/enterexit_logs.dart';
 import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
+import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
@@ -31,30 +32,35 @@ class HomeView extends StatelessWidget {
         },
         builder: (context, state) {
           return Stack(
+            fit: StackFit.expand,
             children: [
               const BackgroundLogo(),
               if (state is! LoadingHomeState && state.homeScreenDto != null)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveWidget.defaultPadding(context),
-                      vertical: ResponsiveWidget.smallPadding(context)),
-                  child: Column(
-                    children: [
-                      // if (state.homeScreenDto!.homeScreenWidgets!
-                      //     .contains(HomeScreenWidget.ApplicationStatus))
-                      //   PermitApplicationStatusWidget(
-                      //     status: state.applicationStatus!,
-                      //   ),
-                      if (state.homeScreenDto!.homeScreenWidgets!
-                          .contains(HomeScreenWidget.PermitStatus))
-                        const PermitStatusWidget(),
-                      if (state.homeScreenDto!.homeScreenWidgets!
-                          .contains(HomeScreenWidget.PreviousPermits))
-                        const PreviousPermits(permits: []),
-                      if (state.homeScreenDto!.homeScreenWidgets!
-                          .contains(HomeScreenWidget.AccessLogs))
-                        const AccessLogsList(),
-                    ],
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ResponsiveWidget.defaultPadding(context),
+                        vertical: ResponsiveWidget.smallPadding(context)),
+                    child: Column(
+                      children: [
+                        // if (state.homeScreenDto!.homeScreenWidgets!
+                        //     .contains(HomeScreenWidget.ApplicationStatus))
+                        //   PermitApplicationStatusWidget(
+                        //     status: state.applicationStatus!,
+                        //   ),
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.PermitStatus))
+                          const PermitStatusWidget(),
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.PreviousPermits))
+                          const PreviousPermits(permits: []),
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.AccessLogs))
+                          const AccessLogsList(),
+                      ].addElementBetweenElements(SizedBox(
+                        height: ResponsiveWidget.mediumPadding(context),
+                      )),
+                    ),
                   ),
                 ),
               FullScreenLoadingIndicator(visible: state is LoadingHomeState),
