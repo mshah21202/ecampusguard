@@ -160,9 +160,10 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
       setSelectedCarNationality((await getCountryFromCode(
           permitApplication!.vehicle!.nationality!))!);
       selectPermitType(permitApplication!.permit!);
+      setSelectedPhoneCountry(
+          (await getCountryFromCode(permitApplication!.phoneNumberCountry!)));
 
-      phoneNumberController.text =
-          (permitApplication!.phoneNumber!).substring(0);
+      phoneNumberController.text = permitApplication!.phoneNumber!;
 
       numberOfCompanionsController.text =
           permitApplication!.siblingsCount!.toString();
@@ -318,8 +319,8 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
                   attendingDays: _attendingDays.values.toList(),
                   // licenseImgPath: drivingLicenseImgFile!.name,
                   permit: selectedPermit!,
-                  phoneNumber:
-                      "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
+                  phoneNumberCountry: selectedPhoneCountry!.isoCode,
+                  phoneNumber: phoneNumberController.text,
                   siblingsCount: int.parse(numberOfCompanionsController.text),
                   vehicle: VehicleDto(
                     color: carColorController.text,

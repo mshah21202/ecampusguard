@@ -148,24 +148,26 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
     try {
       await _uploadLicenseFile();
       await _uploadRegistrationFile();
-      var result = await _api.getPermitApplicationApi().permitApplicationApplyPost(
-          createPermitApplicationDto: CreatePermitApplicationDto(
-              studentId: int.parse(studentIdController.text),
-              academicYear: AcademicYear.values.toList()[academicYear ?? 0],
-              attendingDays: _attendingDays.values.toList(),
-              licenseImgPath: drivingLicenseImgUrl,
-              permitId: selectedPermit!.id,
-              phoneNumber:
-                  "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
-              siblingsCount: int.parse(numberOfCompanionsController.text),
-              vehicle: VehicleDto(
-                  color: carColorController.text,
-                  make: carMakeController.text,
-                  model: carModelController.text,
-                  nationality: selectedCarNationality!.isoCode,
-                  plateNumber: plateNumberController.text,
-                  registrationDocImgPath: carRegistrationImgUrl,
-                  year: int.parse(carYearController.text))));
+      var result = await _api
+          .getPermitApplicationApi()
+          .permitApplicationApplyPost(
+              createPermitApplicationDto: CreatePermitApplicationDto(
+                  studentId: int.parse(studentIdController.text),
+                  academicYear: AcademicYear.values.toList()[academicYear ?? 0],
+                  attendingDays: _attendingDays.values.toList(),
+                  licenseImgPath: drivingLicenseImgUrl,
+                  permitId: selectedPermit!.id,
+                  phoneNumberCountry: selectedPhoneCountry!.isoCode,
+                  phoneNumber: phoneNumberController.text,
+                  siblingsCount: int.parse(numberOfCompanionsController.text),
+                  vehicle: VehicleDto(
+                      color: carColorController.text,
+                      make: carMakeController.text,
+                      model: carModelController.text,
+                      nationality: selectedCarNationality!.isoCode,
+                      plateNumber: plateNumberController.text,
+                      registrationDocImgPath: carRegistrationImgUrl,
+                      year: int.parse(carYearController.text))));
 
       if (result.data == null) {
         emit(FailedApplyForPermitState(snackBarMessage: result.statusMessage));

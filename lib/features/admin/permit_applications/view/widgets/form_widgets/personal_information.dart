@@ -73,7 +73,7 @@ class PersonalDetailsForm extends StatelessWidget {
               PhoneNumberValidator validator =
                   GetIt.I.get<PhoneNumberValidator>();
               if (!validator.isPhoneNumberValid(
-                  cubit.selectedPhoneCountry!.isoCode, "0$value", true)) {
+                  cubit.selectedPhoneCountry!.isoCode, "0$value", false)) {
                 return "Invalid format";
               }
               return null;

@@ -40,6 +40,17 @@ class ResponsiveWidget extends StatelessWidget {
     }
   }
 
+  static double xLargeWidthPadding(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    if (isLargeScreen(context)) {
+      return width * 0.40;
+    } else if (isMediumScreen(context)) {
+      return width * 0.20;
+    } else {
+      return width * 0.10;
+    }
+  }
+
   static double largePadding(BuildContext context) {
     if (isLargeScreen(context)) {
       return 82;

@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: appBar,
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: BlocBuilder<HomeCubit, HomeState>(
         buildWhen: (previous, current) {
           return current.homeScreenDto != null;
@@ -39,8 +39,9 @@ class HomeView extends StatelessWidget {
                 SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveWidget.largePadding(context),
-                        vertical: ResponsiveWidget.mediumPadding(context)),
+                      horizontal: ResponsiveWidget.largePadding(context),
+                      vertical: ResponsiveWidget.mediumPadding(context),
+                    ),
                     child: Column(
                       children: [
                         if (state.homeScreenDto!.homeScreenWidgets!

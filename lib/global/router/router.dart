@@ -1,6 +1,4 @@
 import 'package:ecampusguard/features/admin/areas/areas.dart';
-import 'package:ecampusguard/features/admin/areas/view/area_details_view.dart';
-import 'package:ecampusguard/features/admin/areas/view/areas_list_view.dart';
 import 'package:ecampusguard/features/admin/home_admin/view/home_admin_page.dart';
 import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/admin/permits/permits.dart';
@@ -11,6 +9,7 @@ import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.
 import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
 import 'package:ecampusguard/features/register/register.dart';
+import 'package:ecampusguard/features/user_permit_details/user_permit_details.dart';
 import 'package:ecampusguard/global/extensions/go_router_extension.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/helpers/user_permits_params.dart';
@@ -59,6 +58,12 @@ GoRouter appRouter({
               path: applyForPermitRoute,
               builder: (context, state) {
                 return const ApplyForPermitPage();
+              },
+            ),
+            GoRoute(
+              path: userPermitDetailsRoute,
+              builder: (context, state) {
+                return const UserPermitDetailsPage();
               },
             ),
           ],
