@@ -38,92 +38,69 @@ class LoginForm extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Form(
-                key: loginCubit.formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppLogo(
-                      darkMode: theme.colorScheme.brightness == Brightness.dark,
-                      width: 100,
-                      height: 100,
-                    ),
-                    const Text(
-                      'Login to eCampusGuard',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              child: AutofillGroup(
+                child: Form(
+                  key: loginCubit.formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppLogo(
+                        darkMode:
+                            theme.colorScheme.brightness == Brightness.dark,
+                        width: 100,
+                        height: 100,
                       ),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: loginCubit.usernameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                          validator: (value) {
-                            if (value == null || value == "") {
-                              return "This is required";
-                            }
-
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextFormField(
-                          controller: loginCubit.passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock),
-                          ),
-                          validator: (value) {
-                            if (value == null || value == "") {
-                              return "This is required";
-                            }
-
-                            return null;
-                          },
-                          onFieldSubmitted: (value) {
-                            onSubmit(
-                              loginCubit: loginCubit,
-                              authCubit: authCubit,
-                            );
-                          },
-                        ),
-                      ].addElementBetweenElements(
-                        const SizedBox(
-                          height: 10,
+                      const Text(
+                        'Login to eCampusGuard',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: (screenSize.width > 600
-                                  ? 400
-                                  : screenSize.width * 0.9) *
-                              0.3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      Column(
                         children: <Widget>[
-                          FilledButton.icon(
-                            onPressed: () {
+                          TextFormField(
+                            autofocus: true,
+                            autofillHints: const [
+                              AutofillHints.username,
+                            ],
+                            controller: loginCubit.usernameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Username',
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return "This is required";
+                              }
+
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                          TextFormField(
+                            autofillHints: const [
+                              AutofillHints.password,
+                            ],
+                            controller: loginCubit.passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return "This is required";
+                              }
+
+                              return null;
+                            },
+                            onFieldSubmitted: (value) {
                               onSubmit(
                                 loginCubit: loginCubit,
                                 authCubit: authCubit,
                               );
                             },
-                            icon: const Icon(Icons.login),
-                            label: const Text('Login'),
-                          ),
-                          TextButton.icon(
-                            onPressed: () {
-                              GoRouter.of(context).push(registerRoute);
-                            },
-                            icon: const Icon(Icons.edit),
-                            label: const Text('Register'),
                           ),
                         ].addElementBetweenElements(
                           const SizedBox(
@@ -131,10 +108,43 @@ class LoginForm extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                  ].addElementBetweenElements(
-                    const SizedBox(
-                      height: 30,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: (screenSize.width > 600
+                                    ? 400
+                                    : screenSize.width * 0.9) *
+                                0.3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            FilledButton.icon(
+                              onPressed: () {
+                                onSubmit(
+                                  loginCubit: loginCubit,
+                                  authCubit: authCubit,
+                                );
+                              },
+                              icon: const Icon(Icons.login),
+                              label: const Text('Login'),
+                            ),
+                            TextButton.icon(
+                              onPressed: () {
+                                GoRouter.of(context).push(registerRoute);
+                              },
+                              icon: const Icon(Icons.edit),
+                              label: const Text('Register'),
+                            ),
+                          ].addElementBetweenElements(
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ].addElementBetweenElements(
+                      const SizedBox(
+                        height: 30,
+                      ),
                     ),
                   ),
                 ),

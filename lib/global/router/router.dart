@@ -9,6 +9,7 @@ import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.
 import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
 import 'package:ecampusguard/features/register/register.dart';
+import 'package:ecampusguard/features/user_permit_applications/user_permit_applications.dart';
 import 'package:ecampusguard/features/user_permit_details/user_permit_details.dart';
 import 'package:ecampusguard/global/extensions/go_router_extension.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
@@ -65,6 +66,37 @@ GoRouter appRouter({
               builder: (context, state) {
                 return const UserPermitDetailsPage();
               },
+            ),
+            ShellRoute(
+              builder: (context, state, child) {
+                PermitApplicationsParams params =
+                    PermitApplicationsParams.fromUri(state.uri);
+                return BlocProvider(
+                  create: (_) => UserPermitApplicationsCubit(
+                    params: params.toString().isNotEmpty ? params : null,
+                  ),
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                    path: userApplicationsRoute,
+                    builder: (context, state) {
+                      return const UserPermitApplicationsListView();
+                    },
+                    routes: [
+                      GoRoute(
+                        path: userApplicationDetailsRoute,
+                        builder: (context, state) {
+                          int id = int.parse(state.pathParameters["id"]!);
+
+                          return UserPermitApplicationDetails(
+                            applicationId: id,
+                          );
+                        },
+                      ),
+                    ]),
+              ],
             ),
           ],
         ),

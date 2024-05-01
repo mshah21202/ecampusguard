@@ -5,6 +5,7 @@ import 'package:ecampusguard/features/admin/permit_applications/view/widgets/app
 import 'package:ecampusguard/features/admin/permits/permits.dart';
 import 'package:ecampusguard/features/admin/user_permits/cubit/user_permits_cubit.dart';
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
+import 'package:ecampusguard/features/user_permit_applications/user_permit_applications.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -38,6 +39,65 @@ class PermitApplicationsDataSource extends AsyncDataTableSource {
         var rowKey = ValueKey(index);
         return DataRow2(
           key: rowKey,
+          onTap: () {
+            cubit.onRowTap(index);
+          },
+          cells: [
+            DataCell(
+              Text(applications[index].studentId.toString()),
+            ),
+            DataCell(
+              Text(applications[index].studentName ?? ""),
+            ),
+            DataCell(
+              Text(academicYears[applications[index].academicYear!.index]),
+            ),
+            DataCell(
+              Text(applications[index].permitName ?? ""),
+            ),
+            DataCell(
+              PermitApplicationStatusChip(
+                status: (applications[index].status ??
+                    PermitApplicationStatus.unknownDefaultOpenApi),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return AsyncRowsResponse(cubit.totalRows, rows);
+  }
+}
+
+class UserPermitApplicationsDataSource extends AsyncDataTableSource {
+  UserPermitApplicationsDataSource.fromApi({
+    required this.fetchFunction,
+    required this.cubit,
+  });
+
+  final Future<List<PermitApplicationInfoDto>> Function(
+      int startIndex, int count) fetchFunction;
+
+  final UserPermitApplicationsCubit cubit;
+
+  List<String> academicYears = [
+    "First Year",
+    "Second Year",
+    "Third Year",
+    "Forth+ Year",
+  ];
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    List<PermitApplicationInfoDto> applications =
+        await fetchFunction(startIndex, count);
+
+    List<DataRow> rows = List.generate(
+      applications.length,
+      (index) {
+        return DataRow2(
+          key: ValueKey(index),
           onTap: () {
             cubit.onRowTap(index);
           },

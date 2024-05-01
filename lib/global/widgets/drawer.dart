@@ -48,20 +48,8 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.apps),
             title: const Text('Applications'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('My Profile'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              context.pop();
+              context.go("$homeRoute$userApplicationsRoute");
             },
           ),
           ListTile(

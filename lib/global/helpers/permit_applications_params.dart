@@ -15,35 +15,45 @@ class PermitApplicationsParams {
       this.orderByDirection});
 
   PermitApplicationsParams(
-      {required this.pageSize,
-      required this.currentPage,
-      required this.studentId,
-      required this.name,
-      required this.academicYear,
-      required this.permitId,
-      required this.status,
-      required this.orderBy,
-      required this.orderByDirection});
+      {this.pageSize,
+      this.currentPage,
+      this.studentId,
+      this.name,
+      this.academicYear,
+      this.permitId,
+      this.status,
+      this.orderBy,
+      this.orderByDirection});
 
   PermitApplicationsParams copyWith({
     int? pageSize,
+    bool pageSizeClear = false,
     int? currentPage,
+    bool currentPageClear = false,
     String? studentId,
+    bool studentIdClear = false,
     String? name,
+    bool nameClear = false,
     AcademicYear? academicYear,
+    bool academicYearClear = false,
     int? permitId,
+    bool permitIdClear = false,
     PermitApplicationStatus? status,
+    bool statusClear = false,
     PermitApplicationOrderBy? orderBy,
+    bool orderByClear = false,
     String? orderByDirection,
+    bool orderByDirectionClear = false,
   }) {
     return PermitApplicationsParams(
       pageSize: pageSize ?? this.pageSize,
       currentPage: currentPage ?? this.currentPage,
-      studentId: studentId ?? this.studentId,
-      name: name ?? this.name,
-      academicYear: academicYear ?? this.academicYear,
-      permitId: permitId ?? this.permitId,
-      status: status ?? this.status,
+      studentId: studentIdClear ? null : studentId ?? this.studentId,
+      name: nameClear ? null : name ?? this.name,
+      academicYear:
+          academicYearClear ? null : academicYear ?? this.academicYear,
+      permitId: permitIdClear ? null : permitId ?? this.permitId,
+      status: statusClear ? null : status ?? this.status,
       orderBy: orderBy ?? this.orderBy,
       orderByDirection: orderByDirection ?? this.orderByDirection,
     );
@@ -90,42 +100,43 @@ class PermitApplicationsParams {
     String result = "";
 
     if (pageSize != null) {
-      result = "$result${result.isNotEmpty ? "&" : ""}pageSize=$pageSize";
+      result = "$result${result.isNotEmpty ? "&" : "?"}pageSize=$pageSize";
     }
 
     if (currentPage != null) {
-      result = "$result${result.isNotEmpty ? "&" : ""}currentPage=$currentPage";
+      result =
+          "$result${result.isNotEmpty ? "&" : "?"}currentPage=$currentPage";
     }
 
     if (studentId != null && studentId!.isNotEmpty) {
-      result = "$result${result.isNotEmpty ? "&" : ""}studentId=$studentId";
+      result = "$result${result.isNotEmpty ? "&" : "?"}studentId=$studentId";
     }
 
     if (name != null && name!.isNotEmpty) {
-      result = "$result${result.isNotEmpty ? "&" : ""}name=$name";
+      result = "$result${result.isNotEmpty ? "&" : "?"}name=$name";
     }
 
     if (academicYear != null) {
       result =
-          "$result${result.isNotEmpty ? "&" : ""}academicYear=${academicYear!.index}";
+          "$result${result.isNotEmpty ? "&" : "?"}academicYear=${academicYear!.index}";
     }
 
     if (permitId != null) {
-      result = "$result${result.isNotEmpty ? "&" : ""}permitId=$permitId";
+      result = "$result${result.isNotEmpty ? "&" : "?"}permitId=$permitId";
     }
 
     if (status != null) {
-      result = "$result${result.isNotEmpty ? "&" : ""}status=${status!.index}";
+      result = "$result${result.isNotEmpty ? "&" : "?"}status=${status!.index}";
     }
 
     if (orderBy != null) {
       result =
-          "$result${result.isNotEmpty ? "&" : ""}orderBy=${orderBy!.index}";
+          "$result${result.isNotEmpty ? "&" : "?"}orderBy=${orderBy!.index}";
     }
 
     if (orderByDirection != null && orderByDirection != null) {
       result =
-          "$result${result.isNotEmpty ? "&" : ""}orderByDirection=$orderByDirection";
+          "$result${result.isNotEmpty ? "&" : "?"}orderByDirection=$orderByDirection";
     }
 
     return result;

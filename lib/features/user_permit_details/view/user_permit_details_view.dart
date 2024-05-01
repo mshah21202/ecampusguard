@@ -7,6 +7,7 @@ import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,14 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
     return Scaffold(
       appBar: appBar,
       drawer: const AppDrawer(),
-      body: BlocBuilder<UserPermitDetailsCubit, UserPermitDetailsState>(
+      body: BlocConsumer<UserPermitDetailsCubit, UserPermitDetailsState>(
+        listener: (context, state) {
+          if (state.snackbarMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              appSnackBar(state.snackbarMessage!, context),
+            );
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<UserPermitDetailsCubit>();
           var theme = Theme.of(context);
