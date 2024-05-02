@@ -19,7 +19,7 @@ class AppDataTable extends StatefulWidget {
   final int rowsPerPage;
   final int? sortColumnIndex;
   final bool? sortAscending;
-  final void Function(int) onPageChanged;
+  final void Function(int page) onPageChanged;
   final PaginatorController? controller;
   final int? initialFirstRowIndex;
 

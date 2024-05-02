@@ -2,10 +2,10 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/applications_filter_dialog.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
-import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
-import 'package:ecampusguard/global/widgets/admin_drawer.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
+import 'package:ecampusguard/global/widgets/data_table.dart';
+import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
@@ -15,70 +15,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../permit_applications.dart';
+import '../user_permit_applications.dart';
 
-class PermitApplicationsListView extends StatefulWidget {
-  const PermitApplicationsListView({
+class UserPermitApplicationsListView extends StatelessWidget {
+  const UserPermitApplicationsListView({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<PermitApplicationsListView> createState() =>
-      _PermitApplicationsListViewState();
-}
-
-class _PermitApplicationsListViewState
-    extends State<PermitApplicationsListView> {
-  @override
-  void initState() {
-    super.initState();
-    final cubit = context.read<PermitApplicationsCubit>();
-    cubit.applicationsDataSource.addListener(cubit.selectedRowsListener);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final cubit = context.read<PermitApplicationsCubit>();
-    var theme = Theme.of(context);
-    return BlocListener<PermitApplicationsCubit, PermitApplicationsState>(
+    return BlocConsumer<UserPermitApplicationsCubit,
+        UserPermitApplicationsState>(
+      listenWhen: (previous, current) {
+        if (previous is RowTappedState && current is RowTappedState) {
+          return true;
+        }
+
+        return previous != current;
+      },
       listener: (context, state) {
-        if (state is PermitApplicationsParamsUpdate) {
-          String url =
-              "$adminHomeRoute/$adminApplicationsRoute${state.params.toString()}";
-          context.go(url);
+        if (state is UserPermitApplicationsParamsUpdated) {
+          context.go(
+              "$homeRoute$userApplicationsRoute${state.params!.toString()}");
         }
 
         if (state is RowTappedState) {
-          context.go("$adminHomeRoute/$adminApplicationsRoute/${state.id}");
+          context.go("$homeRoute$userApplicationsRoute/${state.id!}");
         }
 
-        if (state.snackBarMessage != null) {
+        if (state.snackbarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            appSnackBar(state.snackBarMessage!, context),
+            appSnackBar(state.snackbarMessage!, context),
           );
         }
       },
-      listenWhen: (previous, current) {
-        return previous != current;
-      },
-      child: Scaffold(
-        appBar: appBar,
-        drawer: const AdminAppDrawer(),
-        body: BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
-            builder: (context, state) {
-          return Stack(
+      builder: (context, state) {
+        final cubit = context.read<UserPermitApplicationsCubit>();
+        var theme = Theme.of(context);
+        return Scaffold(
+          appBar: appBar,
+          drawer: const AppDrawer(),
+          body: Stack(
             fit: StackFit.expand,
             children: [
-              Positioned(
-                left: -150,
-                bottom: -150,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: AppLogo(
-                    darkMode: theme.colorScheme.brightness == Brightness.dark,
-                  ),
-                ),
-              ),
+              const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: ResponsiveWidget.defaultPadding(context),
@@ -136,33 +116,7 @@ class _PermitApplicationsListViewState
                     ),
                     Expanded(
                       child: AppDataTable(
-                        controller: cubit.controller,
-                        initialFirstRowIndex: cubit.params.currentPage != null
-                            ? cubit.params.currentPage! *
-                                (cubit.params.pageSize ?? 10)
-                            : null,
-                        sortColumnIndex: cubit.sortColumnIndex,
-                        sortAscending: cubit.params.orderByDirection == "ASC",
                         dataSource: cubit.applicationsDataSource,
-                        onPageChanged: (page) {
-                          PermitApplicationsParams params =
-                              PermitApplicationsParams(
-                            pageSize: cubit.params.pageSize,
-                            currentPage: page ~/ (cubit.params.pageSize ?? 10),
-                            studentId: cubit.params.studentId,
-                            status: cubit.params.status,
-                            name: cubit.params.name,
-                            academicYear: cubit.params.academicYear,
-                            permitId: cubit.params.permitId,
-                            orderBy: cubit.params.orderBy,
-                            orderByDirection: cubit.params.orderByDirection,
-                          );
-                          cubit.setQueryParams(
-                            updatedParams: params,
-                            updateDatasource: false,
-                          );
-                        },
-                        rowsPerPage: cubit.params.pageSize ?? 10,
                         columns: [
                           DataColumn2(
                             size: ColumnSize.M,
@@ -231,18 +185,27 @@ class _PermitApplicationsListViewState
                             },
                           ),
                         ],
+                        rowsPerPage: cubit.params.pageSize ?? 10,
+                        onPageChanged: (page) {
+                          cubit.setQueryParams(
+                            updatedParams: cubit.params.copyWith(
+                              currentPage:
+                                  page ~/ (cubit.params.pageSize ?? 10),
+                            ),
+                          );
+                        },
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               FullScreenLoadingIndicator(
-                visible: state is LoadingPermitApplications,
+                visible: state is UserPermitApplicationsLoading,
               ),
             ],
-          );
-        }),
-      ),
+          ),
+        );
+      },
     );
   }
 }

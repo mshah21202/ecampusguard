@@ -1,9 +1,14 @@
-import 'package:ecampusguard/features/home/view/widgets/permit_application_status.dart';
+import 'package:ecampusguard/features/home/view/widgets/enterexit_logs.dart';
 import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
+import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
+import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
+import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,54 +26,54 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: appBar,
-      drawer: AppDrawer(),
-      body: Stack(
-        children: [
-
-
-          BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  const SizedBox(height: 20,),
-                  if (state.applicationStatus != null)
-                    PermitApplicationStatusWidget(
-                      status: state.applicationStatus!,
+      drawer: const AppDrawer(),
+      body: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          if (state.snackbarMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              appSnackBar(state.snackbarMessage!, context),
+            );
+          }
+        },
+        buildWhen: (previous, current) {
+          return current.homeScreenDto != null;
+        },
+        builder: (context, state) {
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              const BackgroundLogo(),
+              if (state is! LoadingHomeState && state.homeScreenDto != null)
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ResponsiveWidget.largePadding(context),
+                      vertical: ResponsiveWidget.mediumPadding(context),
                     ),
-                  if (state.applicationStatus == null &&
-                      state.permitStatus != null)
-                    PermitStatusWidget(status: state.permitStatus!),
-                  const PreviousPermits(permits: [])
-                ],
-              );
-            },
-          ),
-
-          const BackgroundLogo()
-        ],
-
-
+                    child: Column(
+                      children: [
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.PermitStatus))
+                          const PermitStatusWidget(),
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.PreviousPermits))
+                          const PreviousPermits(permits: []),
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.AccessLogs))
+                          const AccessLogsList(),
+                      ].addElementBetweenElements(
+                        SizedBox(
+                          height: ResponsiveWidget.mediumPadding(context),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              FullScreenLoadingIndicator(visible: state is LoadingHomeState),
+            ],
+          );
+        },
       ),
-
     );
-
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,8 @@
 import 'package:ecampusguard/features/authentication/authentication.dart';
+import 'package:ecampusguard/global/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
@@ -30,40 +32,24 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              context.pop();
+              context.go(homeRoute);
             },
           ),
           ListTile(
             leading: const Icon(Icons.badge),
             title: const Text('Permit'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              context.pop();
+              context.go("$homeRoute$userPermitDetailsRoute");
             },
           ),
           ListTile(
             leading: const Icon(Icons.apps),
             title: const Text('Applications'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('My Profile'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              context.pop();
+              context.go("$homeRoute$userApplicationsRoute");
             },
           ),
           ListTile(

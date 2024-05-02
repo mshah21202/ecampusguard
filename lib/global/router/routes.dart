@@ -1,7 +1,10 @@
 const String loginRoute = '/login';
+const String registerRoute = '/register';
 const String homeRoute = '/';
 const String applyForPermitRoute = 'apply';
-const String registerRoute = '/register';
+const String userPermitDetailsRoute = 'permit';
+const String userApplicationsRoute = 'applications';
+const String userApplicationDetailsRoute = ':id';
 
 const String adminHomeRoute = '/admin';
 

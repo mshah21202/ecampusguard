@@ -1,14 +1,24 @@
 part of 'home_cubit.dart';
 
 class HomeState extends Equatable {
-  const HomeState({this.applicationStatus, this.permitStatus});
-  final PermitApplicationStatus? applicationStatus;
-  final UserPermitStatus? permitStatus;
+  const HomeState({
+    this.applicationInfo,
+    this.userPermit,
+    this.homeScreenDto,
+    this.snackbarMessage,
+  });
+
+  final HomeScreenDto? homeScreenDto;
+  final PermitApplicationInfoDto? applicationInfo;
+  final UserPermitDto? userPermit;
+  final String? snackbarMessage;
 
   @override
-  List<Object> get props => [
-        applicationStatus ?? PermitApplicationStatus.unknownDefaultOpenApi,
-        permitStatus ?? UserPermitStatus.unknownDefaultOpenApi
+  List<Object?> get props => [
+        applicationInfo,
+        userPermit,
+        homeScreenDto,
+        snackbarMessage,
       ];
 }
 
@@ -16,15 +26,14 @@ class HomeInitial extends HomeState {}
 
 class LoadingHomeState extends HomeState {}
 
-class ApplicationStatusState extends HomeState {
-  const ApplicationStatusState({required this.status})
-      : super(applicationStatus: status);
-
-  final PermitApplicationStatus status;
+class LoadedHomeState extends HomeState {
+  const LoadedHomeState({
+    super.homeScreenDto,
+    super.applicationInfo,
+    super.userPermit,
+  });
 }
 
-class PermitStatusState extends HomeState {
-  const PermitStatusState({required this.status}) : super(permitStatus: status);
-
-  final UserPermitStatus status;
+class ErrorHomeState extends HomeState {
+  const ErrorHomeState({super.snackbarMessage});
 }

@@ -11,6 +11,7 @@ import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class PermitApplicationDetailsView extends StatefulWidget {
   const PermitApplicationDetailsView({
@@ -91,7 +92,9 @@ class _PermitApplicationDetailsViewState
                         children: [
                           FilledButton.icon(
                             onPressed: () {
-                              cubit.onSubmit(true);
+                              cubit.onSubmit(true).then((value) {
+                                context.pop();
+                              });
                             },
                             icon: const Icon(Icons.check),
                             label: const Text("Save & Accept"),
@@ -101,7 +104,9 @@ class _PermitApplicationDetailsViewState
                           ),
                           OutlinedButton.icon(
                             onPressed: () {
-                              cubit.onSubmit(false);
+                              cubit.onSubmit(false).then((value) {
+                                context.pop();
+                              });
                             },
                             icon: const Icon(Icons.close),
                             label: const Text("Deny"),
