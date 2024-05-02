@@ -48,7 +48,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       }
     } catch (e) {
       emit(LoginFailedAuthentication(message: e.toString()));
-      print(e);
     }
   }
 

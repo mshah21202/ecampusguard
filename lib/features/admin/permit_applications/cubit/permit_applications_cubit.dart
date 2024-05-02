@@ -349,8 +349,8 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
       if (e is DioException && (e).response != null) {
         emit(
           ErrorPermitApplications(
-            snackBarMessage: (ResponseDto.fromJson((e).response!.data))
-                .toString(), // TODO: Test this
+            snackBarMessage:
+                (ResponseDto.fromJson((e).response!.data)).toString(),
           ),
         );
       }

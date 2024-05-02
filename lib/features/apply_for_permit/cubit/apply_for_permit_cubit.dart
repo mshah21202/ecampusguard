@@ -201,7 +201,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
         drivingLicenseImgUrl = await file.getDownloadURL();
       });
     } catch (e) {
-      print(e);
+      emit(FailedApplyForPermitState(snackBarMessage: e.toString()));
     }
   }
 
@@ -214,7 +214,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
         carRegistrationImgUrl = await file.getDownloadURL();
       });
     } catch (e) {
-      print(e);
+      emit(FailedApplyForPermitState(snackBarMessage: e.toString()));
     }
   }
 

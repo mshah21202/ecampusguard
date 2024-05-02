@@ -78,7 +78,7 @@ class CustomGridView extends StatelessWidget {
       itemCount: children.length,
       itemBuilder: (context, index) {
         if (index % 2 != 0 && index != 0 && !singleColumn) {
-          return Center();
+          return const Center();
         }
 
         if (index + 1 < children.length && !singleColumn) {

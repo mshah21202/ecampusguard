@@ -30,7 +30,7 @@ class PermitsCubit extends Cubit<PermitsState> {
       TextEditingController();
   int? areaIndex;
 
-  Map<String, bool> _permitDays = {
+  final Map<String, bool> _permitDays = {
     "Sun": false,
     "Mon": false,
     "Tue": false,

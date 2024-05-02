@@ -18,10 +18,10 @@ class UserPermitDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       drawer: const AdminAppDrawer(),
-      body: Stack(
+      body: const Stack(
         fit: StackFit.expand,
         children: [
-          const BackgroundLogo(),
+          BackgroundLogo(),
         ],
       ),
     );
