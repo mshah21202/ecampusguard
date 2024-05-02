@@ -3,7 +3,7 @@ import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permi
 import 'package:ecampusguard/global/helpers/user_permits_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
@@ -40,16 +40,7 @@ class UserPermitsListView extends StatelessWidget {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            Positioned(
-              left: -150,
-              bottom: -150,
-              child: Opacity(
-                opacity: 0.2,
-                child: AppLogo(
-                  darkMode: theme.colorScheme.brightness == Brightness.dark,
-                ),
-              ),
-            ),
+            const BackgroundLogo(),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: ResponsiveWidget.defaultPadding(context),

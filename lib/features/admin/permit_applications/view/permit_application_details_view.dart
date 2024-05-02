@@ -4,8 +4,8 @@ import 'package:ecampusguard/features/admin/permit_applications/view/widgets/for
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/form_widgets/vehicle_information.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
@@ -53,16 +53,7 @@ class _PermitApplicationDetailsViewState
             builder: (context, state) {
           return Stack(
             children: [
-              Positioned(
-                left: -150,
-                bottom: -150,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: AppLogo(
-                    darkMode: theme.colorScheme.brightness == Brightness.dark,
-                  ),
-                ),
-              ),
+              const BackgroundLogo(),
               SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(

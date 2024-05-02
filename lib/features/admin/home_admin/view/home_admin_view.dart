@@ -3,8 +3,8 @@ import 'package:ecampusguard/features/admin/home_admin/view/widgets/applications
 import 'package:ecampusguard/features/admin/home_admin/view/widgets/areas_summary.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,6 @@ class _HomeAdminViewState extends State<HomeAdminView> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return Scaffold(
       appBar: appBar,
       drawer: const AdminAppDrawer(),
@@ -42,16 +41,7 @@ class _HomeAdminViewState extends State<HomeAdminView> {
           return Stack(
             fit: StackFit.expand,
             children: [
-              Positioned(
-                left: -150,
-                bottom: -150,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: AppLogo(
-                    darkMode: theme.colorScheme.brightness == Brightness.dark,
-                  ),
-                ),
-              ),
+              const BackgroundLogo(),
               SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
