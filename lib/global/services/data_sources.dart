@@ -298,7 +298,7 @@ class UserPermitsDataSource extends AsyncDataTableSource {
               Text(userPermits[index].user!.name!),
             ),
             DataCell(
-              Text(userPermits[index].vehicle!.plateNumber!),
+              Text(userPermits[index].vehicle!.plateNumber),
             ),
             DataCell(
               Text(DateFormat("dd/MM/y").format(userPermits[index].expiry!)),

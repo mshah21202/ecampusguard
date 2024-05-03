@@ -1,8 +1,6 @@
 import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -138,12 +136,8 @@ class PersonalDetailsForm extends StatelessWidget {
             builder: (context, state) {
           var cubit = context.read<PermitApplicationsCubit>();
           return InkWell(
-            onTap: () async {
-              FilePickerResult? result =
-                  await FilePickerWeb.platform.pickFiles(type: FileType.image);
-              if (result != null) {
-                cubit.selectDrivingLicense(result.files.single);
-              }
+            onTap: () {
+              cubit.openLinkInNewTab(cubit.drivingLicenseImgUrl);
             },
             child: IgnorePointer(
               child: TextFormField(

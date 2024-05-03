@@ -1,20 +1,23 @@
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
-import 'package:ecampusguard/features/user_permit_details/cubit/user_permit_details_cubit.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PermitInformationDetails extends StatelessWidget {
   const PermitInformationDetails({
     super.key,
+    required this.userPermit,
+    this.permit,
   });
+
+  final UserPermitDto userPermit;
+  final PermitDto? permit;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var cubit = context.read<UserPermitDetailsCubit>();
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.background,
@@ -53,7 +56,7 @@ class PermitInformationDetails extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            cubit.userPermit!.permit!.name!,
+                            (permit ?? userPermit.permit)!.name!,
                             style: theme.textTheme.headlineMedium!.copyWith(
                               color: theme.colorScheme.onBackground,
                             ),
@@ -77,7 +80,7 @@ class PermitInformationDetails extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            cubit.userPermit!.permit!.area!.gate!,
+                            (permit ?? userPermit.permit)!.area!.gate!,
                             style: theme.textTheme.headlineMedium!.copyWith(
                               color: theme.colorScheme.onBackground,
                             ),
@@ -109,7 +112,7 @@ class PermitInformationDetails extends StatelessWidget {
                             ),
                           ),
                           UserPermitStatusChip(
-                            status: cubit.userPermit!.status!,
+                            status: userPermit.status!,
                           ),
                         ].addElementBetweenElements(
                           const SizedBox(
@@ -130,7 +133,7 @@ class PermitInformationDetails extends StatelessWidget {
                             ),
                           ),
                           DaysIndicator(
-                            days: cubit.userPermit!.permit!.days!,
+                            days: (permit ?? userPermit.permit)!.days!,
                           )
                         ].addElementBetweenElements(
                           const SizedBox(

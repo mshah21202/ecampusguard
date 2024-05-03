@@ -7,6 +7,7 @@ import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +33,12 @@ class UserPermitsListView extends StatelessWidget {
 
         if (state is UserPermitsOnRowTap) {
           context.go("$adminHomeRoute/$adminUserPermitsRoute/${state.id!}");
+        }
+
+        if (state.snackbarMessage != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            appSnackBar(state.snackbarMessage!, context),
+          );
         }
       },
       child: Scaffold(

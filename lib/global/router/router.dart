@@ -228,7 +228,7 @@ GoRouter appRouter({
                         int? id =
                             int.tryParse(state.pathParameters["id"] ?? "");
                         return UserPermitDetailsView(
-                          permitId: id!,
+                          userPermitId: id!,
                         );
                       },
                     ),

@@ -141,6 +141,37 @@ class _PermitDetailsViewState extends State<PermitDetailsView> {
                                 return null;
                               },
                             ),
+                            InkWell(
+                              onTap: () {
+                                showDatePicker(
+                                  useRootNavigator: false,
+                                  context: context,
+                                  initialDate: cubit.expiry,
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now().add(
+                                    const Duration(days: 365 * 2),
+                                  ),
+                                ).then((value) {
+                                  if (value != null) {
+                                    cubit.onDateChanged(value);
+                                  }
+                                });
+                              },
+                              child: IgnorePointer(
+                                child: InputDatePickerFormField(
+                                  key: cubit.expiryDateKey,
+                                  fieldLabelText: "Expiry",
+                                  initialDate: cubit.expiry,
+                                  onDateSubmitted: (date) {
+                                    cubit.expiry = date;
+                                  },
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now().add(
+                                    const Duration(days: 365 * 2),
+                                  ),
+                                ),
+                              ),
+                            ),
                             DropdownButtonFormField(
                               validator: (value) {
                                 if (value == null) {

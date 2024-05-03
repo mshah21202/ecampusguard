@@ -50,7 +50,7 @@ class ApplicationDetails extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            cubit.permitApplication!.vehicle!.plateNumber!,
+                            cubit.permitApplication!.vehicle!.plateNumber,
                             style: theme.textTheme.headlineMedium!.copyWith(
                               color: theme.colorScheme.onBackground,
                             ),
