@@ -68,9 +68,17 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
                               style: theme.textTheme.headlineLarge?.copyWith(
                                   color: theme.colorScheme.onBackground),
                             ),
-                            const PermitInformationDetails(),
-                            const PersonalInformationDetails(),
-                            const VehicleInformationDetails(),
+                            PermitInformationDetails(
+                              userPermit: cubit.userPermit!,
+                            ),
+                            PersonalInformationDetails(
+                              userPermit: cubit.userPermit!,
+                              countries: cubit.countries,
+                            ),
+                            VehicleInformationDetails(
+                              userPermit: cubit.userPermit!,
+                              countries: cubit.countries,
+                            ),
                             Row(
                               children: <Widget>[
                                 FilledButton.icon(

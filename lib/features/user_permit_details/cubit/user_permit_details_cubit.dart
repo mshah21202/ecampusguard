@@ -55,15 +55,15 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
   }
 
   void populateVehicleInformation() {
-    plateNumberController.text = userPermit!.vehicle!.plateNumber!;
+    plateNumberController.text = userPermit!.vehicle!.plateNumber;
     setSelectedCarNationality(
       countries.firstWhere(
-          (element) => element.isoCode == userPermit!.vehicle!.nationality!),
+          (element) => element.isoCode == userPermit!.vehicle!.nationality),
     );
-    carMakeController.text = userPermit!.vehicle!.make!;
-    carModelController.text = userPermit!.vehicle!.model!;
-    carYearController.text = (userPermit!.vehicle!.year!).toString();
-    carColorController.text = userPermit!.vehicle!.color!;
+    carMakeController.text = userPermit!.vehicle!.make;
+    carModelController.text = userPermit!.vehicle!.model;
+    carYearController.text = (userPermit!.vehicle!.year).toString();
+    carColorController.text = userPermit!.vehicle!.color;
   }
 
   void loadCountries() async {

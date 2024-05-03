@@ -1,7 +1,5 @@
 import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -129,11 +127,7 @@ class VehicleDetailsForm extends StatelessWidget {
           var cubit = context.read<PermitApplicationsCubit>();
           return InkWell(
             onTap: () async {
-              FilePickerResult? result =
-                  await FilePickerWeb.platform.pickFiles(type: FileType.image);
-              if (result != null) {
-                cubit.selectCarRegistration(result.files.single);
-              }
+              cubit.openLinkInNewTab(cubit.carRegistrationImgUrl);
             },
             child: IgnorePointer(
               child: TextFormField(

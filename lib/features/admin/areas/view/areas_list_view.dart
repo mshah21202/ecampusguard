@@ -1,4 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:ecampusguard/global/extensions/button_extension.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
@@ -99,7 +100,7 @@ class _AreasListViewState extends State<AreasListView> {
                                     visible:
                                         cubit.areasDataSource.selectedRowCount >
                                             0,
-                                    child: FilledButton.tonalIcon(
+                                    child: ErrorFilledButton.tonalIcon(
                                       onPressed: () {
                                         cubit.onDelete();
                                       },
