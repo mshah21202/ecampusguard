@@ -334,6 +334,33 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     emit(PermitApplicationsUpdated(attendingDays: selectedAttendingDays));
   }
 
+  Future<void> onPayment() async {
+    emit(LoadingPermitApplications());
+    try {
+      var result =
+          await _api.getPermitApplicationApi().permitApplicationPayIdPost(
+                id: applicationId!,
+              );
+
+      if (result.data == null) {
+        emit(ErrorPermitApplications(snackBarMessage: result.statusMessage));
+        return;
+      } else if (result.data!.responseCode == ResponseCode.Failed) {
+        emit(ErrorPermitApplications(
+            snackBarMessage: result.data!.message.toString()));
+        return;
+      }
+
+      emit(LoadedPermitApplications(
+          snackBarMessage: result.data!.message.toString()));
+      applicationsDataSource.refreshDatasource();
+    } catch (e) {
+      emit(
+        ErrorPermitApplications(snackBarMessage: e.toString()),
+      );
+    }
+  }
+
   Future<void> onSubmit(bool accept) async {
     emit(LoadingPermitApplications());
     if (!formKey.currentState!.validate()) {

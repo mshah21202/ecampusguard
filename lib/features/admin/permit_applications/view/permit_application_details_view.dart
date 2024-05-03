@@ -109,6 +109,17 @@ class _PermitApplicationDetailsViewState
                                   child: const Text("View User Permit"),
                                 ),
                               if (cubit.permitApplication!.status ==
+                                  PermitApplicationStatus.AwaitingPayment)
+                                FilledButton.icon(
+                                  onPressed: () {
+                                    cubit.onPayment().then((value) {
+                                      context.pop();
+                                    });
+                                  },
+                                  icon: const Icon(Icons.check),
+                                  label: const Text("Mark as Paid"),
+                                ),
+                              if (cubit.permitApplication!.status ==
                                       PermitApplicationStatus.Pending ||
                                   cubit.permitApplication!.status ==
                                       PermitApplicationStatus.AwaitingPayment)
