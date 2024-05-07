@@ -13,6 +13,7 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'permit_applications_state.dart';
 
@@ -63,10 +64,12 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
   int? applicationId;
   bool acknowledged = false;
   int? academicYear;
-  PlatformFile? drivingLicenseImgFile;
-  bool get choosenDrivingLicense => drivingLicenseImgFile != null;
-  PlatformFile? carRegistrationImgFile;
-  bool get choosenCarRegistration => carRegistrationImgFile != null;
+  Uri? drivingLicenseImgUrl;
+  Uri? carRegistrationImgUrl;
+  // PlatformFile? drivingLicenseImgFile;
+  // bool get choosenDrivingLicense => drivingLicenseImgFile != null;
+  // PlatformFile? carRegistrationImgFile;
+  // bool get choosenCarRegistration => carRegistrationImgFile != null;
   List<String> get academicYears => [
         "First Year",
         "Second Year",
@@ -157,17 +160,18 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
 
       attendingDaysController.text = selectedAttendingDays.join(",");
 
-      setSelectedCarNationality((await getCountryFromCode(
-          permitApplication!.vehicle!.nationality!))!);
+      setSelectedCarNationality(
+          (await getCountryFromCode(permitApplication!.vehicle!.nationality))!);
       selectPermitType(permitApplication!.permit!);
+      setSelectedPhoneCountry(
+          (await getCountryFromCode(permitApplication!.phoneNumberCountry!)));
 
-      phoneNumberController.text =
-          (permitApplication!.phoneNumber!).substring(0);
+      phoneNumberController.text = permitApplication!.phoneNumber!;
 
       numberOfCompanionsController.text =
           permitApplication!.siblingsCount!.toString();
 
-      plateNumberController.text = permitApplication!.vehicle!.plateNumber!;
+      plateNumberController.text = permitApplication!.vehicle!.plateNumber;
 
       academicYear = permitApplication!.academicYear!.index;
 
@@ -175,10 +179,54 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
           (element) => element.id == permitApplication!.permit!.id,
           orElse: () => permits.first));
 
-      carMakeController.text = permitApplication!.vehicle!.make!;
-      carModelController.text = permitApplication!.vehicle!.model!;
-      carColorController.text = permitApplication!.vehicle!.color!;
-      carYearController.text = permitApplication!.vehicle!.year!.toString();
+      carMakeController.text = permitApplication!.vehicle!.make;
+      carModelController.text = permitApplication!.vehicle!.model;
+      carColorController.text = permitApplication!.vehicle!.color;
+      carYearController.text = permitApplication!.vehicle!.year.toString();
+
+      drivingLicenseImgUrl = permitApplication!.licenseImgPath != null
+          ? Uri.tryParse(permitApplication!.licenseImgPath!)
+          : null;
+      drivingLicenseController.text = drivingLicenseImgUrl == null
+          ? "File not found"
+          : _getFileName(drivingLicenseImgUrl!) ?? "File not found";
+      carRegistrationImgUrl = permitApplication!
+                  .vehicle!.registrationDocImgPath !=
+              null
+          ? Uri.tryParse(permitApplication!.vehicle!.registrationDocImgPath!)
+          : null;
+      carRegistrationController.text = carRegistrationImgUrl == null
+          ? "File not found"
+          : _getFileName(carRegistrationImgUrl!) ?? "File not found";
+    }
+  }
+
+  String? _getFileName(Uri uri) {
+    var regex = RegExp(r'([^\/?%]*\.(?:jpg|jpeg|png|gif|pdf))');
+
+    for (String segment in uri.pathSegments) {
+      if (regex.hasMatch(segment)) {
+        return segment;
+      }
+    }
+
+    return null;
+  }
+
+  void openLinkInNewTab(Uri? url) async {
+    if (url != null) {
+      var result = await launchUrl(
+        url,
+        webOnlyWindowName: "_blank",
+      );
+
+      if (!result) {
+        emit(const ErrorPermitApplications(
+            snackBarMessage: "Browser prevented this action"));
+      }
+    } else {
+      emit(const ErrorPermitApplications(
+          snackBarMessage: "Could not find path to file"));
     }
   }
 
@@ -257,18 +305,6 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     emit(PermitApplicationsUpdated(selectedPermit: selectedPermit));
   }
 
-  void selectDrivingLicense(PlatformFile file) {
-    drivingLicenseImgFile = file;
-    drivingLicenseController.text = file.name;
-    emit(UploadedFile(uploadedFile: drivingLicenseImgFile));
-  }
-
-  void selectCarRegistration(PlatformFile file) {
-    carRegistrationImgFile = file;
-    carRegistrationController.text = file.name;
-    emit(UploadedFile(uploadedFile: carRegistrationImgFile));
-  }
-
   void setSelectedPhoneCountry(Country? country) async {
     if (countries.isEmptyOrNull) {
       await loadCountries();
@@ -298,6 +334,33 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     emit(PermitApplicationsUpdated(attendingDays: selectedAttendingDays));
   }
 
+  Future<void> onPayment() async {
+    emit(LoadingPermitApplications());
+    try {
+      var result =
+          await _api.getPermitApplicationApi().permitApplicationPayIdPost(
+                id: applicationId!,
+              );
+
+      if (result.data == null) {
+        emit(ErrorPermitApplications(snackBarMessage: result.statusMessage));
+        return;
+      } else if (result.data!.responseCode == ResponseCode.Failed) {
+        emit(ErrorPermitApplications(
+            snackBarMessage: result.data!.message.toString()));
+        return;
+      }
+
+      emit(LoadedPermitApplications(
+          snackBarMessage: result.data!.message.toString()));
+      applicationsDataSource.refreshDatasource();
+    } catch (e) {
+      emit(
+        ErrorPermitApplications(snackBarMessage: e.toString()),
+      );
+    }
+  }
+
   Future<void> onSubmit(bool accept) async {
     emit(LoadingPermitApplications());
     if (!formKey.currentState!.validate()) {
@@ -318,8 +381,8 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
                   attendingDays: _attendingDays.values.toList(),
                   // licenseImgPath: drivingLicenseImgFile!.name,
                   permit: selectedPermit!,
-                  phoneNumber:
-                      "${selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${selectedPhoneCountry!.phoneCode}${phoneNumberController.text}",
+                  phoneNumberCountry: selectedPhoneCountry!.isoCode,
+                  phoneNumber: phoneNumberController.text,
                   siblingsCount: int.parse(numberOfCompanionsController.text),
                   vehicle: VehicleDto(
                     color: carColorController.text,
@@ -344,12 +407,13 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
 
       emit(LoadedPermitApplications(
           snackBarMessage: result.data!.message.toString()));
+      applicationsDataSource.refreshDatasource();
     } catch (e) {
       if (e is DioException && (e).response != null) {
         emit(
           ErrorPermitApplications(
-            snackBarMessage: (ResponseDto.fromJson((e).response!.data))
-                .toString(), // TODO: Test this
+            snackBarMessage:
+                (ResponseDto.fromJson((e).response!.data)).toString(),
           ),
         );
       }

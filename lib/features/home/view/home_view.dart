@@ -8,6 +8,7 @@ import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
@@ -26,8 +27,15 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: appBar,
-      drawer: AppDrawer(),
-      body: BlocBuilder<HomeCubit, HomeState>(
+      drawer: const AppDrawer(),
+      body: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          if (state.snackbarMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              appSnackBar(state.snackbarMessage!, context),
+            );
+          }
+        },
         buildWhen: (previous, current) {
           return current.homeScreenDto != null;
         },
@@ -40,8 +48,9 @@ class HomeView extends StatelessWidget {
                 SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveWidget.largePadding(context),
-                        vertical: ResponsiveWidget.mediumPadding(context)),
+                      horizontal: ResponsiveWidget.largePadding(context),
+                      vertical: ResponsiveWidget.mediumPadding(context),
+                    ),
                     child: Column(
                       children: [
                         if (state.homeScreenDto!.homeScreenWidgets!

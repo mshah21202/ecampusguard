@@ -2,9 +2,12 @@ import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permi
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/home/home.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
+import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 /// This widget displays the permit's status information. It has 3 states, [ValidPermit], [WithdrawnPermit], & [ExpiredPermit].
 ///
@@ -113,14 +116,24 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FilledButton(
-                  onPressed: () {
-                    //do smth
-                  },
-                  child: const Text(
-                    "Update Details",
+                if (cubit.userPermit!.status == UserPermitStatus.Valid)
+                  FilledButton(
+                    onPressed: () {
+                      context.go("$homeRoute$userPermitDetailsRoute");
+                    },
+                    child: const Text(
+                      "Update Details",
+                    ),
                   ),
-                ),
+                if (cubit.userPermit!.status == UserPermitStatus.Expired)
+                  FilledButton(
+                    onPressed: () {
+                      context.go("$homeRoute$applyForPermitRoute");
+                    },
+                    child: const Text(
+                      "Apply now",
+                    ),
+                  ),
               ],
             ),
           ),

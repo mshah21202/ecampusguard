@@ -1,8 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:ecampusguard/global/extensions/button_extension.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
@@ -68,16 +69,7 @@ class _PermitsListViewState extends State<PermitsListView> {
           return Stack(
             fit: StackFit.expand,
             children: [
-              Positioned(
-                left: -150,
-                bottom: -150,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: AppLogo(
-                    darkMode: theme.colorScheme.brightness == Brightness.dark,
-                  ),
-                ),
-              ),
+              const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: ResponsiveWidget.defaultPadding(context),
@@ -107,7 +99,7 @@ class _PermitsListViewState extends State<PermitsListView> {
                                     visible: cubit.permitsDataSource
                                             .selectedRowCount >
                                         0,
-                                    child: FilledButton.tonalIcon(
+                                    child: ErrorFilledButton.tonalIcon(
                                       onPressed: () {
                                         cubit.onDelete();
                                       },

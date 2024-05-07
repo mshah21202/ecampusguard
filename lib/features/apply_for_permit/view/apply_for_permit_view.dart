@@ -5,7 +5,7 @@ import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/persona
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/vehicle_information.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
@@ -79,16 +79,7 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
         appBar: appBar,
         body: Stack(
           children: [
-            Positioned(
-              left: -150,
-              bottom: -150,
-              child: Opacity(
-                opacity: 0.2,
-                child: AppLogo(
-                  darkMode: theme.colorScheme.brightness == Brightness.dark,
-                ),
-              ),
-            ),
+            const BackgroundLogo(),
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(

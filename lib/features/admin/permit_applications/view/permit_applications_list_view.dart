@@ -2,12 +2,13 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecampusguard/features/admin/permit_applications/view/widgets/applications_filter_dialog.dart';
 import 'package:ecampusguard/global/helpers/permit_applications_params.dart';
 import 'package:ecampusguard/global/router/routes.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
-import 'package:ecampusguard/global/widgets/app_logo.dart';
 import 'package:ecampusguard/global/widgets/admin_drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
+import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
@@ -43,12 +44,18 @@ class _PermitApplicationsListViewState
       listener: (context, state) {
         if (state is PermitApplicationsParamsUpdate) {
           String url =
-              "$adminHomeRoute/$adminApplicationsRoute?${state.params.toString()}";
+              "$adminHomeRoute/$adminApplicationsRoute${state.params.toString()}";
           context.go(url);
         }
 
         if (state is RowTappedState) {
           context.go("$adminHomeRoute/$adminApplicationsRoute/${state.id}");
+        }
+
+        if (state.snackBarMessage != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            appSnackBar(state.snackBarMessage!, context),
+          );
         }
       },
       listenWhen: (previous, current) {
@@ -62,16 +69,7 @@ class _PermitApplicationsListViewState
           return Stack(
             fit: StackFit.expand,
             children: [
-              Positioned(
-                left: -150,
-                bottom: -150,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: AppLogo(
-                    darkMode: theme.colorScheme.brightness == Brightness.dark,
-                  ),
-                ),
-              ),
+              const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: ResponsiveWidget.defaultPadding(context),
@@ -103,10 +101,16 @@ class _PermitApplicationsListViewState
                                         PermitApplicationsParams params =
                                             cubit.params.copyWith(
                                           studentId: studentId,
+                                          studentIdClear: studentId == null,
                                           status: status,
+                                          statusClear: status == null,
                                           name: name,
+                                          nameClear: name == null,
                                           academicYear: academicYear,
+                                          academicYearClear:
+                                              academicYear == null,
                                           permitId: permitId,
+                                          permitIdClear: permitId == null,
                                         );
 
                                         cubit.setQueryParams(

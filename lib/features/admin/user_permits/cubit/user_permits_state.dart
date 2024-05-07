@@ -7,6 +7,8 @@ class UserPermitsState extends Equatable {
     this.params,
     this.permits,
     this.id,
+    this.userPermit,
+    this.newPermit,
   });
 
   final String? snackbarMessage;
@@ -14,6 +16,8 @@ class UserPermitsState extends Equatable {
   final List<UserPermitDto>? userPermits;
   final List<PermitDto>? permits;
   final int? id;
+  final UserPermitDto? userPermit;
+  final PermitDto? newPermit;
 
   @override
   List<Object?> get props => [
@@ -22,6 +26,8 @@ class UserPermitsState extends Equatable {
         params,
         permits,
         id,
+        userPermit,
+        newPermit,
       ];
 }
 
@@ -42,6 +48,8 @@ class UserPermitsLoaded extends UserPermitsState {
     super.snackbarMessage,
     super.userPermits,
     super.permits,
+    super.userPermit,
+    super.newPermit,
   });
 }
 

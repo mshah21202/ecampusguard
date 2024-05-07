@@ -187,8 +187,12 @@ class _UserPermitFilterDialogState extends State<UserPermitFilterDialog> {
                             context.pop();
 
                             widget.onSave!(
-                              _studentIdController.text,
-                              _plateNumberController.text,
+                              _studentIdController.text != ""
+                                  ? _studentIdController.text
+                                  : null,
+                              _plateNumberController.text != ""
+                                  ? _plateNumberController.text
+                                  : null,
                               _status,
                               _permitId,
                             );

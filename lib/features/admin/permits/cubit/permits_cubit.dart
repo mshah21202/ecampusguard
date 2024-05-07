@@ -24,13 +24,15 @@ class PermitsCubit extends Cubit<PermitsState> {
   List<AreaDto> areas = [];
   int pageSize = 10;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState> expiryDateKey = GlobalKey<FormFieldState>();
   final TextEditingController permitNameController = TextEditingController();
   final TextEditingController permitPriceController = TextEditingController();
   final TextEditingController permitCapacityController =
       TextEditingController();
   int? areaIndex;
+  DateTime? expiry;
 
-  Map<String, bool> _permitDays = {
+  final Map<String, bool> _permitDays = {
     "Sun": false,
     "Mon": false,
     "Tue": false,
@@ -65,6 +67,7 @@ class PermitsCubit extends Cubit<PermitsState> {
         emit(PermitsError(snackbarMessage: result.statusMessage));
         return;
       }
+
       permit = result.data;
       await populateFields();
       emit(PermitsLoaded(permit: permit));
@@ -73,10 +76,16 @@ class PermitsCubit extends Cubit<PermitsState> {
     }
   }
 
+  void onDateChanged(DateTime value) {
+    expiry = value;
+    emit(PermitsLoaded(expiry: expiry));
+  }
+
   Future<void> populateFields({bool clear = false}) async {
     permitNameController.text = clear ? "" : permit!.name!;
     permitPriceController.text = clear ? "" : permit!.price.toString();
     permitCapacityController.text = clear ? "" : permit!.capacity.toString();
+    expiry = permit!.expiry;
     if (areas.isEmpty) {
       await loadAreas();
     }
@@ -194,7 +203,9 @@ class PermitsCubit extends Cubit<PermitsState> {
   Future<bool> onSubmit({bool create = false}) async {
     emit(PermitsLoading());
     try {
-      if (!formKey.currentState!.validate() || areaIndex == null) {
+      if (!formKey.currentState!.validate() ||
+          areaIndex == null ||
+          expiry == null) {
         emit(const PermitsError(
             snackbarMessage: "Please enter the correct information"));
         return false;
@@ -208,6 +219,7 @@ class PermitsCubit extends Cubit<PermitsState> {
                 price: double.parse(permitPriceController.text),
                 areaId: areas[areaIndex!].id!,
                 days: _permitDays.values.toList().reversed.toList(),
+                expiry: expiry!,
               ),
             );
 
@@ -229,12 +241,12 @@ class PermitsCubit extends Cubit<PermitsState> {
         var result = await _api.getPermitsApi().permitsIdPost(
               id: permit!.id!,
               createPermitDto: CreatePermitDto(
-                name: permitNameController.text,
-                capacity: int.parse(permitCapacityController.text),
-                price: double.parse(permitPriceController.text),
-                areaId: areas[areaIndex!].id!,
-                days: _permitDays.values.toList().reversed.toList(),
-              ),
+                  name: permitNameController.text,
+                  capacity: int.parse(permitCapacityController.text),
+                  price: double.parse(permitPriceController.text),
+                  areaId: areas[areaIndex!].id!,
+                  days: _permitDays.values.toList().reversed.toList(),
+                  expiry: expiry!),
             );
 
         if (result.data == null) {
