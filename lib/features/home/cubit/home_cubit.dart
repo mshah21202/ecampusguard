@@ -43,8 +43,11 @@ class HomeCubit extends Cubit<HomeState> {
         emit(ErrorHomeState(snackbarMessage: result.statusMessage));
         return;
       }
-
-      emit(LoadedHomeState(permitApplication: result.data!.first));
+      // FIXME: This was missing which made the widget always display the the user had no application.
+      if (result.data!.first.status != PermitApplicationStatus.Denied) {
+        permitApplication = result.data!.first;
+      }
+      emit(LoadedHomeState(permitApplication: permitApplication));
       return;
     } catch (e) {
       emit(ErrorHomeState(snackbarMessage: e.toString()));
