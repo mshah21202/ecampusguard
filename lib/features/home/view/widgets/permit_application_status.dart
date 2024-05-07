@@ -84,7 +84,7 @@ class _PermitApplicationStatusWidgetState
                         // _applicationInfo(cubit, theme),
                       ].addElementBetweenElements(
                         SizedBox(
-                          height: ResponsiveWidget.defaultPadding(context),
+                          height: ResponsiveWidget.xLargePadding(context),
                         ),
                       ),
                     ));
