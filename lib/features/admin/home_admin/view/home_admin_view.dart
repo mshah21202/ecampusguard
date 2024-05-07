@@ -34,7 +34,7 @@ class _HomeAdminViewState extends State<HomeAdminView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,
+      appBar: appBar(),
       drawer: const AdminAppDrawer(),
       body: BlocBuilder<HomeAdminCubit, HomeAdminState>(
         builder: (context, state) {
@@ -45,7 +45,7 @@ class _HomeAdminViewState extends State<HomeAdminView> {
               SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ResponsiveWidget.defaultPadding(context),
+                    horizontal: ResponsiveWidget.largePadding(context),
                     vertical: ResponsiveWidget.smallPadding(context),
                   ),
                   child: Column(
@@ -55,7 +55,7 @@ class _HomeAdminViewState extends State<HomeAdminView> {
                       const AreasSummary(),
                     ].addElementBetweenElements(
                       SizedBox(
-                        height: ResponsiveWidget.defaultPadding(context),
+                        height: ResponsiveWidget.largePadding(context),
                       ),
                     ),
                   ),

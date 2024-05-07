@@ -62,7 +62,7 @@ class _PermitApplicationsListViewState
         return previous != current;
       },
       child: Scaffold(
-        appBar: appBar,
+        appBar: appBar(),
         drawer: const AdminAppDrawer(),
         body: BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
             builder: (context, state) {
@@ -72,7 +72,7 @@ class _PermitApplicationsListViewState
               const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ResponsiveWidget.defaultPadding(context),
+                  horizontal: ResponsiveWidget.largePadding(context),
                   vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(

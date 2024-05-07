@@ -46,7 +46,7 @@ class _PermitsListViewState extends State<PermitsListView> {
     var theme = Theme.of(context);
     return Scaffold(
       drawer: const AdminAppDrawer(),
-      appBar: appBar,
+      appBar: appBar(),
       body: BlocConsumer<PermitsCubit, PermitsState>(
         listenWhen: (previous, current) => true,
         listener: (context, state) {
@@ -72,7 +72,7 @@ class _PermitsListViewState extends State<PermitsListView> {
               const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ResponsiveWidget.defaultPadding(context),
+                  horizontal: ResponsiveWidget.largePadding(context),
                   vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(

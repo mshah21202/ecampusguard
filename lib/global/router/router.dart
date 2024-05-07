@@ -6,6 +6,8 @@ import 'package:ecampusguard/features/admin/permits/view/permit_details_view.dar
 import 'package:ecampusguard/features/admin/user_permits/user_permits.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/apply_for_permit_page.dart';
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
+import 'package:ecampusguard/features/gatestaff/area_screen/area_screen.dart';
+import 'package:ecampusguard/features/gatestaff/home_gatestaff/home_gatestaff.dart';
 import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
 import 'package:ecampusguard/features/register/register.dart';
@@ -39,7 +41,6 @@ GoRouter appRouter({
           },
         ),
         GoRoute(
-          // User routes
           path: homeRoute,
           builder: (context, state) {
             return const HomePage();
@@ -50,6 +51,8 @@ GoRouter appRouter({
                 return null;
               case Role.admin:
                 return adminHomeRoute;
+              case Role.gateStaff:
+                return gateStaffHomeRoute;
               default:
                 return homeRoute;
             }
@@ -108,6 +111,8 @@ GoRouter appRouter({
                 return homeRoute;
               case Role.admin:
                 return null;
+              case Role.gateStaff:
+                return gateStaffHomeRoute;
               default:
                 return homeRoute;
             }
@@ -237,7 +242,22 @@ GoRouter appRouter({
               ],
             ),
           ],
-        )
+        ),
+        GoRoute(
+          path: gateStaffHomeRoute,
+          builder: (context, state) {
+            return const HomeGatestaffPage();
+          },
+          routes: [
+            GoRoute(
+              path: "$gateStaffAreaScreenRoute/$gateStaffAreaScreenIdRoute",
+              builder: (context, state) {
+                int id = int.parse(state.pathParameters["id"] ?? "");
+                return AreaScreenPage(areaId: id);
+              },
+            )
+          ],
+        ),
       ],
       redirect: (context, state) async {
         var loggedIn = authCubit.isValidSession();
@@ -257,6 +277,8 @@ GoRouter appRouter({
               return homeRoute;
             case Role.admin:
               return adminHomeRoute;
+            case Role.gateStaff:
+              return gateStaffHomeRoute;
             default:
               return homeRoute;
           }

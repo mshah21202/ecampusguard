@@ -35,7 +35,7 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,
+      appBar: appBar(),
       drawer: const AppDrawer(),
       body: BlocConsumer<UserPermitDetailsCubit, UserPermitDetailsState>(
         listener: (context, state) {

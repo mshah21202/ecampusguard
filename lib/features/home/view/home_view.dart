@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: appBar,
+      appBar: appBar(),
       drawer: const AppDrawer(),
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -39,6 +39,7 @@ class HomeView extends StatelessWidget {
           return current.homeScreenDto != null;
         },
         builder: (context, state) {
+          var cubit = context.read<HomeCubit>();
           return Stack(
             fit: StackFit.expand,
             children: [
@@ -47,7 +48,7 @@ class HomeView extends StatelessWidget {
                 SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveWidget.largePadding(context),
+                      horizontal: ResponsiveWidget.xLargePadding(context),
                       vertical: ResponsiveWidget.mediumPadding(context),
                     ),
                     child: Column(
@@ -59,8 +60,11 @@ class HomeView extends StatelessWidget {
                             .contains(HomeScreenWidget.PreviousPermits))
                           const PreviousPermits(permits: []),
                         if (state.homeScreenDto!.homeScreenWidgets!
-                            .contains(HomeScreenWidget.AccessLogs))
-                          const AccessLogsList(),
+                                .contains(HomeScreenWidget.AccessLogs) &&
+                            cubit.userPermit != null)
+                          AccessLogsList(
+                            accessLogs: cubit.userPermit!.accessLogs!,
+                          ),
                       ].addElementBetweenElements(
                         SizedBox(
                           height: ResponsiveWidget.mediumPadding(context),

@@ -22,7 +22,7 @@ class RegisterView extends StatelessWidget {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: appBar,
+          appBar: appBar(),
           // backgroundColor: theme.colorScheme.background,
           body: Stack(
             children: [

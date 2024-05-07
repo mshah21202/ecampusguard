@@ -30,16 +30,6 @@ class ResponsiveWidget extends StatelessWidget {
       MediaQuery.of(context).size.width >= mediumScreenSize &&
       MediaQuery.of(context).size.width <= customScreenSize;
 
-  static double defaultPadding(BuildContext context) {
-    if (isLargeScreen(context)) {
-      return 64;
-    } else if (isMediumScreen(context)) {
-      return 32;
-    } else {
-      return 16;
-    }
-  }
-
   static double xLargeWidthPadding(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     if (isLargeScreen(context)) {
@@ -51,7 +41,7 @@ class ResponsiveWidget extends StatelessWidget {
     }
   }
 
-  static double largePadding(BuildContext context) {
+  static double xLargePadding(BuildContext context) {
     if (isLargeScreen(context)) {
       return 82;
     } else if (isMediumScreen(context)) {
@@ -61,13 +51,23 @@ class ResponsiveWidget extends StatelessWidget {
     }
   }
 
+  static double largePadding(BuildContext context) {
+    if (isLargeScreen(context)) {
+      return 64;
+    } else if (isMediumScreen(context)) {
+      return 32;
+    } else {
+      return 16;
+    }
+  }
+
   static double mediumPadding(BuildContext context) {
     if (isLargeScreen(context)) {
       return 32;
     } else if (isMediumScreen(context)) {
       return 24;
     } else {
-      return 12;
+      return 18;
     }
   }
 

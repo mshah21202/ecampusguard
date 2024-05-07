@@ -45,7 +45,7 @@ class _PermitDetailsViewState extends State<PermitDetailsView> {
     var theme = Theme.of(context);
     return Scaffold(
       drawer: const AdminAppDrawer(),
-      appBar: appBar,
+      appBar: appBar(),
       body: BlocBuilder<PermitsCubit, PermitsState>(
         builder: (context, state) {
           return Stack(
