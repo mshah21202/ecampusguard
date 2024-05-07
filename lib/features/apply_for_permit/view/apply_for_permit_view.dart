@@ -76,14 +76,14 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
         }
       },
       child: Scaffold(
-        appBar: appBar,
+        appBar: appBar(),
         body: Stack(
           children: [
             const BackgroundLogo(),
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ResponsiveWidget.defaultPadding(context),
+                    horizontal: ResponsiveWidget.largePadding(context),
                     vertical: ResponsiveWidget.smallPadding(context)),
                 child: Form(
                   key: cubit.formKey,

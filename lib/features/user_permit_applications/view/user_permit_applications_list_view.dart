@@ -53,7 +53,7 @@ class UserPermitApplicationsListView extends StatelessWidget {
         final cubit = context.read<UserPermitApplicationsCubit>();
         var theme = Theme.of(context);
         return Scaffold(
-          appBar: appBar,
+          appBar: appBar(),
           drawer: const AppDrawer(),
           body: Stack(
             fit: StackFit.expand,
@@ -61,7 +61,7 @@ class UserPermitApplicationsListView extends StatelessWidget {
               const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ResponsiveWidget.defaultPadding(context),
+                  horizontal: ResponsiveWidget.largePadding(context),
                   vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(

@@ -43,7 +43,7 @@ class _UserPermitApplicationDetailsState
         var cubit = context.read<UserPermitApplicationsCubit>();
         var theme = Theme.of(context);
         return Scaffold(
-          appBar: appBar,
+          appBar: appBar(),
           drawer: const AppDrawer(),
           body: Stack(
             fit: StackFit.expand,

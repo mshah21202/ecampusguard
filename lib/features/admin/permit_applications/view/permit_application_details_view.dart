@@ -46,7 +46,7 @@ class _PermitApplicationDetailsViewState
     var theme = Theme.of(context);
     return Scaffold(
       drawer: const AdminAppDrawer(),
-      appBar: appBar,
+      appBar: appBar(),
       body: BlocBuilder<PermitApplicationsCubit, PermitApplicationsState>(
         builder: (context, state) {
           return Stack(

@@ -74,7 +74,7 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
                       _permitActions(cubit, theme),
                     ].addElementBetweenElements(
                       SizedBox(
-                        height: ResponsiveWidget.defaultPadding(context),
+                        height: ResponsiveWidget.largePadding(context),
                       ),
                     ),
                   ),

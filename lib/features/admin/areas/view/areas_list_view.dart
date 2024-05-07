@@ -65,7 +65,7 @@ class _AreasListViewState extends State<AreasListView> {
       listenWhen: (previous, current) => true,
       child: Scaffold(
         drawer: const AdminAppDrawer(),
-        appBar: appBar,
+        appBar: appBar(),
         body: BlocBuilder<AreasCubit, AreasState>(builder: (context, state) {
           return Stack(
             fit: StackFit.expand,
@@ -73,7 +73,7 @@ class _AreasListViewState extends State<AreasListView> {
               const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ResponsiveWidget.defaultPadding(context),
+                  horizontal: ResponsiveWidget.largePadding(context),
                   vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(

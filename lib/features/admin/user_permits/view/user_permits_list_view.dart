@@ -42,7 +42,7 @@ class UserPermitsListView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: appBar,
+        appBar: appBar(),
         drawer: const AdminAppDrawer(),
         body: Stack(
           fit: StackFit.expand,
@@ -50,7 +50,7 @@ class UserPermitsListView extends StatelessWidget {
             const BackgroundLogo(),
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ResponsiveWidget.defaultPadding(context),
+                horizontal: ResponsiveWidget.largePadding(context),
                 vertical: ResponsiveWidget.smallPadding(context),
               ),
               child: Column(

@@ -18,16 +18,17 @@ class ApplicationSummary extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-            color: theme.colorScheme.background,
-            borderRadius: BorderRadius.circular(25),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.brightness == Brightness.light
-                    ? theme.colorScheme.shadow.withOpacity(0.25)
-                    : theme.colorScheme.secondaryContainer.withOpacity(0.5),
-                blurRadius: 15.0,
-              )
-            ]),
+          color: theme.colorScheme.background,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.brightness == Brightness.light
+                  ? theme.colorScheme.shadow.withOpacity(0.25)
+                  : theme.colorScheme.secondaryContainer.withOpacity(0.5),
+              blurRadius: 15.0,
+            )
+          ],
+        ),
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -41,7 +41,7 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
     final cubit = context.read<UserPermitsCubit>();
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: appBar,
+      appBar: appBar(),
       drawer: const AdminAppDrawer(),
       body: BlocBuilder<UserPermitsCubit, UserPermitsState>(
           builder: (context, state) {
