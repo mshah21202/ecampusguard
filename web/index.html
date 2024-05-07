@@ -50,15 +50,14 @@
           serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: function (engineInitializer) {
-          engineInitializer.initializeEngine().then(function (appRunner) {
+          engineInitializer.initializeEngine({
+            render: "html"
+          }).then(function (appRunner) {
             appRunner.runApp();
           });
         }
       });
     });
-  </script>
-  <script type="text/javascript">
-    window.flutterWebRenderer = "html";
   </script>
 </body>
 

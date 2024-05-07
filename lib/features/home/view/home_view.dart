@@ -1,4 +1,5 @@
 import 'package:ecampusguard/features/home/view/widgets/enterexit_logs.dart';
+import 'package:ecampusguard/features/home/view/widgets/permit_application_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
@@ -43,6 +44,9 @@ class HomeView extends StatelessWidget {
                         vertical: ResponsiveWidget.mediumPadding(context)),
                     child: Column(
                       children: [
+                        if (state.homeScreenDto!.homeScreenWidgets!
+                            .contains(HomeScreenWidget.ApplicationStatus))
+                          const PermitApplicationStatusWidget(),
                         if (state.homeScreenDto!.homeScreenWidgets!
                             .contains(HomeScreenWidget.PermitStatus))
                           const PermitStatusWidget(),
