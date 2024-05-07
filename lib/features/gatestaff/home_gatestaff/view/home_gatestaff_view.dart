@@ -3,6 +3,7 @@ import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguard/global/widgets/gatestaff_drawer.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,8 @@ class _HomeGatestaffViewState extends State<HomeGatestaffView> {
       final cubit = context.read<HomeGatestaffCubit>();
       var theme = Theme.of(context);
       return Scaffold(
-        appBar: appBar(),
+        appBar: appBar(automaticallyImplyLeading: true),
+        drawer: const GateStaffDrawer(),
         body: Stack(
           fit: StackFit.expand,
           children: [

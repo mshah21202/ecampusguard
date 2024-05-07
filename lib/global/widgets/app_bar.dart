@@ -2,7 +2,7 @@ import 'package:ecampusguard/global/theme/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-AppBar appBar({bool automaticallyImplyLeading = false}) => AppBar(
+AppBar appBar({bool automaticallyImplyLeading = true}) => AppBar(
       title: const Text("eCampusGuard"),
       automaticallyImplyLeading: automaticallyImplyLeading,
       centerTitle: true,

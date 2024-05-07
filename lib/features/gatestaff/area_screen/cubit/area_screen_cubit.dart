@@ -46,6 +46,12 @@ class AreaScreenCubit extends Cubit<AreaScreenState> {
     }
   }
 
+  @override
+  Future<void> close() async {
+    await _anplrSignalR.disconnect();
+    super.close();
+  }
+
   void onConnectionClose({Exception? error}) {
     connected = false;
     emit(AreaScreenLoaded(

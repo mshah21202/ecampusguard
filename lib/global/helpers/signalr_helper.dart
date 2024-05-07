@@ -41,6 +41,11 @@ class SignalRHelper {
     }
   }
 
+  Future<void> disconnect() async {
+    await hubConnection.stop();
+    connected = true;
+  }
+
   void _addListeners() {
     if (clientMethods == null) {
       return;
