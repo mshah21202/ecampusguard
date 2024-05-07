@@ -1,225 +1,253 @@
-// import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
+import 'package:ecampusguard/features/home/cubit/home_cubit.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../global/widgets/responsive.dart';
+import '../../../admin/permit_applications/view/widgets/application_status_chip.dart';
 
 /// This widget displays the permit application's status.
 ///
 /// It has 3 states: [Pending, AwaitingPayment, Paid, Denied]
 ///
 /// Use this when [HomeState]'s [permitStatus] is [null].
-class PermitApplicationStatusWidget extends StatelessWidget {
-  const PermitApplicationStatusWidget({super.key, required this.status});
+class PermitApplicationStatusWidget extends StatefulWidget {
+  const PermitApplicationStatusWidget({
+    super.key,
+  });
 
-  final PermitApplicationStatus status;
+  @override
+  State<PermitApplicationStatusWidget> createState() =>
+      _PermitApplicationStatusWidgetState();
+}
 
-  //pending stat
-  Widget _buildPendingStatus(ThemeData theme) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Application Sent',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-
-
-                ),
-
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text('Status: ', style: TextStyle(fontSize: 20)),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.tertiaryContainer,
-                        borderRadius: BorderRadius.circular(10), // Rounded corners
-                      ),
-
-                      child:const Row(
-                        children: [
-                          Icon(Icons.pending_outlined, ),
-                          const SizedBox(width: 10),
-                          Text('Pending', style: TextStyle(fontSize: 16,)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-              ],
-            ),
-            const SizedBox(width: 500),
-            Column(
-              children: [
-                FilledButton(
-                  onPressed: () {
-                    // Student check his application
-                  },
-                        child: const Text(
-                        'Check Application',
-                        style: TextStyle(fontSize: 16),
-                        ),
-                ),
-              ],
-            ),
-          ].addElementBetweenElements(const SizedBox(width: 30),),
-        ),
-      );
+class _PermitApplicationStatusWidgetState
+    extends State<PermitApplicationStatusWidget> {
+  @override
+  void initState() {
+    super.initState();
+    var cubit = context.read<HomeCubit>();
+    cubit.fetchApplicationStatus();
   }
 
-//Awaiting stat
-  Widget _buildAwaitingPaymentStatus(ThemeData theme) {
-
-    return Padding(
-
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Application Sent',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-
-              ),
-
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Text('Status: ', style: TextStyle(fontSize: 20)),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
-                    ),
-
-                    child: Row(
-                      children: [
-                        Icon(Icons.payment_outlined, color: theme.colorScheme.onSecondary),
-                        const SizedBox(width: 10),
-                        Text('Awaiting Payment', style: TextStyle(fontSize: 16,  color: theme.colorScheme.onSecondary)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-            ],
-          ),
-          const SizedBox(width: 500),
-          Column(
-            children: [
-              FilledButton(
-                onPressed: () {
-                  // Student check his application
-                },
-                child: const Text(
-                  'Pay Now',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-        ].addElementBetweenElements(const SizedBox(width: 30),),
-      ),
-    );
-  }
-
-  //Denied
-  Widget _buildDeniedStatus(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Application Denied',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-
-              ),
-
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Text('Status: ', style: TextStyle(fontSize: 20)),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.tertiaryContainer,
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
-                    ),
-
-                    child:const Row(
-                      children: [
-                        Icon(Icons.error_outline, ),
-                        const SizedBox(width: 10),
-                        Text('Denied', style: TextStyle(fontSize: 16,)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-            ],
-          ),
-        ].addElementBetweenElements(const SizedBox(width: 30),),
-      ),
-    );
-  }
+  // final PermitApplicationStatus status;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    Widget statusWidget;
-    switch (status) {
-
-      case PermitApplicationStatus.Pending:
-         statusWidget = _buildPendingStatus(theme);
-      case PermitApplicationStatus.AwaitingPayment:
-         statusWidget = _buildAwaitingPaymentStatus(theme);
-      case PermitApplicationStatus.Denied:
-         statusWidget = _buildDeniedStatus(theme);
-      default:
-        return Container();
-    }
-    return Container(
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.background,
-        borderRadius: BorderRadius.circular(25.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.19),
-            blurRadius: 25.0,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          statusWidget,
-        ],
-      ),
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        var cubit = context.read<HomeCubit>();
+        if (state is! LoadingHomeState) {
+          return Container(
+              // FIXME: We want the height of container to be as small as possible
+              // height: MediaQuery.of(context).size.height *
+              //     (ResponsiveWidget.isLargeScreen(context) ||
+              //             ResponsiveWidget.isMediumScreen(context)
+              //         ? 0.27
+              //         : 0.45),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.background,
+                borderRadius: BorderRadius.circular(25.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.19),
+                    blurRadius: 25.0,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ResponsiveWidget.isLargeScreen(context) ||
+                      ResponsiveWidget.isMediumScreen(context)
+                  ? IntrinsicHeight(
+                      // FIXME: We want the height of container to be as small as possible
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween, FIXME: This was causing issues with sizes
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          // _PermitType(cubit, theme),
+                          _applicationDetails(cubit, theme),
+                          _applicationActions(cubit, theme),
+                          // _applicationInfo(cubit, theme),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        // _PermitType(cubit, theme),
+                        _applicationDetails(cubit, theme),
+                        _applicationActions(cubit, theme),
+                        // _applicationInfo(cubit, theme),
+                      ].addElementBetweenElements(
+                        SizedBox(
+                          height: ResponsiveWidget.defaultPadding(context),
+                        ),
+                      ),
+                    ));
+        } else {
+          return const Center();
+        }
+      },
     );
-
   }
 
+  Widget _applicationDetails(HomeCubit cubit, ThemeData theme) {
+    return Flexible(
+      flex: ResponsiveWidget.isLargeScreen(context) ||
+              ResponsiveWidget.isMediumScreen(context)
+          ? 4
+          : 12,
+      fit: FlexFit.tight,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              cubit.permitApplication != null
+                  ? "Application Sent"
+                  : "Apply for permit",
+              style: theme.textTheme.headlineLarge!.copyWith(
+                color: theme.colorScheme.onBackground,
+              ),
+            ),
+            if (cubit.permitApplication != null)
+              // FIXME: Row was missing here.
+              Row(
+                children: [
+                  Text(
+                    'Status: ',
+                    style: theme
+                        .textTheme.titleLarge, // FIXME: Used predefined theme.
+                  ),
+                  PermitApplicationStatusChip(
+                    status: cubit.permitApplication!.status!,
+                  ),
+                ],
+              ),
+            //
+            // FIXME: This belongs in the _applicationActions, it is a button.
+            // if (cubit.permitApplication ==
+            //     null)
+            //   FilledButton(
+            //     style: FilledButton.styleFrom(
+            //       backgroundColor: theme.colorScheme.primary,
+            //       foregroundColor: theme.colorScheme.onPrimary,
+            //       padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(30),
+            //       ),
+            //     ),
+            //     onPressed: () {
+            //       // do amth
+            //     },
+            //     child: Text('Apply Now'),
+            //   ),
+          ].addElementBetweenElements(
+            const SizedBox(
+              height: 8,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
+  Widget _applicationActions(HomeCubit cubit, ThemeData theme) {
+    return Flexible(
+      flex: ResponsiveWidget.isLargeScreen(context) ||
+              ResponsiveWidget.isMediumScreen(context)
+          ? 1
+          : 6,
+      fit: FlexFit.tight,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: ResponsiveWidget.isLargeScreen(context) ||
+                    ResponsiveWidget.isMediumScreen(context)
+                ? BorderSide(
+                    color: theme.colorScheme.outline.withOpacity(0.16),
+                    width: 2)
+                : BorderSide.none,
+            top: ResponsiveWidget.isLargeScreen(context) ||
+                    ResponsiveWidget.isMediumScreen(context)
+                ? BorderSide.none
+                : BorderSide(
+                    color: theme.colorScheme.outline.withOpacity(0.16),
+                    width: 2),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(
+            24.0, // FIXME: This needs to be the same amount of the _applicationDetails.
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // FIXME: This was placed in the permitDetails.
+              if (cubit.permitApplication == null)
+                FilledButton(
+                  // FIXME: No need to style.
+                  // style: FilledButton.styleFrom(
+                  //   backgroundColor: theme.colorScheme.primary,
+                  //   foregroundColor: theme.colorScheme.onPrimary,
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 32, vertical: 16),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(30),
+                  //   ),
+                  // ),
+                  onPressed: () {
+                    // do amth
+                  },
+                  child: const Text('Apply Now'),
+                ),
+              if (cubit.permitApplication != null &&
+                  cubit.permitApplication!.status ==
+                      PermitApplicationStatus.Pending)
+                FilledButton(
+                  // FIXME: No need to style.
+                  // style: FilledButton.styleFrom(
+                  //   backgroundColor: theme.colorScheme.primary,
+                  //   foregroundColor: theme.colorScheme.onPrimary,
+                  //   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(30),
+                  //   ),
+                  // ),
+                  onPressed: () {
+                    //do smth
+                  },
+                  child: const Text('Check Application'),
+                ),
+              if (cubit.permitApplication != null &&
+                  cubit.permitApplication!.status ==
+                      PermitApplicationStatus.AwaitingPayment)
+                FilledButton(
+                  // FIXME: No need to style.
+                  // style: FilledButton.styleFrom(
+                  //   backgroundColor: theme.colorScheme.primary,
+                  //   foregroundColor: theme.colorScheme.onPrimary,
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 32, vertical: 16),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius:
+                  //         BorderRadius.circular(30), // Rounded corners
+                  //   ),
+                  // ),
+                  onPressed: () {
+                    // do smth
+                  },
+                  child: const Text('Pay Now'),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
