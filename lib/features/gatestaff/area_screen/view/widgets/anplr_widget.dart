@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/gatestaff/area_screen/view/widgets/live_feed_status_chip.dart';
+import 'package:ecampusguard/features/gatestaff/area_screen/view/widgets/search_dialog.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/raw_status_chip.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
@@ -231,7 +232,13 @@ class AnplrWidget extends StatelessWidget {
                   icon: const Icon(Icons.camera_alt),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      useRootNavigator: false,
+                      context: context,
+                      builder: (context) => const SearchDialog(),
+                    );
+                  },
                   icon: const Icon(Icons.search),
                   label: const Text("Manual Search"),
                 ),

@@ -17,6 +17,7 @@ class AreaScreenCubit extends Cubit<AreaScreenState> {
   final Ecampusguardapi _api = GetIt.I.get<Ecampusguardapi>();
   AreaScreenDto? areaScreen;
   AnplrResultDto? anplrResult;
+  List<UserPermitDto> searchResult = [];
 
   bool connected = false;
 
@@ -106,6 +107,26 @@ class AreaScreenCubit extends Cubit<AreaScreenState> {
         areaScreen: areaScreen,
         resultSeq: (state.resultSeq ?? 0) + 1,
       ));
+      return;
+    } catch (e) {
+      emit(AreaScreenError(snackbarMessage: e.toString()));
+    }
+  }
+
+  void searchUserPermit({String? plateNumber, String? studentId}) async {
+    emit(SearchDialogLoading());
+    try {
+      var result = await _api.getSearchApi().searchGet(
+            studentId: studentId,
+            plateNumber: plateNumber,
+          );
+
+      if (result.data == null) {
+        emit(AreaScreenError(snackbarMessage: result.statusMessage));
+        return;
+      }
+      searchResult = result.data!;
+      emit(SearchDialogLoaded(searchResult: searchResult));
       return;
     } catch (e) {
       emit(AreaScreenError(snackbarMessage: e.toString()));

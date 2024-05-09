@@ -9,6 +9,7 @@ import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../area_screen.dart';
 
@@ -47,6 +48,12 @@ class _AreaScreenViewState extends State<AreaScreenView> {
         return Scaffold(
           appBar: appBar(
             automaticallyImplyLeading: true,
+            leading: IconButton(
+              onPressed: () {
+                context.pop();
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
           ),
           body: Stack(
             fit: StackFit.expand,

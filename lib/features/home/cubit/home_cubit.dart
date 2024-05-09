@@ -66,10 +66,12 @@ class HomeCubit extends Cubit<HomeState> {
 
       // var result = await _testPermitStatus(UserPermitStatus.Withdrawn);
       userPermit = result.data;
-      emit(LoadedHomeState(
-        userPermit: result.data,
-        // homeScreenDto: homeScreenDto,
-      ));
+      emit(
+        LoadedHomeState(
+          userPermit: result.data,
+          homeScreenDto: homeScreenDto,
+        ),
+      );
     } catch (e) {
       emit(ErrorHomeState(snackbarMessage: e.toString()));
     }

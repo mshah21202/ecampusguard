@@ -7,6 +7,7 @@ import 'package:ecampusguard/features/admin/user_permits/user_permits.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/apply_for_permit_page.dart';
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/features/gatestaff/area_screen/area_screen.dart';
+import 'package:ecampusguard/features/gatestaff/area_screen/view/area_screen_view.dart';
 import 'package:ecampusguard/features/gatestaff/home_gatestaff/home_gatestaff.dart';
 import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
@@ -249,13 +250,24 @@ GoRouter appRouter({
             return const HomeGatestaffPage();
           },
           routes: [
-            GoRoute(
-              path: "$gateStaffAreaScreenRoute/$gateStaffAreaScreenIdRoute",
-              builder: (context, state) {
+            ShellRoute(
+              builder: (context, state, child) {
                 int id = int.parse(state.pathParameters["id"] ?? "");
-                return AreaScreenPage(areaId: id);
+
+                return BlocProvider(
+                  create: (context) => AreaScreenCubit(areaId: id),
+                  child: child,
+                );
               },
-            )
+              routes: [
+                GoRoute(
+                  path: "$gateStaffAreaScreenRoute/$gateStaffAreaScreenIdRoute",
+                  builder: (context, state) {
+                    return const AreaScreenView();
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ],
