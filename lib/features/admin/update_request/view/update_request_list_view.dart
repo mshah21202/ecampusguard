@@ -70,7 +70,7 @@ class _UpdateRequestListViewState extends State<UpdateRequestListView> {
                       ),
                       Expanded(
                         child: AppDataTable(
-                          controller: cubit.dataSource,
+                          controller: cubit.controller,
                           initialFirstRowIndex: cubit.params.currentPage != null
                               ? cubit.params.currentPage! *
                                   (cubit.params.pageSize ?? 10)
