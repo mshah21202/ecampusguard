@@ -24,7 +24,6 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
       fetchFunction: getPermitApplications,
       cubit: this,
     );
-
     loadPermits();
   }
 
@@ -107,7 +106,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     if (applicationsDataSource.selectionState == SelectionState.none) {
       selectedApplications = [];
     }
-
+ 
     emit(PermitApplicationsRowSelection(
         selectedApplications: selectedApplications));
   }

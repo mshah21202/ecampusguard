@@ -26,6 +26,10 @@ const String adminCreatePermitRoute = 'create';
 const String adminUserPermitsRoute = 'user-permits';
 const String adminUserPermitDetailsRoute = ':id';
 
+const String adminUpdateRequestsRoute = 'update-request';
+const String adminUpdateRequestDetailsRoute = ':id';
+
+
 // Gate staff routes
 const String gateStaffHomeRoute = '/gatestaff';
 const String gateStaffAreaScreenRoute = 'area';
