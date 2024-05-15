@@ -14,7 +14,7 @@ class UpdateRequestListView extends StatefulWidget {
   const UpdateRequestListView({Key? key}) : super(key: key);
 
   @override
-  _UpdateRequestListViewState createState() => _UpdateRequestListViewState();
+  State<UpdateRequestListView> createState() => _UpdateRequestListViewState();
 }
 
 class _UpdateRequestListViewState extends State<UpdateRequestListView> {
@@ -32,11 +32,24 @@ class _UpdateRequestListViewState extends State<UpdateRequestListView> {
 
     return BlocListener<UpdateRequestCubit, UpdateRequestState>(
       listener: (context, state) {
-        if (state is UpdateRequestAccepted || state is UpdateRequestRejected) {
+
+        if (state.snackBarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.snackBarMessage ?? '')),
+            SnackBar(content: Text(state.snackBarMessage!)),
           );
         }
+
+        if (state is UpdateRequestParamsUpdate) {
+          String url = "/admin/update-requests${state.params.toString()}";
+          context.go(url);
+        }
+
+        if (state is RowTappedState) {
+          context.go("/admin/update-requests/${state.id}");
+        }
+      },
+      listenWhen: (previous, current) {
+        return previous != current;
       },
       child: Scaffold(
         appBar: appBar(),

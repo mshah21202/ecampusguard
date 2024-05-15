@@ -155,31 +155,32 @@ GoRouter appRouter({
               ],
             ),
             ShellRoute(
-                builder: (context, state, child) {
-                  UpdateRequestParams params = UpdateRequestParams.fromUri(state.uri); 
-                  return BlocProvider(
-                    create: (_) => UpdateRequestCubit(params: params), 
-                    child: child,
-                  );
-                },
-                routes: [
-                  GoRoute(
-                    path: adminUpdateRequestsRoute, 
-                    builder: (context, state) {
-                      return const UpdateRequestListView();
-                    },
-                    routes: [
-                      GoRoute(
-                        path: adminUpdateRequestDetailsRoute, 
-                        builder: (context, state) {
-                          int id = int.parse(state.pathParameters["id"]!);  
-                          return UpdateRequestDetailsView(requestId: id);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+              builder: (context, state, child) {
+                UpdateRequestParams params =
+                    UpdateRequestParams.fromUri(state.uri);
+                return BlocProvider(
+                  create: (_) => UpdateRequestCubit(params: params),
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: adminUpdateRequestsRoute,
+                  builder: (context, state) {
+                    return const UpdateRequestListView();
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminUpdateRequestDetailsRoute, 
+                      builder: (context, state) {
+                        int id = int.parse(state.pathParameters['id']!);
+                        return UpdateRequestDetailsView(requestId: id);
+                      },
+                    ),
+                  ],
                 ),
+              ],
+            ),
             ShellRoute(
               builder: (context, state, child) {
                 return BlocProvider(

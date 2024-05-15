@@ -1,11 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:country_state_city/models/country.dart';
-import 'package:country_state_city/utils/country_utils.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:dio/dio.dart';
-import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/helpers/update_requests_params.dart';
 import 'package:ecampusguard/global/services/data_sources.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
@@ -61,16 +57,12 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
 
   Future<void> loadUpdateRequests() async {
     emit(UpdateRequestLoading());
-    try {
-      var result = await fetchUpdateRequests(0, params.pageSize ?? 10);
-      if (result.isEmpty) {
-        emit(UpdateRequestEmpty());
-      } else {
-        emit(UpdateRequestLoaded(result));
-      }
-    } catch (error) {
-      emit(UpdateRequestError("Failed to load update requests: ${error.toString()}"));
-    }
+   
+      var result = await _api.getUserPermitApi().userPermitUpdateRequestsGet();
+      if(result.data!=null){
+        requests=result.data!.toList();}
+        emit(UpdateRequestLoading());
+
   }
 
   Future<List<UpdateRequestDto>> fetchUpdateRequests(int startIndex, int count) async {
@@ -84,7 +76,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
             pageSize: count,
           );
       if (result.data == null) {
-        emit(UpdateRequestError("Failed to fetch update requests"));
+        emit(const UpdateRequestError("Failed to fetch update requests"));
         return [];
       }
       var pagination = jsonDecode(result.headers["pagination"]!.join(","));
@@ -153,30 +145,19 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     emit(RowTappedState(id: requests[index].id!));
   }
 
-  String? _getFileName(Uri uri) {
-    var regex = RegExp(r'([^\/?%]*\.(?:jpg|jpeg|png|gif|pdf))');
 
-    for (String segment in uri.pathSegments) {
-      if (regex.hasMatch(segment)) {
-        return segment;
+  void openLinkInNewTab(Uri? url) async {
+    if (url != null) {
+      var result = await launchUrl(
+        url,
+        webOnlyWindowName: "_blank",
+      );
+
+      if (!result) {
+        emit(const UpdateRequestError("Browser prevented this action"));
       }
+    } else {
+      emit(const UpdateRequestError("Could not find path to file"));
     }
-
-    return null;
   }
-
-  // void openLinkInNewTab(Uri? url) async {
-  //   if (url != null) {
-  //     var result = await launchUrl(
-  //       url,
-  //       webOnlyWindowName: "_blank",
-  //     );
-
-  //     if (!result) {
-  //       emit(UpdateRequestError("Browser prevented this action"));
-  //     }
-  //   } else {
-  //     emit(UpdateRequestError("Could not find path to file"));
-  //   }
-  // }
 }
