@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:country_state_city/models/country.dart';
 import 'package:country_state_city/utils/country_utils.dart';
+import 'package:ecampusguard/features/user_permit_details/view/widgets/personal_information_details.dart';
+import 'package:ecampusguard/features/user_permit_details/view/widgets/vehicle_infromation_details.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -17,20 +19,25 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
 
   final Ecampusguardapi _api = GetIt.I.get<Ecampusguardapi>();
 
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController drivingLicenseController =
-      TextEditingController();
+  // final TextEditingController phoneNumberController = TextEditingController();
+  // final TextEditingController drivingLicenseController =
+  //     TextEditingController();
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  final TextEditingController plateNumberController = TextEditingController();
-  final TextEditingController selectedCarNationalityController =
-      TextEditingController();
-  final TextEditingController carMakeController = TextEditingController();
-  final TextEditingController carYearController = TextEditingController();
-  final TextEditingController carModelController = TextEditingController();
-  final TextEditingController carColorController = TextEditingController();
-  final TextEditingController carRegistrationController =
-      TextEditingController();
+  // final TextEditingController plateNumberController = TextEditingController();
+  // final TextEditingController selectedCarNationalityController =
+  //     TextEditingController();
+  // final TextEditingController carMakeController = TextEditingController();
+  // final TextEditingController carYearController = TextEditingController();
+  // final TextEditingController carModelController = TextEditingController();
+  // final TextEditingController carColorController = TextEditingController();
+  // final TextEditingController carRegistrationController =
+  //     TextEditingController();
+  GlobalKey<PersonalInformationDetailsState> personalInfoKey =
+      GlobalKey<PersonalInformationDetailsState>();
+
+  GlobalKey<VehicleInformationDetailsState> carInfoKey =
+      GlobalKey<VehicleInformationDetailsState>();
 
   PlatformFile? drivingLicenseFile;
   PlatformFile? carRegistrationFile;
@@ -44,27 +51,27 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
 
   UserPermitDto? userPermit;
 
-  void populatePersonalInformation() {
-    setSelectedPhoneCountry(
-      countries.firstWhere((element) =>
-          element.isoCode ==
-          userPermit!.permitApplication!.phoneNumberCountry!),
-    );
+  // void populatePersonalInformation() {
+  //   setSelectedPhoneCountry(
+  //     countries.firstWhere((element) =>
+  //         element.isoCode ==
+  //         userPermit!.permitApplication!.phoneNumberCountry!),
+  //   );
 
-    phoneNumberController.text = userPermit!.permitApplication!.phoneNumber!;
-  }
+  //   phoneNumberController.text = userPermit!.permitApplication!.phoneNumber!;
+  // }
 
-  void populateVehicleInformation() {
-    plateNumberController.text = userPermit!.vehicle!.plateNumber;
-    setSelectedCarNationality(
-      countries.firstWhere(
-          (element) => element.isoCode == userPermit!.vehicle!.nationality),
-    );
-    carMakeController.text = userPermit!.vehicle!.make;
-    carModelController.text = userPermit!.vehicle!.model;
-    carYearController.text = (userPermit!.vehicle!.year).toString();
-    carColorController.text = userPermit!.vehicle!.color;
-  }
+  // void populateVehicleInformation() {
+  //   plateNumberController.text = userPermit!.vehicle!.plateNumber;
+  //   setSelectedCarNationality(
+  //     countries.firstWhere(
+  //         (element) => element.isoCode == userPermit!.vehicle!.nationality),
+  //   );
+  //   carMakeController.text = userPermit!.vehicle!.make;
+  //   carModelController.text = userPermit!.vehicle!.model;
+  //   carYearController.text = (userPermit!.vehicle!.year).toString();
+  //   carColorController.text = userPermit!.vehicle!.color;
+  // }
 
   void loadCountries() async {
     countries = await getAllCountries();
@@ -75,28 +82,28 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
     emit(UserPermitDetailsUpdated(selectedPhoneCountry: selectedPhoneCountry));
   }
 
-  void setSelectedCarNationality(Country? country) {
-    selectedCarNationality = country;
-    selectedCarNationalityController.text = country?.name ?? "";
-    emit(UserPermitDetailsUpdated(
-        selectedCarNationality: selectedCarNationality));
-  }
+  // void setSelectedCarNationality(Country? country) {
+  //   selectedCarNationality = country;
+  //   selectedCarNationalityController.text = country?.name ?? "";
+  //   emit(UserPermitDetailsUpdated(
+  //       selectedCarNationality: selectedCarNationality));
+  // }
 
-  void selectDrivingLicense(PlatformFile file) {
-    drivingLicenseFile = file;
-    drivingLicenseController.text = file.name;
-    emit(UserPermitDetailsUpdated(
-      drivingLicenseFile: drivingLicenseFile,
-    ));
-  }
+  // void selectDrivingLicense(PlatformFile file) {
+  //   drivingLicenseFile = file;
+  //   drivingLicenseController.text = file.name;
+  //   emit(UserPermitDetailsUpdated(
+  //     drivingLicenseFile: drivingLicenseFile,
+  //   ));
+  // }
 
-  void selectCarRegistration(PlatformFile file) {
-    carRegistrationFile = file;
-    carRegistrationController.text = file.name;
-    emit(UserPermitDetailsUpdated(
-      carRegistrationFile: carRegistrationFile,
-    ));
-  }
+  // void selectCarRegistration(PlatformFile file) {
+  //   carRegistrationFile = file;
+  //   carRegistrationController.text = file.name;
+  //   emit(UserPermitDetailsUpdated(
+  //     carRegistrationFile: carRegistrationFile,
+  //   ));
+  // }
 
   void getUserPermit() async {
     emit(UserPermitDetailsLoading());
@@ -155,16 +162,21 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
 
       var result = await _api.getUserPermitApi().updatePost(
             createUpdateRequestDto: CreateUpdateRequestDto(
-              phoneNumber: phoneNumberController.text,
-              phoneNumberCountry: selectedPhoneCountry!.isoCode,
+              phoneNumber:
+                  personalInfoKey.currentState!.phoneNumberController.text,
+              phoneNumberCountry:
+                  personalInfoKey.currentState!.selectedPhoneCountry!.isoCode,
               drivingLicenseImgPath: drivingLicenseImgUrl,
               vehicle: VehicleDto(
-                plateNumber: plateNumberController.text,
-                nationality: selectedCarNationality!.isoCode,
-                make: carMakeController.text,
-                model: carModelController.text,
-                color: carColorController.text,
-                year: int.parse(carYearController.text),
+                plateNumber:
+                    carInfoKey.currentState!.plateNumberController.text,
+                nationality:
+                    carInfoKey.currentState!.selectedCarNationality!.isoCode,
+                make: carInfoKey.currentState!.carMakeController.text,
+                model: carInfoKey.currentState!.carModelController.text,
+                color: carInfoKey.currentState!.carColorController.text,
+                year:
+                    int.parse(carInfoKey.currentState!.carYearController.text),
                 registrationDocImgPath: carRegistrationImgUrl,
               ),
             ),
