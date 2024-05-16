@@ -70,24 +70,6 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     emit(UpdateRequestLoading());
   }
 
-  Future<void> _userPermitUpdateRequest() async {
-    emit(UpdateRequestLoading());
-    try {
-      var result = await _api
-          .getUserPermitApi()
-          .userPermitUpdateRequestsIdGet(id: requestId!);
-      if (result.data != null) {
-        UpdateRequest = result.data!;
-        emit(UpdateRequestLoaded([UpdateRequest!]));
-      } else {
-        emit(const UpdateRequestError("Failed to load request details"));
-      }
-    } catch (e) {
-      emit(UpdateRequestError(
-          "Failed to load request details: ${e.toString()}"));
-    }
-  }
-
   Future<List<UpdateRequestDto>> getUpdateRequests(
       int startIndex, int count) async {
     emit(UpdateRequestLoading());
@@ -114,6 +96,25 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       return [];
     }
   }
+
+  Future<void> loadRequestDetails() async {
+    emit(UpdateRequestLoading());
+    try {
+      var result = await _api
+          .getUserPermitApi()
+          .userPermitUpdateRequestsIdGet(id: requestId!);
+      if (result.data != null) {
+        UpdateRequest = result.data!;
+        emit(UpdateRequestLoaded([UpdateRequest!]));
+      } else {
+        emit(const UpdateRequestError("Failed to load request details"));
+      }
+    } catch (e) {
+      emit(UpdateRequestError(
+          "Failed to load request details: ${e.toString()}"));
+    }
+  }
+
 
 
   void acceptRequest(int requestId) async {
