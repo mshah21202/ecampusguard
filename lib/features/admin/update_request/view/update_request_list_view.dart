@@ -143,19 +143,6 @@ class _UpdateRequestListViewState extends State<UpdateRequestListView> {
                               },
                             ),
                             DataColumn2(
-                              size: ColumnSize.M,
-                              label: const Text("Country Code"),
-                              onSort: (columnIndex, ascending) {
-                                cubit.setQueryParams(
-                                  updatedParams: cubit.params.copyWith(
-                                    orderBy: 'phoneNumberCountry',
-                                    // orderByDirection: ascending ? "ASC" : "DSC",
-                                  ),
-                                  sortColumnIndex: columnIndex,
-                                );
-                              },
-                            ),
-                            DataColumn2(
                               size: ColumnSize.L,
                               label: const Text("Status"),
                               onSort: (columnIndex, ascending) {

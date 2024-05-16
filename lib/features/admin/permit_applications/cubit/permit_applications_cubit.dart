@@ -240,6 +240,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     emit(const LoadedPermitApplications());
   }
 
+
   void setQueryParams({
     required PermitApplicationsParams updatedParams,
     int? sortColumnIndex,

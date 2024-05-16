@@ -156,15 +156,15 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
       var result = await _api.getUserPermitApi().updatePost(
             createUpdateRequestDto: CreateUpdateRequestDto(
               phoneNumber: phoneNumberController.text,
-              phoneNumberCountry: selectedPhoneCountry!.isoCode,
+              phoneNumberCountry: selectedPhoneCountry?.isoCode ?? "",
               drivingLicenseImgPath: drivingLicenseImgUrl,
               vehicle: VehicleDto(
                 plateNumber: plateNumberController.text,
-                nationality: selectedCarNationality!.isoCode,
+                nationality: selectedCarNationality?.isoCode ?? "",
                 make: carMakeController.text,
                 model: carModelController.text,
                 color: carColorController.text,
-                year: int.parse(carYearController.text),
+                year: int.tryParse(carYearController.text) ?? 0,
                 registrationDocImgPath: carRegistrationImgUrl,
               ),
             ),

@@ -73,7 +73,7 @@ class AdminAppDrawer extends StatelessWidget {
               title: const Text('Update Requests'),
               onTap: () {
                 context.pop();
-                context.go("$adminHomeRoute/$adminUpdateRequestDetailsRoute");
+                context.go("$adminHomeRoute/$adminUpdateRequestsRoute");
               }),
           ListTile(
             leading: const Icon(Icons.logout),
