@@ -72,10 +72,12 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
                               userPermit: cubit.userPermit!,
                             ),
                             PersonalInformationDetails(
+                              key: cubit.personalInfoKey,
                               userPermit: cubit.userPermit!,
                               countries: cubit.countries,
                             ),
                             VehicleInformationDetails(
+                              key: cubit.carInfoKey,
                               userPermit: cubit.userPermit!,
                               countries: cubit.countries,
                             ),
