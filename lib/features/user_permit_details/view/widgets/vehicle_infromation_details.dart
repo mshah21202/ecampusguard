@@ -4,6 +4,7 @@ import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VehicleInformationDetails extends StatefulWidget {
   const VehicleInformationDetails({
@@ -216,7 +217,7 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
                 ),
                 InkWell(
                   onTap: () async {
-                    // Download only
+                    openLinkInNewTab(Uri(path: carRegistrationImgUrl));
                   },
                   child: IgnorePointer(
                     child: TextFormField(
@@ -286,5 +287,14 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
     }
 
     return null;
+  }
+
+  void openLinkInNewTab(Uri? url) async {
+    if (url != null) {
+      await launchUrl(
+        url,
+        webOnlyWindowName: "_blank",
+      );
+    }
   }
 }

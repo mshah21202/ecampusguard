@@ -195,11 +195,11 @@ class PersonalDetailsForm extends StatelessWidget {
                 enabled: true,
                 controller: cubit.drivingLicenseController,
                 validator: (value) {
-                  // if (value == null ||
-                  //     value == "" ||
-                  //     !cubit.choosenCarRegistration) {
-                  //   return "This is required";
-                  // }
+                  if (value == null ||
+                      value == "" ||
+                      cubit.drivingLicenseImgUrl == null) {
+                    return "This is required";
+                  }
 
                   return null;
                 },
@@ -209,7 +209,7 @@ class PersonalDetailsForm extends StatelessWidget {
                     labelStyle:
                         TextStyle(color: theme.colorScheme.onSurfaceVariant),
                     suffixIcon: Icon(
-                      Icons.file_upload,
+                      Icons.file_download,
                       color: theme.colorScheme.onSurfaceVariant,
                     )),
               ),

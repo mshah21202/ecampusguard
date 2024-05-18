@@ -6,6 +6,7 @@ import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalInformationDetails extends StatefulWidget {
   const PersonalInformationDetails({
@@ -146,7 +147,7 @@ class PersonalInformationDetailsState
                     Expanded(
                       child: InkWell(
                         onTap: () async {
-                          // Download file
+                          openLinkInNewTab(Uri(path: drivingLicenseImgUrl));
                         },
                         child: IgnorePointer(
                           child: TextFormField(
@@ -217,5 +218,14 @@ class PersonalInformationDetailsState
     }
 
     return null;
+  }
+
+  void openLinkInNewTab(Uri? url) async {
+    if (url != null) {
+      await launchUrl(
+        url,
+        webOnlyWindowName: "_blank",
+      );
+    }
   }
 }
