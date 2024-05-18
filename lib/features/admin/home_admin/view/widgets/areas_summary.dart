@@ -41,18 +41,33 @@ class AreasSummary extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              Row(
-                children: cubit.areaSummaries
-                    .map<Widget>(
-                      (e) => AreaSummary(areaSummary: e),
+              !ResponsiveWidget.isSmallScreen(context)
+                  ? Row(
+                      children: cubit.areaSummaries
+                          .map<Widget>(
+                            (e) => AreaSummary(areaSummary: e),
+                          )
+                          .toList()
+                          .addElementBetweenElements(
+                            SizedBox(
+                              width: ResponsiveWidget.smallPadding(context),
+                            ),
+                          ),
                     )
-                    .toList()
-                    .addElementBetweenElements(
-                      SizedBox(
-                        width: ResponsiveWidget.smallPadding(context),
+                  : IntrinsicHeight(
+                      child: Column(
+                        children: cubit.areaSummaries
+                            .map<Widget>(
+                              (e) => AreaSummary(areaSummary: e),
+                            )
+                            .toList()
+                            .addElementBetweenElements(
+                              SizedBox(
+                                height: ResponsiveWidget.smallPadding(context),
+                              ),
+                            ),
                       ),
-                    ),
-              )
+                    )
             ],
           );
         });

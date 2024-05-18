@@ -76,9 +76,60 @@ class PersonalDetailsForm extends StatelessWidget {
               }
               return null;
             },
-            decoration: const InputDecoration(
-              label: Text("Phone Number"),
-              errorStyle: TextStyle(height: 0),
+            decoration: InputDecoration(
+              label: const Text("Phone Number"),
+              errorStyle: const TextStyle(height: 0),
+              prefixText: cubit.selectedPhoneCountry != null &&
+                      cubit.selectedPhoneCountry!.phoneCode.isNotEmpty
+                  ? "${cubit.selectedPhoneCountry!.phoneCode[0] != "+" ? "+" : ""}${cubit.selectedPhoneCountry!.phoneCode} "
+                  : null,
+              prefixIcon: SizedBox(
+                width: 24,
+                child: IconButton(
+                  icon: cubit.selectedPhoneCountry != null
+                      ? Image.network(
+                          "https://flagsapi.com/${cubit.selectedPhoneCountry!.isoCode}/flat/64.png")
+                      : const Icon(Icons.language),
+                  onPressed: () {
+                    showMenu(
+                      context: context,
+                      position: RelativeRect.fill,
+                      items: cubit.countries
+                          .map((country) => PopupMenuItem(
+                                value: country.isoCode,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: Image.network(
+                                        "https://flagsapi.com/${country.isoCode}/flat/64.png",
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return const Icon(
+                                            Icons.language,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        "${country.name} (${country.phoneCode.isNotEmpty && country.phoneCode[0] != "+" ? "+" : ""}${country.phoneCode})",
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  cubit.setSelectedPhoneCountry(country);
+                                },
+                              ))
+                          .toList(),
+                    );
+                  },
+                ),
+              ),
             ),
           );
         }),

@@ -36,10 +36,12 @@ class ApplicationSummary extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  applicationSummary.title ?? "",
-                  style: theme.textTheme.headlineSmall!
-                      .copyWith(color: theme.colorScheme.onBackground),
+                Flexible(
+                  child: Text(
+                    applicationSummary.title ?? "",
+                    style: theme.textTheme.headlineSmall!
+                        .copyWith(color: theme.colorScheme.onBackground),
+                  ),
                 ),
                 Container(
                   width: 48,

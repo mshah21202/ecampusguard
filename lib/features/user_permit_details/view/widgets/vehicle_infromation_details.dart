@@ -2,7 +2,6 @@ import 'package:country_state_city/models/country.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -217,11 +216,7 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
                 ),
                 InkWell(
                   onTap: () async {
-                    FilePickerResult? result = await FilePickerWeb.platform
-                        .pickFiles(type: FileType.image);
-                    if (result != null) {
-                      selectCarRegistration(result.files.single);
-                    }
+                    // Download only
                   },
                   child: IgnorePointer(
                     child: TextFormField(
@@ -241,7 +236,7 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
                           labelStyle: TextStyle(
                               color: theme.colorScheme.onSurfaceVariant),
                           suffixIcon: Icon(
-                            Icons.file_upload,
+                            Icons.file_download,
                             color: theme.colorScheme.onSurfaceVariant,
                           )),
                     ),
@@ -269,6 +264,11 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
     carModelController.text = widget.userPermit.vehicle!.model;
     carYearController.text = (widget.userPermit.vehicle!.year).toString();
     carColorController.text = widget.userPermit.vehicle!.color;
+
+    carRegistrationController.text = _getFileName(
+            Uri(path: widget.userPermit.vehicle!.registrationDocImgPath!)) ??
+        "";
+    carRegistrationImgUrl = widget.userPermit.vehicle!.registrationDocImgPath;
   }
 
   void setSelectedCarNationality(Country? country) {
@@ -276,8 +276,15 @@ class VehicleInformationDetailsState extends State<VehicleInformationDetails> {
     selectedCarNationalityController.text = country?.name ?? "";
   }
 
-  void selectCarRegistration(PlatformFile file) {
-    carRegistrationFile = file;
-    carRegistrationController.text = file.name;
+  String? _getFileName(Uri uri) {
+    var regex = RegExp(r'([^\/?%]*\.(?:jpg|jpeg|png|gif|pdf))');
+
+    for (String segment in uri.pathSegments) {
+      if (regex.hasMatch(segment)) {
+        return segment;
+      }
+    }
+
+    return null;
   }
 }

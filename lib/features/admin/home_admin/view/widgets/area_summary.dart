@@ -35,7 +35,7 @@ class AreaSummary extends StatelessWidget {
               height: 24,
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
+              crossAxisAlignment: CrossAxisAlignment.end,
               textBaseline: TextBaseline.alphabetic,
               children: [
                 Text(

@@ -41,6 +41,7 @@ class PermitInformationDetails extends StatelessWidget {
               ResponsiveWidget.smallPadding(context),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -98,55 +99,50 @@ class PermitInformationDetails extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
+                ResponsiveWrap(
+                  wrap: ResponsiveWidget.isSmallScreen(context),
+                  expandOnHorizontal: true,
+                  verticalGap: 10,
                   children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Status",
-                            style: theme.textTheme.bodyLarge!.copyWith(
-                              color: theme.colorScheme.onBackground
-                                  .withOpacity(0.5),
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Status",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.5),
                           ),
-                          UserPermitStatusChip(
-                            status: userPermit.status!,
-                          ),
-                        ].addElementBetweenElements(
-                          const SizedBox(
-                            height: 10,
-                          ),
+                        ),
+                        UserPermitStatusChip(
+                          status: userPermit.status!,
+                        ),
+                      ].addElementBetweenElements(
+                        const SizedBox(
+                          height: 10,
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Days",
-                            style: theme.textTheme.bodyLarge!.copyWith(
-                              color: theme.colorScheme.onBackground
-                                  .withOpacity(0.5),
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Days",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.5),
                           ),
-                          DaysIndicator(
-                            days: (permit ?? userPermit.permit)!.days!,
-                          )
-                        ].addElementBetweenElements(
-                          const SizedBox(
-                            height: 10,
-                          ),
+                        ),
+                        DaysIndicator(
+                          days: (permit ?? userPermit.permit)!.days!,
+                        )
+                      ].addElementBetweenElements(
+                        const SizedBox(
+                          height: 10,
                         ),
                       ),
                     ),
-                  ].addElementBetweenElements(
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ),
+                  ],
                 ),
               ].addElementBetweenElements(
                 const SizedBox(
