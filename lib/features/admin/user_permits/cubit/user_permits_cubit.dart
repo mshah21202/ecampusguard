@@ -230,4 +230,25 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
       return;
     }
   }
+
+  void onSendNotification({required String title, required String body}) async {
+    emit(UserPermitsLoading());
+    try {
+      var result = await _api.getUserPermitApi().userPermitNotificationIdPost(
+          id: userPermitId!,
+          notificationDto: NotificationDto(title: title, body: body));
+
+      if (result.data == null) {
+        emit(UserPermitsError(snackbarMessage: result.statusMessage));
+        return;
+      }
+
+      emit(
+          UserPermitsLoaded(snackbarMessage: result.data?.message?.toString()));
+      return;
+    } catch (e) {
+      emit(UserPermitsError(snackbarMessage: e.toString()));
+      return;
+    }
+  }
 }
