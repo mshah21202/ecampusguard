@@ -1,4 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 
 class AppDataTable extends StatefulWidget {
@@ -43,6 +44,7 @@ class _AppDataTableState extends State<AppDataTable> {
         color: theme.colorScheme.background,
       ),
       child: AsyncPaginatedDataTable2(
+        minWidth: largeScreenSize.toDouble() * 0.7,
         initialFirstRowIndex: widget.initialFirstRowIndex,
         controller: widget.controller,
         onSelectAll: (value) {

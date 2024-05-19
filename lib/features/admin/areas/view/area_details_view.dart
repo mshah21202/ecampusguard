@@ -59,7 +59,9 @@ class _AreaDetailsViewState extends State<AreaDetailsView> {
               const BackgroundLogo(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.25,
+                  horizontal: !ResponsiveWidget.isSmallScreen(context)
+                      ? ResponsiveWidget.xLargeWidthPadding(context) / 2
+                      : ResponsiveWidget.mediumPadding(context),
                   vertical: ResponsiveWidget.smallPadding(context),
                 ),
                 child: Column(

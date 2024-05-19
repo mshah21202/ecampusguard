@@ -55,7 +55,9 @@ class _PermitDetailsViewState extends State<PermitDetailsView> {
               SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.25,
+                    horizontal: !ResponsiveWidget.isSmallScreen(context)
+                        ? ResponsiveWidget.xLargeWidthPadding(context) / 2
+                        : ResponsiveWidget.mediumPadding(context),
                     vertical: ResponsiveWidget.smallPadding(context),
                   ),
                   child: Column(
@@ -147,7 +149,8 @@ class _PermitDetailsViewState extends State<PermitDetailsView> {
                                   useRootNavigator: false,
                                   context: context,
                                   initialDate: cubit.expiry,
-                                  firstDate: DateTime.now(),
+                                  firstDate: DateTime.now()
+                                      .subtract(const Duration(days: 365)),
                                   lastDate: DateTime.now().add(
                                     const Duration(days: 365 * 2),
                                   ),
@@ -165,7 +168,8 @@ class _PermitDetailsViewState extends State<PermitDetailsView> {
                                   onDateSubmitted: (date) {
                                     cubit.expiry = date;
                                   },
-                                  firstDate: DateTime.now(),
+                                  firstDate: DateTime.now()
+                                      .subtract(const Duration(days: 365)),
                                   lastDate: DateTime.now().add(
                                     const Duration(days: 365 * 2),
                                   ),

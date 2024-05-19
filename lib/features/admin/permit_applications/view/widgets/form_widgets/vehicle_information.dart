@@ -134,9 +134,11 @@ class VehicleDetailsForm extends StatelessWidget {
                 enabled: true,
                 controller: cubit.carRegistrationController,
                 validator: (value) {
-                  // if (value == null || value == "") {
-                  //   return "This is required";
-                  // }
+                  if (value == null ||
+                      value == "" ||
+                      cubit.drivingLicenseImgUrl == null) {
+                    return "This is required";
+                  }
 
                   return null;
                 },
@@ -146,7 +148,7 @@ class VehicleDetailsForm extends StatelessWidget {
                     labelStyle:
                         TextStyle(color: theme.colorScheme.onSurfaceVariant),
                     suffixIcon: Icon(
-                      Icons.file_upload,
+                      Icons.file_download,
                       color: theme.colorScheme.onSurfaceVariant,
                     )),
               ),

@@ -43,18 +43,33 @@ class ApplicationsSummary extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              Row(
-                children: cubit.applicationSummaries
-                    .map<Widget>((s) => ApplicationSummary(
-                          applicationSummary: s,
-                        ))
-                    .toList()
-                    .addElementBetweenElements(
-                      SizedBox(
-                        width: ResponsiveWidget.smallPadding(context),
+              !ResponsiveWidget.isSmallScreen(context)
+                  ? Row(
+                      children: cubit.applicationSummaries
+                          .map<Widget>((s) => ApplicationSummary(
+                                applicationSummary: s,
+                              ))
+                          .toList()
+                          .addElementBetweenElements(
+                            SizedBox(
+                              width: ResponsiveWidget.smallPadding(context),
+                            ),
+                          ),
+                    )
+                  : IntrinsicHeight(
+                      child: Column(
+                        children: cubit.applicationSummaries
+                            .map<Widget>((s) => ApplicationSummary(
+                                  applicationSummary: s,
+                                ))
+                            .toList()
+                            .addElementBetweenElements(
+                              SizedBox(
+                                height: ResponsiveWidget.smallPadding(context),
+                              ),
+                            ),
                       ),
-                    ),
-              )
+                    )
             ],
           );
         });

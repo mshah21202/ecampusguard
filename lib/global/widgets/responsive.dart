@@ -1,3 +1,4 @@
+import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:flutter/material.dart';
 
 const int largeScreenSize = 1366;
@@ -96,5 +97,56 @@ class ResponsiveWidget extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class ResponsiveWrap extends StatelessWidget {
+  const ResponsiveWrap({
+    super.key,
+    this.wrap = false,
+    required this.children,
+    this.expandOnVertical = false,
+    this.expandOnHorizontal = false,
+    this.horizontalGap,
+    this.verticalGap,
+  });
+
+  final bool wrap;
+  final List<Widget> children;
+  final bool expandOnVertical;
+  final bool expandOnHorizontal;
+  final double? horizontalGap;
+  final double? verticalGap;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> _children =
+        (!wrap && expandOnHorizontal) || (wrap && expandOnVertical)
+            ? children
+                .map(
+                  (child) => Expanded(
+                    child: child,
+                  ),
+                )
+                .toList()
+            : children;
+    bool _horizontalGap = horizontalGap != null && horizontalGap! > 0;
+    bool _verticalGap = verticalGap != null && verticalGap! > 0;
+    if ((!wrap && _horizontalGap) || (wrap && _verticalGap)) {
+      _children = _children.addElementBetweenElements(
+        SizedBox(
+          height: verticalGap,
+          width: horizontalGap,
+        ),
+      );
+    }
+    return wrap
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _children,
+          )
+        : Row(
+            children: _children,
+          );
   }
 }

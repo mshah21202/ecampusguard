@@ -3,10 +3,10 @@ import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalInformationDetails extends StatefulWidget {
   const PersonalInformationDetails({
@@ -147,13 +147,7 @@ class PersonalInformationDetailsState
                     Expanded(
                       child: InkWell(
                         onTap: () async {
-                          FilePickerResult? result = await FilePickerWeb
-                              .platform
-                              .pickFiles(type: FileType.image);
-
-                          if (result != null) {
-                            selectDrivingLicense(result.files.single);
-                          }
+                          openLinkInNewTab(Uri(path: drivingLicenseImgUrl));
                         },
                         child: IgnorePointer(
                           child: TextFormField(
@@ -173,7 +167,7 @@ class PersonalInformationDetailsState
                                 labelStyle: TextStyle(
                                     color: theme.colorScheme.onSurfaceVariant),
                                 suffixIcon: Icon(
-                                  Icons.file_upload,
+                                  Icons.file_download,
                                   color: theme.colorScheme.onSurfaceVariant,
                                 )),
                           ),
@@ -203,14 +197,35 @@ class PersonalInformationDetailsState
 
     phoneNumberController.text =
         widget.userPermit.permitApplication!.phoneNumber!;
+
+    drivingLicenseController.text = _getFileName(
+            Uri(path: widget.userPermit.permitApplication!.licenseImgPath!)) ??
+        "";
+    drivingLicenseImgUrl = widget.userPermit.permitApplication!.licenseImgPath;
   }
 
   void setSelectedPhoneCountry(Country? country) {
     selectedPhoneCountry = country;
   }
 
-  void selectDrivingLicense(PlatformFile file) {
-    drivingLicenseFile = file;
-    drivingLicenseController.text = file.name;
+  String? _getFileName(Uri uri) {
+    var regex = RegExp(r'([^\/?%]*\.(?:jpg|jpeg|png|gif|pdf))');
+
+    for (String segment in uri.pathSegments) {
+      if (regex.hasMatch(segment)) {
+        return segment;
+      }
+    }
+
+    return null;
+  }
+
+  void openLinkInNewTab(Uri? url) async {
+    if (url != null) {
+      await launchUrl(
+        url,
+        webOnlyWindowName: "_blank",
+      );
+    }
   }
 }

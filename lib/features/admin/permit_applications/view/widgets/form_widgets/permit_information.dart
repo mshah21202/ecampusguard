@@ -1,6 +1,7 @@
 import 'package:ecampusguard/features/admin/permit_applications/permit_applications.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/days_indicator.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
+import 'package:ecampusguard/global/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,49 +35,49 @@ class PermitInformationForm extends StatelessWidget {
           ),
           const Center(),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
+              ResponsiveWrap(
+                wrap: ResponsiveWidget.isSmallScreen(context),
+                expandOnHorizontal: true,
+                verticalGap: 10,
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Text(
-                          "Gate:",
-                          style: theme.textTheme.headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          cubit.selectedPermit != null &&
-                                  cubit.selectedPermit!.area != null
-                              ? cubit.selectedPermit!.area!.gate ?? ""
-                              : "",
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Gate:",
+                        style: theme.textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        cubit.selectedPermit != null &&
+                                cubit.selectedPermit!.area != null
+                            ? cubit.selectedPermit!.area!.gate ?? ""
+                            : "",
+                        style: theme.textTheme.headlineSmall,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Text(
-                          "Fee:",
-                          style: theme.textTheme.headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          cubit.selectedPermit != null
-                              ? "${cubit.selectedPermit!.price.toString()} JOD"
-                              : "",
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Fee:",
+                        style: theme.textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        cubit.selectedPermit != null
+                            ? "${cubit.selectedPermit!.price.toString()} JOD"
+                            : "",
+                        style: theme.textTheme.headlineSmall,
+                      ),
+                    ],
                   ),
                 ],
               ),

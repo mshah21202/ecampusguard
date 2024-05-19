@@ -69,8 +69,8 @@ class PermitsCubit extends Cubit<PermitsState> {
       }
 
       permit = result.data;
-      await populateFields();
       emit(PermitsLoaded(permit: permit));
+      await populateFields();
     } catch (e) {
       emit(PermitsError(snackbarMessage: e.toString()));
     }
@@ -85,7 +85,10 @@ class PermitsCubit extends Cubit<PermitsState> {
     permitNameController.text = clear ? "" : permit!.name!;
     permitPriceController.text = clear ? "" : permit!.price.toString();
     permitCapacityController.text = clear ? "" : permit!.capacity.toString();
-    expiry = permit!.expiry;
+    expiry = clear ? null : permit!.expiry;
+    // clear
+    //     ? expiryDateKey.currentState!.reset()
+    //     : expiryDateKey.currentState!.didChange(expiry);
     if (areas.isEmpty) {
       await loadAreas();
     }
