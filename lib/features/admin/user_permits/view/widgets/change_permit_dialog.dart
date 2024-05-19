@@ -36,7 +36,8 @@ class ChangePermitDialogState extends State<ChangePermitDialog> {
       return Dialog(
         child: SizedBox(
           // height: MediaQuery.of(context).size.width * 0.3,
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width *
+              (!ResponsiveWidget.isSmallScreen(context) ? 0.35 : 0.9),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

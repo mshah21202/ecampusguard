@@ -1,5 +1,6 @@
 import 'package:ecampusguard/features/admin/user_permits/cubit/user_permits_cubit.dart';
 import 'package:ecampusguard/features/admin/user_permits/view/widgets/change_permit_dialog.dart';
+import 'package:ecampusguard/features/admin/user_permits/view/widgets/send_notification_dialog.dart';
 import 'package:ecampusguard/features/user_permit_details/view/widgets/permit_information_details.dart';
 import 'package:ecampusguard/features/user_permit_details/view/widgets/personal_information_details.dart';
 import 'package:ecampusguard/features/user_permit_details/view/widgets/vehicle_infromation_details.dart';
@@ -191,7 +192,18 @@ class _UserPermitDetailsViewState extends State<UserPermitDetailsView> {
                               label: const Text("Withdraw Permit"),
                             ),
                           FilledButton.tonalIcon(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                useRootNavigator: false,
+                                context: context,
+                                builder: (context) => SendNotificationDialog(
+                                  onSave: (title, body) {
+                                    cubit.onSendNotification(
+                                        title: title, body: body);
+                                  },
+                                ),
+                              );
+                            },
                             icon: const Icon(Icons.message),
                             label: const Text("Send Notification"),
                           ),
