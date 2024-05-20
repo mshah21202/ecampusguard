@@ -22,6 +22,11 @@ import 'package:ecampusguard/global/router/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/admin/update_request/cubit/update_request_cubit.dart';
+import '../../features/admin/update_request/view/update_request_details_view.dart';
+import '../../features/admin/update_request/view/update_request_list_view.dart';
+import '../helpers/update_requests_params.dart';
+
 GoRouter appRouter({
   required AuthenticationCubit authCubit,
 }) =>
@@ -155,6 +160,33 @@ GoRouter appRouter({
                                 applicationId: id);
                           },
                         )
+                      ],
+                    ),
+                  ],
+                ),
+                ShellRoute(
+                  builder: (context, state, child) {
+                    UpdateRequestParams params =
+                        UpdateRequestParams.fromUri(state.uri);
+                    return BlocProvider(
+                      create: (_) => UpdateRequestCubit(params: params),
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminUpdateRequestsRoute,
+                      builder: (context, state) {
+                        return const UpdateRequestListView();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: adminUpdateRequestDetailsRoute,
+                          builder: (context, state) {
+                            int id = int.parse(state.pathParameters['id']!);
+                            return UpdateRequestDetailsView(requestId: id);
+                          },
+                        ),
                       ],
                     ),
                   ],

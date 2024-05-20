@@ -10,6 +10,50 @@ import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../features/admin/update_request/cubit/update_request_cubit.dart';
+import '../../features/admin/update_request/view/widgets/update_request_chip.dart';
+
+class UpdateRequestDataSource extends AsyncDataTableSource {
+  UpdateRequestDataSource.fromApi({
+    required this.fetchFunction,
+    required this.cubit,
+  });
+
+  final Future<List<UpdateRequestDto>> Function(int startIndex, int count) fetchFunction;
+  final UpdateRequestCubit cubit;
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    List<UpdateRequestDto> updateRequests = await fetchFunction(startIndex, count);
+
+    List<DataRow> rows = List.generate(
+      updateRequests.length,
+      (index) {
+        var request = updateRequests[index];
+        var rowKey = ValueKey(index);
+        return DataRow2(
+          key: rowKey,
+          onTap: () {
+            cubit.onRowTap(index); 
+          },
+          cells: [
+            DataCell(Text(request.userPermit?.user?.name ?? 'N/A')),
+            DataCell(Text(request.updatedVehicle?.plateNumber ?? 'N/A')),
+            DataCell(Text(request.phoneNumber)),
+            DataCell(
+              UpdateRequestStatusChip(
+                status: request.status ?? UpdateRequestStatus.unknownDefaultOpenApi, 
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return AsyncRowsResponse(cubit.totalRows, rows); 
+  }
+}
+
 class PermitApplicationsDataSource extends AsyncDataTableSource {
   PermitApplicationsDataSource.fromApi({
     required this.fetchFunction,

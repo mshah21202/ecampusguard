@@ -161,6 +161,7 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
       }
 
       var result = await _api.getUserPermitApi().updatePost(
+            validateStatus: (status) => true,
             createUpdateRequestDto: CreateUpdateRequestDto(
               phoneNumber:
                   personalInfoKey.currentState!.phoneNumberController.text,
