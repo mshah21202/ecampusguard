@@ -77,16 +77,5 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  /// Testing purposes only
-  Future<PermitApplicationStatus> _testApplicationStatus(
-      PermitApplicationStatus status) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    return status;
-  }
-
-  /// Testing purposes only
-  Future<UserPermitStatus> _testPermitStatus(UserPermitStatus status) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    return status;
-  }
+  Future<void> getNotifications() async {}
 }

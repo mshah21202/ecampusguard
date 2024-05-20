@@ -1,6 +1,5 @@
 import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/features/login/view/widgets/login_form.dart';
-import 'package:ecampusguard/global/widgets/app_bar.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/snack_bar.dart';
@@ -17,7 +16,10 @@ class LoginView extends StatelessWidget {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: appBar(),
+          appBar: AppBar(
+            title: const Text("eCampusGuard"),
+            centerTitle: true,
+          ),
           // backgroundColor: theme.colorScheme.background,
           body: Stack(
             children: [

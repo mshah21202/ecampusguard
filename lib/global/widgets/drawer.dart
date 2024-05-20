@@ -1,4 +1,5 @@
 import 'package:ecampusguard/features/authentication/authentication.dart';
+import 'package:ecampusguard/features/notifications/cubit/notifications_cubit.dart';
 import 'package:ecampusguard/global/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,6 +58,8 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Log Out'),
             onTap: () {
               var cubit = context.read<AuthenticationCubit>();
+              var notificationCubit = context.read<NotificationsCubit>();
+              notificationCubit.clear();
               cubit.logout();
             },
           ),
