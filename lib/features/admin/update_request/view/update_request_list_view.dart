@@ -1,4 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/data_table.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
@@ -32,7 +33,6 @@ class _UpdateRequestListViewState extends State<UpdateRequestListView> {
 
     return BlocListener<UpdateRequestCubit, UpdateRequestState>(
       listener: (context, state) {
-
         if (state.snackBarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.snackBarMessage!)),
@@ -40,12 +40,13 @@ class _UpdateRequestListViewState extends State<UpdateRequestListView> {
         }
 
         if (state is UpdateRequestParamsUpdate) {
-          String url = "/admin/update-requests${state.params.toString()}";
+          String url =
+              "$adminHomeRoute/$adminUpdateRequestsRoute?${state.params.toString()}";
           context.go(url);
         }
 
         if (state is RowTappedState) {
-          context.go("/admin/update-requests/${state.id}");
+          context.go("$adminHomeRoute/$adminUpdateRequestsRoute/${state.id}");
         }
       },
       listenWhen: (previous, current) {

@@ -18,9 +18,8 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       fetchFunction: getUpdateRequests,
       cubit: this,
     );
-    loadUpdateRequests();
   }
-
+  PermitApplicationDto? permitApplication;
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController phoneNumberCountryController =
       TextEditingController();
@@ -39,7 +38,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
   int totalRows = 0;
   PaginatorController controller = PaginatorController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  UpdateRequestDto? UpdateRequest;
+  UpdateRequestDto? updaterequest;
   int? requestId;
 
   void selectedRowsListener() {
@@ -60,16 +59,6 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     emit(UpdateRequestRowSelection(selectedRequests: selectedRequests));
   }
 
-  Future<void> loadUpdateRequests() async {
-    emit(UpdateRequestLoading());
-
-    var result = await _api.getUserPermitApi().userPermitUpdateRequestsGet();
-    if (result.data != null) {
-      requests = result.data!.toList();
-    }
-    emit(UpdateRequestLoading());
-  }
-
   Future<List<UpdateRequestDto>> getUpdateRequests(
       int startIndex, int count) async {
     emit(UpdateRequestLoading());
@@ -78,7 +67,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
             id: null,
             permitId: params.userPermitId,
             status: params.status,
-            pageNumber: startIndex ~/ count + 1,
+            pageNumber: startIndex ~/ count,
             pageSize: count,
           );
       if (result.data == null) {
@@ -88,7 +77,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       var pagination = jsonDecode(result.headers["pagination"]!.join(","));
       totalRows = pagination["totalItems"];
       requests = result.data!;
-      emit(UpdateRequestLoaded(requests));
+      emit(UpdateRequestLoaded(requests: result.data));
       return result.data!;
     } catch (e) {
       emit(UpdateRequestError(
@@ -97,25 +86,21 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     }
   }
 
-  Future<void> loadRequestDetails() async {
+  void loadRequestDetails() async {
     emit(UpdateRequestLoading());
     try {
       var result = await _api
           .getUserPermitApi()
           .userPermitUpdateRequestsIdGet(id: requestId!);
       if (result.data != null) {
-        UpdateRequest = result.data!;
-        emit(UpdateRequestLoaded([UpdateRequest!]));
-      } else {
-        emit(const UpdateRequestError("Failed to load request details"));
+        emit(const UpdateRequestLoaded());
+        updaterequest = result.data!;
       }
     } catch (e) {
       emit(UpdateRequestError(
           "Failed to load request details: ${e.toString()}"));
     }
   }
-
-
 
   void acceptRequest(int requestId) async {
     emit(UpdateRequestLoading());
@@ -126,7 +111,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       if (result.data?.responseCode == ResponseCode.Success) {
         emit(UpdateRequestAccepted("Request accepted successfully.",
             result.data!.message ?? "Request has been accepted."));
-        loadUpdateRequests(); // Refresh the list after updating
+        dataSource.refreshDatasource();
       } else {
         emit(UpdateRequestError(
             "Failed to accept request: ${result.data?.message ?? 'Unknown error'}"));
@@ -145,7 +130,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       if (result.data?.responseCode == ResponseCode.Success) {
         emit(UpdateRequestRejected("Request rejected successfully.",
             result.data!.message ?? "Request has been rejected."));
-        loadUpdateRequests(); // Refresh the list after updating
+        dataSource.refreshDatasource();
       } else {
         emit(UpdateRequestError(
             "Failed to reject request: ${result.data?.message ?? 'Unknown error'}"));

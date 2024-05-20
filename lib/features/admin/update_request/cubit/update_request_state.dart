@@ -6,19 +6,24 @@ abstract class UpdateRequestState extends Equatable {
     this.snackBarMessage,
     this.requests,
     this.selectedRequests,
+    this.request,
+    this.params,
   });
 
   final String? snackBarMessage;
   final int? id;
   final List<UpdateRequestDto>? requests;
+  final UpdateRequestDto? request;
   final List<UpdateRequestDto>? selectedRequests;
-
+  final UpdateRequestParams? params;
   @override
   List<Object?> get props => [
         id,
         snackBarMessage,
         requests,
         selectedRequests,
+        params,
+        request,
       ];
 }
 
@@ -29,11 +34,7 @@ class UpdateRequestLoading extends UpdateRequestState {}
 class UpdateRequestEmpty extends UpdateRequestState {}
 
 class UpdateRequestLoaded extends UpdateRequestState {
-  final List<UpdateRequestDto> requests;
-  const UpdateRequestLoaded(this.requests);
-
-  @override
-  List<Object> get props => [requests];
+  const UpdateRequestLoaded({super.requests,super.request});
 }
 
 class UpdateRequestAccepted extends UpdateRequestState {
@@ -61,11 +62,8 @@ class UpdateRequestError extends UpdateRequestState {
 }
 
 class UpdateRequestRowSelection extends UpdateRequestState {
-  final List<UpdateRequestDto> selectedRequests;
-  const UpdateRequestRowSelection({required this.selectedRequests});
+  const UpdateRequestRowSelection({super.selectedRequests});
 
-  @override
-  List<Object> get props => [selectedRequests];
 }
 
 class RowTappedState extends UpdateRequestState {
@@ -73,9 +71,5 @@ class RowTappedState extends UpdateRequestState {
 }
 
 class UpdateRequestParamsUpdate extends UpdateRequestState {
-  final UpdateRequestParams params;
-  const UpdateRequestParamsUpdate({required this.params});
-
-  @override
-  List<Object?> get props => [params];
+  const UpdateRequestParamsUpdate({required super.params});
 }

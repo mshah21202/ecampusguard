@@ -40,8 +40,6 @@ class UpdateRequestDataSource extends AsyncDataTableSource {
             DataCell(Text(request.userPermit?.user?.name ?? 'N/A')),
             DataCell(Text(request.updatedVehicle?.plateNumber ?? 'N/A')),
             DataCell(Text(request.phoneNumber)),
-            DataCell(Text(request.phoneNumberCountry)),
-            DataCell(Text(request.drivingLicenseImgPath ?? 'N/A')),
             DataCell(
               UpdateRequestStatusChip(
                 status: request.status ?? UpdateRequestStatus.unknownDefaultOpenApi, 
