@@ -45,43 +45,45 @@ class NotificationsListDialog extends StatelessWidget {
                   ),
                 ],
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: notifications.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    visualDensity: VisualDensity.comfortable,
-                    onTap: () {
-                      context.pop();
-                      onNotificationRead(index);
-                      showDialog(
-                        useRootNavigator: false,
-                        context: context,
-                        builder: (context) => NotificationDetailsDialog(
-                          notification: notifications[index],
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: notifications.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      visualDensity: VisualDensity.comfortable,
+                      onTap: () {
+                        context.pop();
+                        onNotificationRead(index);
+                        showDialog(
+                          useRootNavigator: false,
+                          context: context,
+                          builder: (context) => NotificationDetailsDialog(
+                            notification: notifications[index],
+                          ),
+                        );
+                      },
+                      isThreeLine: true,
+                      leading: SizedBox(
+                        height: double.infinity,
+                        child: Icon(
+                          notifications[index].read!
+                              ? Icons.check_circle
+                              : Icons.circle,
+                          color: notifications[index].read!
+                              ? null
+                              : Theme.of(context).colorScheme.primary,
+                          size: 22,
                         ),
-                      );
-                    },
-                    isThreeLine: true,
-                    leading: SizedBox(
-                      height: double.infinity,
-                      child: Icon(
-                        notifications[index].read!
-                            ? Icons.check_circle
-                            : Icons.circle,
-                        color: notifications[index].read!
-                            ? null
-                            : Theme.of(context).colorScheme.primary,
-                        size: 22,
                       ),
-                    ),
-                    minLeadingWidth: 25,
-                    title: Text(notifications[index].title!),
-                    subtitle: Text(notifications[index].body!),
-                    trailing: Text(DateFormat("dd/MM/y\nh:m a")
-                        .format(notifications[index].timestamp!)),
-                  );
-                },
+                      minLeadingWidth: 25,
+                      title: Text(notifications[index].title!),
+                      subtitle: Text(notifications[index].body!),
+                      trailing: Text(DateFormat("dd/MM/y\nh:m a")
+                          .format(notifications[index].timestamp!)),
+                    );
+                  },
+                ),
               )
             ].addElementBetweenElements(
               SizedBox(
