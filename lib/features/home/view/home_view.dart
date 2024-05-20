@@ -3,8 +3,8 @@ import 'package:ecampusguard/features/home/view/widgets/permit_application_statu
 import 'package:ecampusguard/features/home/view/widgets/permit_status.dart';
 import 'package:ecampusguard/features/home/view/widgets/previous_permits.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
-import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/app_bar.dart';
+import 'package:ecampusguard/global/widgets/background_logo.dart';
 import 'package:ecampusguard/global/widgets/drawer.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
 import 'package:ecampusguard/global/widgets/responsive.dart';

@@ -11,6 +11,7 @@ import 'package:ecampusguard/features/gatestaff/area_screen/view/area_screen_vie
 import 'package:ecampusguard/features/gatestaff/home_gatestaff/home_gatestaff.dart';
 import 'package:ecampusguard/features/login/view/login_page.dart';
 import 'package:ecampusguard/features/home/view/home_page.dart';
+import 'package:ecampusguard/features/notifications/cubit/notifications_cubit.dart';
 import 'package:ecampusguard/features/register/register.dart';
 import 'package:ecampusguard/features/user_permit_applications/user_permit_applications.dart';
 import 'package:ecampusguard/features/user_permit_details/user_permit_details.dart';
@@ -41,230 +42,243 @@ GoRouter appRouter({
             return const RegisterPage();
           },
         ),
-        GoRoute(
-          path: homeRoute,
-          builder: (context, state) {
-            return const HomePage();
-          },
-          redirect: (context, state) {
-            switch (authCubit.role) {
-              case Role.user:
-                return null;
-              case Role.admin:
-                return adminHomeRoute;
-              case Role.gateStaff:
-                return gateStaffHomeRoute;
-              default:
-                return homeRoute;
-            }
+        ShellRoute(
+          builder: (context, state, child) {
+            return BlocProvider(
+              create: (_) => NotificationsCubit(),
+              child: child,
+            );
           },
           routes: [
             GoRoute(
-              path: applyForPermitRoute,
+              path: homeRoute,
               builder: (context, state) {
-                return const ApplyForPermitPage();
+                return const HomePage();
               },
-            ),
-            GoRoute(
-              path: userPermitDetailsRoute,
-              builder: (context, state) {
-                return const UserPermitDetailsPage();
-              },
-            ),
-            ShellRoute(
-              builder: (context, state, child) {
-                PermitApplicationsParams params =
-                    PermitApplicationsParams.fromUri(state.uri);
-                return BlocProvider(
-                  create: (_) => UserPermitApplicationsCubit(
-                    params: params.toString().isNotEmpty ? params : null,
-                  ),
-                  child: child,
-                );
+              redirect: (context, state) {
+                switch (authCubit.role) {
+                  case Role.user:
+                    return null;
+                  case Role.admin:
+                    return adminHomeRoute;
+                  case Role.gateStaff:
+                    return gateStaffHomeRoute;
+                  default:
+                    return homeRoute;
+                }
               },
               routes: [
                 GoRoute(
-                    path: userApplicationsRoute,
-                    builder: (context, state) {
-                      return const UserPermitApplicationsListView();
-                    },
-                    routes: [
-                      GoRoute(
-                        path: userApplicationDetailsRoute,
-                        builder: (context, state) {
-                          int id = int.parse(state.pathParameters["id"]!);
-
-                          return UserPermitApplicationDetails(
-                            applicationId: id,
-                          );
-                        },
+                  path: applyForPermitRoute,
+                  builder: (context, state) {
+                    return const ApplyForPermitPage();
+                  },
+                ),
+                GoRoute(
+                  path: userPermitDetailsRoute,
+                  builder: (context, state) {
+                    return const UserPermitDetailsPage();
+                  },
+                ),
+                ShellRoute(
+                  builder: (context, state, child) {
+                    PermitApplicationsParams params =
+                        PermitApplicationsParams.fromUri(state.uri);
+                    return BlocProvider(
+                      create: (_) => UserPermitApplicationsCubit(
+                        params: params.toString().isNotEmpty ? params : null,
                       ),
-                    ]),
-              ],
-            ),
-          ],
-        ),
-        GoRoute(
-          path: adminHomeRoute,
-          redirect: (context, state) {
-            switch (authCubit.role) {
-              case Role.user:
-                return homeRoute;
-              case Role.admin:
-                return null;
-              case Role.gateStaff:
-                return gateStaffHomeRoute;
-              default:
-                return homeRoute;
-            }
-          },
-          builder: (context, state) {
-            return const HomeAdminPage();
-          },
-          routes: [
-            ShellRoute(
-              builder: (context, state, child) {
-                PermitApplicationsParams params =
-                    PermitApplicationsParams.fromUri(state.uri);
-                return BlocProvider(
-                  create: (_) => PermitApplicationsCubit(params: params),
-                  child: child,
-                );
-              },
-              routes: [
-                GoRoute(
-                  path: adminApplicationsRoute,
-                  builder: (context, state) {
-                    return const PermitApplicationsListView();
+                      child: child,
+                    );
                   },
                   routes: [
                     GoRoute(
-                      path: adminApplicationDetailsRoute,
-                      builder: (context, state) {
-                        int id = int.parse(state.pathParameters["id"]!);
-                        return PermitApplicationDetailsView(applicationId: id);
-                      },
-                    )
-                  ],
-                ),
-              ],
-            ),
-            ShellRoute(
-              builder: (context, state, child) {
-                return BlocProvider(
-                  create: (_) => AreasCubit(),
-                  child: child,
-                );
-              },
-              routes: [
-                GoRoute(
-                  path: adminAreasRoute,
-                  builder: (context, state) {
-                    return const AreasListView();
-                  },
-                  routes: [
-                    GoRoute(
-                      path: adminAreaDetailsRoute,
-                      builder: (context, state) {
-                        int? id =
-                            int.tryParse(state.pathParameters["id"] ?? "");
-                        return AreaDetailsView(areaId: id);
-                      },
-                    ),
-                    GoRoute(
-                      path: adminCreateAreaRoute,
-                      builder: (context, state) {
-                        return const AreaDetailsView();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            ShellRoute(
-              builder: (context, state, child) {
-                return BlocProvider(
-                  create: (_) => PermitsCubit(),
-                  child: child,
-                );
-              },
-              routes: [
-                GoRoute(
-                  path: adminPermitsRoute,
-                  builder: (context, state) {
-                    return const PermitsListView();
-                  },
-                  routes: [
-                    GoRoute(
-                      path: adminPermitDetailsRoute,
-                      builder: (context, state) {
-                        int? id =
-                            int.tryParse(state.pathParameters["id"] ?? "");
-                        return PermitDetailsView(permitId: id);
-                      },
-                    ),
-                    GoRoute(
-                      path: adminCreatePermitRoute,
-                      builder: (context, state) {
-                        return const PermitDetailsView();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            ShellRoute(
-              builder: (context, state, child) {
-                UserPermitsParams params = UserPermitsParams.fromUri(state.uri);
-                return BlocProvider(
-                  create: (_) => UserPermitsCubit(params: params),
-                  child: child,
-                );
-              },
-              routes: [
-                GoRoute(
-                  path: adminUserPermitsRoute,
-                  builder: (context, state) {
-                    return const UserPermitsListView();
-                  },
-                  routes: [
-                    GoRoute(
-                      path: adminUserPermitDetailsRoute,
-                      builder: (context, state) {
-                        int? id =
-                            int.tryParse(state.pathParameters["id"] ?? "");
-                        return UserPermitDetailsView(
-                          userPermitId: id!,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-        GoRoute(
-          path: gateStaffHomeRoute,
-          builder: (context, state) {
-            return const HomeGatestaffPage();
-          },
-          routes: [
-            ShellRoute(
-              builder: (context, state, child) {
-                int id = int.parse(state.pathParameters["id"] ?? "");
+                        path: userApplicationsRoute,
+                        builder: (context, state) {
+                          return const UserPermitApplicationsListView();
+                        },
+                        routes: [
+                          GoRoute(
+                            path: userApplicationDetailsRoute,
+                            builder: (context, state) {
+                              int id = int.parse(state.pathParameters["id"]!);
 
-                return BlocProvider(
-                  create: (context) => AreaScreenCubit(areaId: id),
-                  child: child,
-                );
+                              return UserPermitApplicationDetails(
+                                applicationId: id,
+                              );
+                            },
+                          ),
+                        ]),
+                  ],
+                ),
+              ],
+            ),
+            GoRoute(
+              path: adminHomeRoute,
+              redirect: (context, state) {
+                switch (authCubit.role) {
+                  case Role.user:
+                    return homeRoute;
+                  case Role.admin:
+                    return null;
+                  case Role.gateStaff:
+                    return gateStaffHomeRoute;
+                  default:
+                    return homeRoute;
+                }
+              },
+              builder: (context, state) {
+                return const HomeAdminPage();
               },
               routes: [
-                GoRoute(
-                  path: "$gateStaffAreaScreenRoute/$gateStaffAreaScreenIdRoute",
-                  builder: (context, state) {
-                    return const AreaScreenView();
+                ShellRoute(
+                  builder: (context, state, child) {
+                    PermitApplicationsParams params =
+                        PermitApplicationsParams.fromUri(state.uri);
+                    return BlocProvider(
+                      create: (_) => PermitApplicationsCubit(params: params),
+                      child: child,
+                    );
                   },
+                  routes: [
+                    GoRoute(
+                      path: adminApplicationsRoute,
+                      builder: (context, state) {
+                        return const PermitApplicationsListView();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: adminApplicationDetailsRoute,
+                          builder: (context, state) {
+                            int id = int.parse(state.pathParameters["id"]!);
+                            return PermitApplicationDetailsView(
+                                applicationId: id);
+                          },
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                ShellRoute(
+                  builder: (context, state, child) {
+                    return BlocProvider(
+                      create: (_) => AreasCubit(),
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminAreasRoute,
+                      builder: (context, state) {
+                        return const AreasListView();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: adminAreaDetailsRoute,
+                          builder: (context, state) {
+                            int? id =
+                                int.tryParse(state.pathParameters["id"] ?? "");
+                            return AreaDetailsView(areaId: id);
+                          },
+                        ),
+                        GoRoute(
+                          path: adminCreateAreaRoute,
+                          builder: (context, state) {
+                            return const AreaDetailsView();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                ShellRoute(
+                  builder: (context, state, child) {
+                    return BlocProvider(
+                      create: (_) => PermitsCubit(),
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminPermitsRoute,
+                      builder: (context, state) {
+                        return const PermitsListView();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: adminPermitDetailsRoute,
+                          builder: (context, state) {
+                            int? id =
+                                int.tryParse(state.pathParameters["id"] ?? "");
+                            return PermitDetailsView(permitId: id);
+                          },
+                        ),
+                        GoRoute(
+                          path: adminCreatePermitRoute,
+                          builder: (context, state) {
+                            return const PermitDetailsView();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                ShellRoute(
+                  builder: (context, state, child) {
+                    UserPermitsParams params =
+                        UserPermitsParams.fromUri(state.uri);
+                    return BlocProvider(
+                      create: (_) => UserPermitsCubit(params: params),
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: adminUserPermitsRoute,
+                      builder: (context, state) {
+                        return const UserPermitsListView();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: adminUserPermitDetailsRoute,
+                          builder: (context, state) {
+                            int? id =
+                                int.tryParse(state.pathParameters["id"] ?? "");
+                            return UserPermitDetailsView(
+                              userPermitId: id!,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            GoRoute(
+              path: gateStaffHomeRoute,
+              builder: (context, state) {
+                return const HomeGatestaffPage();
+              },
+              routes: [
+                ShellRoute(
+                  builder: (context, state, child) {
+                    int id = int.parse(state.pathParameters["id"] ?? "");
+
+                    return BlocProvider(
+                      create: (context) => AreaScreenCubit(areaId: id),
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path:
+                          "$gateStaffAreaScreenRoute/$gateStaffAreaScreenIdRoute",
+                      builder: (context, state) {
+                        return const AreaScreenView();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
