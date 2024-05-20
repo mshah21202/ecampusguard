@@ -1,7 +1,7 @@
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 
-Widget buildInfoBox({required String title, required String content, required BuildContext context}) { // Renamed function to avoid naming conflict
+Widget buildInfoBox({ required String content, required BuildContext context}) { 
   var theme = Theme.of(context);
   return Container(
     padding: const EdgeInsets.all(16),
@@ -19,12 +19,16 @@ Widget buildInfoBox({required String title, required String content, required Bu
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+        Row(
+          children: [
+            Text(
+              'Phone Number',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 2),
         SelectableText(
@@ -38,7 +42,7 @@ Widget buildInfoBox({required String title, required String content, required Bu
   );
 }
 
-Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext context}) { // Renamed function to avoid naming conflict
+Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext context}) { 
   var theme = Theme.of(context);
   if (vehicle == null) return const SizedBox.shrink();
   return Container(
@@ -59,9 +63,7 @@ Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext 
       children: [
         Text(
           'Vehicle Details',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontSize: 30,
-          ),
+          style: theme.textTheme.headlineSmall,
         ),
         const SizedBox(height: 20),
         Row(
@@ -70,9 +72,9 @@ Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildVehicleDetail('Plate Number', vehicle.plateNumber, context), // Added missing context parameter
-                  buildVehicleDetail('Nationality', vehicle.nationality, context), // Added missing context parameter
-                  buildVehicleDetail('Make', vehicle.make, context), // Added missing context parameter
+                  buildVehicleDetail('Plate Number', vehicle.plateNumber, context), 
+                  buildVehicleDetail('Nationality', vehicle.nationality, context), 
+                  buildVehicleDetail('Make', vehicle.make, context), 
                 ],
               ),
             ),
@@ -80,9 +82,9 @@ Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildVehicleDetail('Model', vehicle.model, context), // Added missing context parameter
-                  buildVehicleDetail('Year', vehicle.year.toString(), context), // Added missing context parameter
-                  buildVehicleDetail('Color', vehicle.color, context), // Added missing context parameter
+                  buildVehicleDetail('Model', vehicle.model, context), 
+                  buildVehicleDetail('Year', vehicle.year.toString(), context), 
+                  buildVehicleDetail('Color', vehicle.color, context), 
                 ],
               ),
             ),
@@ -93,7 +95,7 @@ Widget buildVehicleInfoBox({required VehicleDto? vehicle, required BuildContext 
   );
 }
 
-Widget buildVehicleDetail(String title, String content, BuildContext context) { // Renamed function to avoid naming conflict
+Widget buildVehicleDetail(String title, String content, BuildContext context) { 
   var theme = Theme.of(context);
   return Padding(
     padding: const EdgeInsets.only(bottom: 8.0),

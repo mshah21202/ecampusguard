@@ -96,7 +96,7 @@ class _UpdateRequestDetailsViewState extends State<UpdateRequestDetailsView> {
                               ),
                             ),
                             buildInfoBox(
-                              title: 'Phone Number',
+                          
                               content:
                                   '${cubit.updaterequest?.phoneNumber} (${cubit.updaterequest?.phoneNumberCountry})',
                             context:context,
