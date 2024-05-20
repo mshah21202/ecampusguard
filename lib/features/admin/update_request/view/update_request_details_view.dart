@@ -1,6 +1,8 @@
 import 'package:ecampusguard/features/admin/update_request/view/widgets/update_request_chip.dart';
+import 'package:ecampusguard/global/extensions/button_extension.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
 import 'package:ecampusguard/global/widgets/full_screen_loading.dart';
+import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -74,14 +76,17 @@ class _UpdateRequestDetailsViewState extends State<UpdateRequestDetailsView> {
                               children: <Widget>[
                                 SelectableText(
                                   "${cubit.updaterequest!.userPermit!.user!.name!}'s Update Request",
-                                  style: theme.textTheme.headlineLarge?.copyWith(
-                                      color: theme.colorScheme.onBackground),
+                                  style: theme.textTheme.headlineLarge
+                                      ?.copyWith(
+                                          color:
+                                              theme.colorScheme.onBackground),
                                 ),
                                 Row(
                                   children: [
                                     SelectableText(
                                       "Status: ",
-                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
                                         fontSize: 20,
                                       ),
                                     ),
@@ -96,32 +101,45 @@ class _UpdateRequestDetailsViewState extends State<UpdateRequestDetailsView> {
                               ),
                             ),
                             buildInfoBox(
-                          
                               content:
                                   '${cubit.updaterequest?.phoneNumber} (${cubit.updaterequest?.phoneNumberCountry})',
-                            context:context,
+                              context: context,
                             ),
                             buildVehicleInfoBox(
                               vehicle: cubit.updaterequest!.updatedVehicle,
-                              context:context,
+                              context: context,
                             ),
                             Wrap(
                               spacing: 12,
                               runSpacing: 12,
                               children: [
                                 FilledButton.icon(
-                                  onPressed: () {
-                                    // cubit.acceptRequest(requestId);
-                                    context.pop();
-                                  },
+                                  onPressed: cubit.updaterequest!.status! ==
+                                          UpdateRequestStatus.Pending
+                                      ? () {
+                                          cubit
+                                              .onSubmitResponse(
+                                                widget.requestId,
+                                                true,
+                                              )
+                                              .then((value) => context.pop());
+                                        }
+                                      : null,
                                   icon: const Icon(Icons.check),
                                   label: const Text("Accept"),
                                 ),
-                                FilledButton.tonalIcon(
-                                  onPressed: () {
-                                    // cubit.rejectRequest(requestId);
-                                    context.pop();
-                                  },
+                                ErrorFilledButton.tonalIcon(
+                                  onPressed: cubit.updaterequest!.status! ==
+                                          UpdateRequestStatus.Pending
+                                      ? () {
+                                          cubit
+                                              .onSubmitResponse(
+                                                widget.requestId,
+                                                false,
+                                              )
+                                              .then((value) => context.pop());
+                                        }
+                                      : null,
                                   icon: const Icon(Icons.close),
                                   label: const Text("Reject"),
                                 ),
@@ -146,6 +164,4 @@ class _UpdateRequestDetailsViewState extends State<UpdateRequestDetailsView> {
       ),
     );
   }
-
-
 }

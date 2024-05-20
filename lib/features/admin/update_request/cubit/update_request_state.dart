@@ -34,36 +34,19 @@ class UpdateRequestLoading extends UpdateRequestState {}
 class UpdateRequestEmpty extends UpdateRequestState {}
 
 class UpdateRequestLoaded extends UpdateRequestState {
-  const UpdateRequestLoaded({super.requests,super.request});
-}
-
-class UpdateRequestAccepted extends UpdateRequestState {
-  final String message;
-  const UpdateRequestAccepted(this.message, Object object);
-
-  @override
-  List<Object> get props => [message];
-}
-
-class UpdateRequestRejected extends UpdateRequestState {
-  final String message;
-  const UpdateRequestRejected(this.message, Object object);
-
-  @override
-  List<Object> get props => [message];
+  const UpdateRequestLoaded({
+    super.requests,
+    super.request,
+    super.snackBarMessage,
+  });
 }
 
 class UpdateRequestError extends UpdateRequestState {
-  final String errorMessage;
-  const UpdateRequestError(this.errorMessage);
-
-  @override
-  List<Object> get props => [errorMessage];
+  const UpdateRequestError({super.snackBarMessage});
 }
 
 class UpdateRequestRowSelection extends UpdateRequestState {
   const UpdateRequestRowSelection({super.selectedRequests});
-
 }
 
 class RowTappedState extends UpdateRequestState {

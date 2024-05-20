@@ -71,7 +71,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
             pageSize: count,
           );
       if (result.data == null) {
-        emit(const UpdateRequestError("Failed to fetch update requests"));
+        emit(UpdateRequestError(snackBarMessage: result.statusMessage));
         return [];
       }
       var pagination = jsonDecode(result.headers["pagination"]!.join(","));
@@ -80,8 +80,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       emit(UpdateRequestLoaded(requests: result.data));
       return result.data!;
     } catch (e) {
-      emit(UpdateRequestError(
-          "Failed to fetch update requests: ${e.toString()}"));
+      emit(UpdateRequestError(snackBarMessage: e.toString()));
       return [];
     }
   }
@@ -93,50 +92,38 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
           .getUserPermitApi()
           .userPermitUpdateRequestsIdGet(id: requestId!);
       if (result.data != null) {
-        emit(const UpdateRequestLoaded());
         updaterequest = result.data!;
+        emit(const UpdateRequestLoaded());
       }
     } catch (e) {
       emit(UpdateRequestError(
-          "Failed to load request details: ${e.toString()}"));
+          snackBarMessage: "Failed to load request details: ${e.toString()}"));
     }
   }
 
-  void acceptRequest(int requestId) async {
+  Future<void> onSubmitResponse(int requestId, bool accept) async {
     emit(UpdateRequestLoading());
     try {
       var result = await _api
           .getUserPermitApi()
-          .userPermitUpdateRequestsIdResponsePost(id: requestId, accept: true);
+          .userPermitUpdateRequestsIdResponsePost(
+              id: requestId, accept: accept);
       if (result.data?.responseCode == ResponseCode.Success) {
-        emit(UpdateRequestAccepted("Request accepted successfully.",
-            result.data!.message ?? "Request has been accepted."));
-        dataSource.refreshDatasource();
+        emit(UpdateRequestLoaded(
+          snackBarMessage: result.data!.message.toString(),
+        ));
       } else {
         emit(UpdateRequestError(
-            "Failed to accept request: ${result.data?.message ?? 'Unknown error'}"));
+          snackBarMessage:
+              "Failed to accept request: ${result.data?.message ?? 'Unknown error'}",
+        ));
       }
+      dataSource.refreshDatasource();
     } catch (e) {
-      emit(UpdateRequestError("Failed to accept request: ${e.toString()}"));
-    }
-  }
-
-  void rejectRequest(int requestId) async {
-    emit(UpdateRequestLoading());
-    try {
-      var result = await _api
-          .getUserPermitApi()
-          .userPermitUpdateRequestsIdResponsePost(id: requestId, accept: false);
-      if (result.data?.responseCode == ResponseCode.Success) {
-        emit(UpdateRequestRejected("Request rejected successfully.",
-            result.data!.message ?? "Request has been rejected."));
-        dataSource.refreshDatasource();
-      } else {
-        emit(UpdateRequestError(
-            "Failed to reject request: ${result.data?.message ?? 'Unknown error'}"));
-      }
-    } catch (e) {
-      emit(UpdateRequestError("Failed to reject request: ${e.toString()}"));
+      emit(
+        UpdateRequestError(
+            snackBarMessage: "Failed to accept request: ${e.toString()}"),
+      );
     }
   }
 
@@ -176,10 +163,12 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       );
 
       if (!result) {
-        emit(const UpdateRequestError("Browser prevented this action"));
+        emit(const UpdateRequestError(
+            snackBarMessage: "Browser prevented this action"));
       }
     } else {
-      emit(const UpdateRequestError("Could not find path to file"));
+      emit(const UpdateRequestError(
+          snackBarMessage: "Could not find path to file"));
     }
   }
 }
