@@ -44,12 +44,6 @@ class _PermitApplicationStatusWidgetState
         var cubit = context.read<HomeCubit>();
         if (state is! LoadingHomeState) {
           return Container(
-              // FIXME: We want the height of container to be as small as possible
-              // height: MediaQuery.of(context).size.height *
-              //     (ResponsiveWidget.isLargeScreen(context) ||
-              //             ResponsiveWidget.isMediumScreen(context)
-              //         ? 0.27
-              //         : 0.45),
               decoration: BoxDecoration(
                 color: theme.colorScheme.background,
                 borderRadius: BorderRadius.circular(25.0),
@@ -64,9 +58,7 @@ class _PermitApplicationStatusWidgetState
               child: ResponsiveWidget.isLargeScreen(context) ||
                       ResponsiveWidget.isMediumScreen(context)
                   ? IntrinsicHeight(
-                      // FIXME: We want the height of container to be as small as possible
                       child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween, FIXME: This was causing issues with sizes
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           // _PermitType(cubit, theme),
@@ -118,37 +110,17 @@ class _PermitApplicationStatusWidgetState
               ),
             ),
             if (cubit.permitApplication != null)
-              // FIXME: Row was missing here.
               Row(
                 children: [
                   Text(
                     'Status: ',
-                    style: theme
-                        .textTheme.titleLarge, // FIXME: Used predefined theme.
+                    style: theme.textTheme.titleLarge,
                   ),
                   PermitApplicationStatusChip(
                     status: cubit.permitApplication!.status!,
                   ),
                 ],
               ),
-            //
-            // FIXME: This belongs in the _applicationActions, it is a button.
-            // if (cubit.permitApplication ==
-            //     null)
-            //   FilledButton(
-            //     style: FilledButton.styleFrom(
-            //       backgroundColor: theme.colorScheme.primary,
-            //       foregroundColor: theme.colorScheme.onPrimary,
-            //       padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(30),
-            //       ),
-            //     ),
-            //     onPressed: () {
-            //       // do amth
-            //     },
-            //     child: Text('Apply Now'),
-            //   ),
           ].addElementBetweenElements(
             const SizedBox(
               height: 8,
@@ -185,24 +157,13 @@ class _PermitApplicationStatusWidgetState
         ),
         child: Padding(
           padding: const EdgeInsets.all(
-            24.0, // FIXME: This needs to be the same amount of the _applicationDetails.
+            24.0,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // FIXME: This was placed in the permitDetails.
               if (cubit.permitApplication == null)
                 FilledButton(
-                  // FIXME: No need to style.
-                  // style: FilledButton.styleFrom(
-                  //   backgroundColor: theme.colorScheme.primary,
-                  //   foregroundColor: theme.colorScheme.onPrimary,
-                  //   padding: const EdgeInsets.symmetric(
-                  //       horizontal: 32, vertical: 16),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(30),
-                  //   ),
-                  // ),
                   onPressed: () {
                     context.go("$homeRoute$applyForPermitRoute");
                   },

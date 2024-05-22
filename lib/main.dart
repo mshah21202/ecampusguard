@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: child ?? Center());
+                    child: child ?? const Center());
               });
             },
             title: 'ecampusguard',

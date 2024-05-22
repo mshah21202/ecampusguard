@@ -7,6 +7,7 @@ import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -132,7 +133,9 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
         drivingLicenseImgUrl = await file.getDownloadURL();
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -145,7 +148,9 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
         carRegistrationImgUrl = await file.getDownloadURL();
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

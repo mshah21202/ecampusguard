@@ -10,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:multiselect/multiselect.dart';
 
 class PersonalDetailsForm extends StatefulWidget {
-  PersonalDetailsForm({
+  const PersonalDetailsForm({
     super.key,
   });
 

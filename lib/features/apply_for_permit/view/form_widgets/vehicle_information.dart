@@ -33,7 +33,6 @@ class VehicleDetailsForm extends StatelessWidget {
             builder: (context, state) {
           cubit = context.read<ApplyForPermitCubit>();
           return DropdownMenu(
-            // TODO: Change this to dropdownbuttonformfield for validator
             menuHeight: MediaQuery.of(context).size.height * 0.5,
             onSelected: (country) {
               cubit.setSelectedCarNationality(

@@ -27,7 +27,7 @@ class ApplyForPermitView extends StatefulWidget {
 
 class _ApplyForPermitViewState extends State<ApplyForPermitView> {
   final List<Widget> formFields = [
-    PersonalDetailsForm(),
+    const PersonalDetailsForm(),
     const VehicleDetailsForm(),
     const PermitInformationForm(),
     const Acknowledgement(),

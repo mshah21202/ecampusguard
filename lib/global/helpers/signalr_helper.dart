@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 class SignalRHelper {
@@ -56,7 +57,9 @@ class SignalRHelper {
     });
 
     hubConnection.onclose(({error}) {
-      print("Connection Closed: $error");
+      if (kDebugMode) {
+        print("Connection Closed: $error");
+      }
       connected = false;
       if (onClose != null) {
         onClose!(error: error);
@@ -65,7 +68,9 @@ class SignalRHelper {
 
     hubConnection.onreconnecting(
       ({error}) {
-        print("Connection Reconnecting: $error");
+        if (kDebugMode) {
+          print("Connection Reconnecting: $error");
+        }
 
         connected = false;
         if (onReconnecting != null) {
@@ -76,7 +81,9 @@ class SignalRHelper {
 
     hubConnection.onreconnected(
       ({connectionId}) {
-        print("Connection Reconnected: $connected");
+        if (kDebugMode) {
+          print("Connection Reconnected: $connected");
+        }
         connected = true;
         if (onReconnected != null) {
           onReconnected!(connectionId: connectionId);
