@@ -11,4 +11,5 @@ class RegisterCubit extends Cubit<RegisterState> {
   final nameController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailController = TextEditingController();
 }

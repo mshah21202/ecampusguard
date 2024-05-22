@@ -55,10 +55,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  void register(
-      {required String name,
-      required String username,
-      required String password}) async {
+  void register({
+    required String name,
+    required String username,
+    required String password,
+    required String email,
+  }) async {
     try {
       emit(LoadingAuthentication());
       var result = await _api.getAuthenticationApi().authenticationRegisterPost(
@@ -66,6 +68,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
               name: name,
               username: username,
               password: password,
+              email: email,
             ),
           );
 

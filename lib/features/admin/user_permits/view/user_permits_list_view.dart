@@ -69,6 +69,7 @@ class UserPermitsListView extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             showDialog(
+                              useRootNavigator: false,
                               context: context,
                               builder: (context) {
                                 return UserPermitFilterDialog(

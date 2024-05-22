@@ -87,6 +87,26 @@ class RegisterForm extends StatelessWidget {
                         textInputAction: TextInputAction.next,
                       ),
                       TextFormField(
+                        controller: registerCubit.emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.email),
+                        ),
+                        validator: (value) {
+                          if (value == null || value == "") {
+                            return "This is required";
+                          }
+
+                          if (!RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
+                              .hasMatch(value)) {
+                            return "Enter a valid email";
+                          }
+
+                          return null;
+                        },
+                        textInputAction: TextInputAction.next,
+                      ),
+                      TextFormField(
                         controller: registerCubit.passwordController,
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -169,6 +189,7 @@ class RegisterForm extends StatelessWidget {
       name: registerCubit.nameController.text,
       username: registerCubit.usernameController.text,
       password: registerCubit.passwordController.text,
+      email: registerCubit.emailController.text,
     );
   }
 }
