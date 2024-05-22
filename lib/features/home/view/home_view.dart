@@ -62,7 +62,7 @@ class HomeView extends StatelessWidget {
                           const PermitStatusWidget(),
                         if (state.homeScreenDto!.homeScreenWidgets!
                             .contains(HomeScreenWidget.PreviousPermits))
-                          const PreviousPermits(permits: []),
+                          const PreviousPermits(),
                         if (state.homeScreenDto!.homeScreenWidgets!
                                 .contains(HomeScreenWidget.AccessLogs) &&
                             cubit.userPermit != null)

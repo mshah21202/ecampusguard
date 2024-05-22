@@ -37,9 +37,10 @@ class RegisterView extends StatelessWidget {
         );
       },
       listener: (BuildContext context, AuthenticationState state) {
-        if (state is RegisterFailedAuthentication && state.message != null) {
+        if (state is RegisterFailedAuthentication &&
+            state.snackbarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            appSnackBar((state).message!, context),
+            appSnackBar((state).snackbarMessage!, context),
           );
         }
       },

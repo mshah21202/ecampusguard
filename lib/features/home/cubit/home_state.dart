@@ -6,12 +6,14 @@ class HomeState extends Equatable {
     this.userPermit,
     this.homeScreenDto,
     this.snackbarMessage,
+    this.previousPermits,
   });
 
   final HomeScreenDto? homeScreenDto;
   final PermitApplicationInfoDto? permitApplication;
   final UserPermitDto? userPermit;
   final String? snackbarMessage;
+  final List<UserPermitDto>? previousPermits;
 
   @override
   List<Object?> get props => [
@@ -19,6 +21,7 @@ class HomeState extends Equatable {
         userPermit,
         homeScreenDto,
         snackbarMessage,
+        previousPermits,
       ];
 }
 
@@ -31,6 +34,7 @@ class LoadedHomeState extends HomeState {
     super.homeScreenDto,
     super.permitApplication,
     super.userPermit,
+    super.previousPermits,
   });
 }
 

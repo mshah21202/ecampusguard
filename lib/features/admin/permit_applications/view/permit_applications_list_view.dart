@@ -91,6 +91,7 @@ class _PermitApplicationsListViewState
                           IconButton(
                             onPressed: () {
                               showDialog(
+                                  useRootNavigator: false,
                                   context: context,
                                   builder: (context) {
                                     return ApplicationFilterDialog(

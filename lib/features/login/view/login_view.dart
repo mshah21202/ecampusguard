@@ -32,9 +32,10 @@ class LoginView extends StatelessWidget {
         );
       },
       listener: (BuildContext context, AuthenticationState state) {
-        if (state is LoginFailedAuthentication && state.message != null) {
+        if (state is LoginFailedAuthentication &&
+            state.snackbarMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            appSnackBar((state).message!, context),
+            appSnackBar((state).snackbarMessage!, context),
           );
         }
       },

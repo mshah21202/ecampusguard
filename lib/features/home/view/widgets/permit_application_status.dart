@@ -1,8 +1,10 @@
 import 'package:ecampusguard/features/home/cubit/home_cubit.dart';
 import 'package:ecampusguard/global/extensions/list_extension.dart';
+import 'package:ecampusguard/global/router/routes.dart';
 import 'package:ecampusguardapi/ecampusguardapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../global/widgets/responsive.dart';
 import '../../../admin/permit_applications/view/widgets/application_status_chip.dart';
@@ -202,7 +204,7 @@ class _PermitApplicationStatusWidgetState
                   //   ),
                   // ),
                   onPressed: () {
-                    // do amth
+                    context.go("$homeRoute$applyForPermitRoute");
                   },
                   child: const Text('Apply Now'),
                 ),
@@ -210,17 +212,9 @@ class _PermitApplicationStatusWidgetState
                   cubit.permitApplication!.status ==
                       PermitApplicationStatus.Pending)
                 FilledButton(
-                  // FIXME: No need to style.
-                  // style: FilledButton.styleFrom(
-                  //   backgroundColor: theme.colorScheme.primary,
-                  //   foregroundColor: theme.colorScheme.onPrimary,
-                  //   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(30),
-                  //   ),
-                  // ),
                   onPressed: () {
-                    //do smth
+                    context.go(
+                        "$homeRoute$userApplicationsRoute/${cubit.permitApplication!.id!}");
                   },
                   child: const Text('Check Application'),
                 ),
@@ -228,19 +222,8 @@ class _PermitApplicationStatusWidgetState
                   cubit.permitApplication!.status ==
                       PermitApplicationStatus.AwaitingPayment)
                 FilledButton(
-                  // FIXME: No need to style.
-                  // style: FilledButton.styleFrom(
-                  //   backgroundColor: theme.colorScheme.primary,
-                  //   foregroundColor: theme.colorScheme.onPrimary,
-                  //   padding: const EdgeInsets.symmetric(
-                  //       horizontal: 32, vertical: 16),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius:
-                  //         BorderRadius.circular(30), // Rounded corners
-                  //   ),
-                  // ),
                   onPressed: () {
-                    // do smth
+                    cubit.onPay();
                   },
                   child: const Text('Pay Now'),
                 ),

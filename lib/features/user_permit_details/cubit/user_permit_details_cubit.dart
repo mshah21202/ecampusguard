@@ -119,7 +119,7 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
       emit(UserPermitDetailsLoaded(userPermit: userPermit));
       return;
     } catch (e) {
-      emit(UserPermitDetailsError(snackbarMessage: e.toString()));
+      emit(const UserPermitDetailsError());
       return;
     }
   }

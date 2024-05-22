@@ -139,7 +139,7 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
 
   Future<void> onSubmit() async {
     emit(LoadingApplyForPermitState());
-    if (!formKey.currentState!.validate() && !acknowledged) {
+    if (!formKey.currentState!.validate() || !acknowledged) {
       emit(const FailedApplyForPermitState(
           snackBarMessage: "Please fill in the required fields"));
       return;
@@ -167,7 +167,6 @@ class ApplyForPermitCubit extends Cubit<ApplyForPermitState> {
                     plateNumber: plateNumberController.text,
                     registrationDocImgPath: carRegistrationImgUrl,
                     year: int.parse(carYearController.text)),
-                studentName: '',
               ));
 
       if (result.data == null) {

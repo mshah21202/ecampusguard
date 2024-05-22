@@ -15,6 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeScreenDto? homeScreenDto;
   UserPermitDto? userPermit;
   PermitApplicationInfoDto? permitApplication;
+  List<UserPermitDto> previousPermits = [];
 
   void _getHomeScreenWidgets() async {
     emit(LoadingHomeState());
@@ -43,11 +44,12 @@ class HomeCubit extends Cubit<HomeState> {
         emit(ErrorHomeState(snackbarMessage: result.statusMessage));
         return;
       }
-      // FIXME: This was missing which made the widget always display the the user had no application.
-      if (result.data!.first.status != PermitApplicationStatus.Denied) {
+      if (result.data!.isNotEmpty &&
+          result.data!.first.status != PermitApplicationStatus.Denied) {
         permitApplication = result.data!.first;
       }
       emit(LoadedHomeState(permitApplication: permitApplication));
+      fetchPreviousPermits();
       return;
     } catch (e) {
       emit(ErrorHomeState(snackbarMessage: e.toString()));
@@ -77,5 +79,29 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> getNotifications() async {}
+  void fetchPreviousPermits() async {
+    emit(LoadingHomeState());
+    try {
+      var result = await _api.getUserPermitsApi().userPermitsGet();
+
+      if (result.data == null) {
+        emit(ErrorHomeState(snackbarMessage: result.statusMessage));
+        return;
+      }
+
+      previousPermits = result.data!;
+      emit(LoadedHomeState(previousPermits: previousPermits));
+      return;
+    } catch (e) {
+      emit(ErrorHomeState(snackbarMessage: e.toString()));
+      return;
+    }
+  }
+
+  void onPay() async {
+    await _api
+        .getPermitApplicationApi()
+        .permitApplicationPayIdPost(id: permitApplication!.id!);
+    _getHomeScreenWidgets();
+  }
 }

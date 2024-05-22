@@ -28,7 +28,6 @@ class _UserPermitApplicationDetailsState
     extends State<UserPermitApplicationDetails> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final cubit = context.read<UserPermitApplicationsCubit>();
     cubit.applicationId = widget.applicationId;

@@ -22,6 +22,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   final Ecampusguardapi _api = GetIt.instance.get<Ecampusguardapi>();
   final SharedPreferences _prefs = GetIt.instance.get<SharedPreferences>();
   Role? role;
+  String? username;
 
   void login({required String username, required String password}) async {
     emit(LoadingAuthentication());
@@ -42,12 +43,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         // Set authentication object in api
         _setAuthentication(data.token);
 
-        emit(Authenticated());
+        emit(Authenticated(
+          username: username,
+          role: role,
+        ));
       } else {
-        emit(LoginFailedAuthentication(message: data.error.toString()));
+        emit(LoginFailedAuthentication(snackbarMessage: data.error.toString()));
       }
     } catch (e) {
-      emit(LoginFailedAuthentication(message: e.toString()));
+      emit(LoginFailedAuthentication(snackbarMessage: e.toString()));
     }
   }
 
@@ -58,13 +62,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(LoadingAuthentication());
       var result = await _api.getAuthenticationApi().authenticationRegisterPost(
-        headers: {"x-mock-response-name": "AlreadyRegistered"},
-        registerDto: RegisterDto(
-          name: name,
-          username: username,
-          password: password,
-        ),
-      );
+            registerDto: RegisterDto(
+              name: name,
+              username: username,
+              password: password,
+            ),
+          );
 
       if (result.data == null) {
         throw Exception(result.statusMessage);
@@ -76,12 +79,16 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         // Set authentication object in api
         _setAuthentication(data.token);
 
-        emit(Authenticated());
+        emit(Authenticated(
+          username: username,
+          role: role,
+        ));
       } else {
-        emit(RegisterFailedAuthentication(message: data.error.toString()));
+        emit(RegisterFailedAuthentication(
+            snackbarMessage: data.error.toString()));
       }
     } catch (e) {
-      emit(RegisterFailedAuthentication(message: e.toString()));
+      emit(RegisterFailedAuthentication(snackbarMessage: e.toString()));
     }
   }
 
@@ -121,7 +128,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     _setAuthentication(token);
 
-    emit(Authenticated());
+    emit(Authenticated(
+      username: username,
+      role: role,
+    ));
     return true;
   }
 
@@ -145,6 +155,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       _prefs.setString(USER_TOKEN_KEY, token);
 
       var roleToken = JwtDecoder.decode(token)["role"];
+      var usernameToken = JwtDecoder.decode(token)["unique_name"].toString();
+
+      username = usernameToken;
 
       switch (roleToken as String) {
         case "Admin":
@@ -162,6 +175,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     } else {
       _prefs.remove(USER_TOKEN_KEY);
       role = null;
+      username = null;
 
       (_api.dio.interceptors
                   .firstWhere((element) => element is BearerAuthInterceptor)

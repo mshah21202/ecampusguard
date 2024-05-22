@@ -1,28 +1,38 @@
 part of 'authentication_cubit.dart';
 
 class AuthenticationState extends Equatable {
-  const AuthenticationState();
+  const AuthenticationState({
+    this.snackbarMessage,
+    this.role,
+    this.username,
+  });
+
+  final String? snackbarMessage;
+  final String? username;
+  final Role? role;
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+        snackbarMessage,
+        username,
+        role,
+      ];
 }
 
 class AuthenticationInitial extends AuthenticationState {}
 
 class LoadingAuthentication extends AuthenticationState {}
 
-class Authenticated extends AuthenticationState {}
+class Authenticated extends AuthenticationState {
+  const Authenticated({required super.username, required super.role});
+}
 
 class LoginFailedAuthentication extends AuthenticationState {
-  const LoginFailedAuthentication({this.message});
-
-  final String? message;
+  const LoginFailedAuthentication({super.snackbarMessage});
 }
 
 class RegisterFailedAuthentication extends AuthenticationState {
-  const RegisterFailedAuthentication({this.message});
-
-  final String? message;
+  const RegisterFailedAuthentication({super.snackbarMessage});
 }
 
 class Unauthenticated extends AuthenticationState {}

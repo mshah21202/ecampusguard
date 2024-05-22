@@ -12,6 +12,7 @@ import 'package:ecampusguard/global/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../apply_for_permit.dart';
 
@@ -104,14 +105,16 @@ class _ApplyForPermitViewState extends State<ApplyForPermitView> {
                         children: [
                           FilledButton.icon(
                             onPressed: () {
-                              cubit.onSubmit();
+                              cubit.onSubmit().then((value) => context.pop());
                             },
                             label: const Text("Send Application"),
                             icon: const Icon(Icons.check),
                           ),
                           const SizedBox(width: 25),
                           OutlinedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pop();
+                            },
                             label: const Text("Cancel & Exit"),
                             icon: const Icon(Icons.close),
                           )

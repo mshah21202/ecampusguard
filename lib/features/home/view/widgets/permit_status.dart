@@ -125,7 +125,8 @@ class _PermitStatusWidgetState extends State<PermitStatusWidget> {
                       "Update Details",
                     ),
                   ),
-                if (cubit.userPermit!.status == UserPermitStatus.Expired)
+                if (cubit.userPermit!.status == UserPermitStatus.Expired ||
+                    cubit.userPermit!.status == UserPermitStatus.Withdrawn)
                   FilledButton(
                     onPressed: () {
                       context.go("$homeRoute$applyForPermitRoute");

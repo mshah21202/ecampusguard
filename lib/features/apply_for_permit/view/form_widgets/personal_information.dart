@@ -1,5 +1,6 @@
 import 'package:ecampusguard/features/apply_for_permit/cubit/apply_for_permit_cubit.dart';
 import 'package:ecampusguard/features/apply_for_permit/view/form_widgets/form_fields.dart';
+import 'package:ecampusguard/features/authentication/cubit/authentication_cubit.dart';
 import 'package:ecampusguard/global/services/phone_number_validator.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,10 +9,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multiselect/multiselect.dart';
 
-class PersonalDetailsForm extends StatelessWidget {
+class PersonalDetailsForm extends StatefulWidget {
   PersonalDetailsForm({
     super.key,
   });
+
+  @override
+  State<PersonalDetailsForm> createState() => _PersonalDetailsFormState();
+}
+
+class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
+  @override
+  void initState() {
+    super.initState();
+    var cubit = context.read<ApplyForPermitCubit>();
+    var authCubit = context.read<AuthenticationCubit>();
+
+    cubit.studentIdController.text = authCubit.username ?? "";
+  }
 
   final GlobalKey dropdownButtonKey = GlobalKey();
 
@@ -30,6 +45,7 @@ class PersonalDetailsForm extends StatelessWidget {
             label: Text("Student ID"),
             errorStyle: TextStyle(height: 0),
           ),
+          enabled: false,
           validator: (value) {
             if (value == null || value == "") {
               return "This is required";

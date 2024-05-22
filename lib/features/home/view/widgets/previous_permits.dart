@@ -1,76 +1,63 @@
-import 'package:ecampusguardapi/ecampusguardapi.dart';
+import 'package:ecampusguard/features/admin/user_permits/view/widgets/user_permit_status_chip.dart';
+import 'package:ecampusguard/features/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
-  class PreviousPermits extends StatelessWidget {
-  const PreviousPermits({super.key, required this.permits});
-
-  final List<PermitDto> permits;
+class PreviousPermits extends StatelessWidget {
+  const PreviousPermits({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Previous Permits',
-            style: TextStyle(
-              fontSize: 24,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        var permits = context.read<HomeCubit>().previousPermits;
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.background,
+            border: Border.all(
+                color: theme.colorScheme.outlineVariant,
+                strokeAlign: BorderSide.strokeAlignOutside),
+            borderRadius: BorderRadius.circular(12),
           ),
-        ),
-        Builder(builder: (context) {
-
-          //Student has no previous permit
-          if (permits.isEmpty) {
-            return const Center(
-              child: Text(
-                "You have no previous permits.",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: theme.colorScheme.surfaceVariant,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Text(
+                  "Previous Permits",
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
-            );
-          }
-
-          //Student has permits
-          else {
-            return Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: ListView.separated(
+              ListView.separated(
+                shrinkWrap: true,
                 itemCount: permits.length,
                 separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
-                  final permit = permits[index];
                   return ListTile(
-                    title: Text(permit.name ?? ""),
+                    dense: false,
+                    title: Text(permits[index].permit?.name ?? ""),
                     subtitle: Text(
-                        'Valid for ${permit.days} days - \$${permit.price!.toStringAsFixed(2)}'),
+                      "Expiry: ${DateFormat("dd/MM/yyy").format(permits[index].expiry!)}",
+                    ),
                     trailing:
-                        Text('Occupied: ${permit.occupied}/${permit.capacity}'),
+                        UserPermitStatusChip(status: permits[index].status!),
                   );
                 },
               ),
-            );
-          }
-        }
-        )
-      ],
+            ],
+          ),
+        );
+      },
     );
   }
 }
