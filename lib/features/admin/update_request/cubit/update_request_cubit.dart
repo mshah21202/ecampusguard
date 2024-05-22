@@ -63,8 +63,7 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
       int startIndex, int count) async {
     emit(UpdateRequestLoading());
     try {
-      var result = await _api.getUserPermitApi().userPermitUpdateRequestsGet(
-            id: null,
+      var result = await _api.getUserPermitsApi().userPermitsUpdateRequestsGet(
             permitId: params.userPermitId,
             status: params.status,
             pageNumber: startIndex ~/ count,
@@ -89,8 +88,8 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     emit(UpdateRequestLoading());
     try {
       var result = await _api
-          .getUserPermitApi()
-          .userPermitUpdateRequestsIdGet(id: requestId!);
+          .getUserPermitsApi()
+          .userPermitsUpdateRequestsIdGet(id: requestId!);
       if (result.data != null) {
         updaterequest = result.data!;
         emit(const UpdateRequestLoaded());
@@ -105,8 +104,8 @@ class UpdateRequestCubit extends Cubit<UpdateRequestState> {
     emit(UpdateRequestLoading());
     try {
       var result = await _api
-          .getUserPermitApi()
-          .userPermitUpdateRequestsIdResponsePost(
+          .getUserPermitsApi()
+          .userPermitsUpdateRequestsIdResponsePost(
               id: requestId, accept: accept);
       if (result.data?.responseCode == ResponseCode.Success) {
         emit(UpdateRequestLoaded(

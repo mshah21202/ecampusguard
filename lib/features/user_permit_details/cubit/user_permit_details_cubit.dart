@@ -108,7 +108,7 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
   void getUserPermit() async {
     emit(UserPermitDetailsLoading());
     try {
-      var result = await _api.getUserPermitApi().userPermitRelevantGet();
+      var result = await _api.getUserPermitsApi().userPermitsRelevantGet();
 
       if (result.data == null) {
         emit(UserPermitDetailsError(snackbarMessage: result.statusMessage));
@@ -160,7 +160,7 @@ class UserPermitDetailsCubit extends Cubit<UserPermitDetailsState> {
         await _uploadLicenseFile();
       }
 
-      var result = await _api.getUserPermitApi().updatePost(
+      var result = await _api.getUserPermitsApi().updatePost(
             validateStatus: (status) => true,
             createUpdateRequestDto: CreateUpdateRequestDto(
               phoneNumber:

@@ -57,7 +57,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchUserPermitDto() async {
     emit(LoadingHomeState());
     try {
-      var result = await _api.getUserPermitApi().userPermitRelevantGet();
+      var result = await _api.getUserPermitsApi().userPermitsRelevantGet();
 
       if (result.data == null) {
         emit(ErrorHomeState(snackbarMessage: result.statusMessage));

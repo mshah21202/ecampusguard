@@ -227,11 +227,6 @@ class AnplrWidget extends StatelessWidget {
             Row(
               children: <Widget>[
                 FilledButton.icon(
-                  onPressed: () {},
-                  label: const Text("View Camera"),
-                  icon: const Icon(Icons.camera_alt),
-                ),
-                OutlinedButton.icon(
                   onPressed: () {
                     showDialog(
                       useRootNavigator: false,

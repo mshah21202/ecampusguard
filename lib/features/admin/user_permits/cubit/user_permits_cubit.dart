@@ -100,7 +100,7 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
     try {
       if (userPermitId != null) {
         var result =
-            await _api.getUserPermitApi().userPermitIdGet(id: userPermitId!);
+            await _api.getUserPermitsApi().userPermitsIdGet(id: userPermitId!);
 
         if (result.data == null) {
           emit(UserPermitsError(snackbarMessage: result.statusMessage));
@@ -124,7 +124,7 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
   Future<List<UserPermitDto>> getUserPermits(int startIndex, int count) async {
     emit(UserPermitsLoading());
     try {
-      var result = await _api.getUserPermitApi().userPermitGet(
+      var result = await _api.getUserPermitsApi().userPermitsGet(
             pageNumber: params.currentPage ?? 0,
             pageSize: params.pageSize ?? 10,
             plateNumber: params.plateNumber,
@@ -153,7 +153,7 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
     emit(UserPermitsLoading());
     try {
       if (userPermitId != null) {
-        var result = await _api.getUserPermitApi().userPermitIdPost(
+        var result = await _api.getUserPermitsApi().userPermitsIdPost(
               id: userPermitId!,
               updateUserPermitDto: UpdateUserPermitDto(
                 permitId: newPermit?.id,
@@ -206,8 +206,8 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
     try {
       if (userPermitId != null) {
         var result = await _api
-            .getUserPermitApi()
-            .userPermitWithdrawIdPost(id: userPermitId!);
+            .getUserPermitsApi()
+            .userPermitsWithdrawIdPost(id: userPermitId!);
 
         if (result.data == null) {
           emit(UserPermitsError(snackbarMessage: result.statusMessage));
@@ -234,7 +234,7 @@ class UserPermitsCubit extends Cubit<UserPermitsState> {
   void onSendNotification({required String title, required String body}) async {
     emit(UserPermitsLoading());
     try {
-      var result = await _api.getUserPermitApi().userPermitNotificationIdPost(
+      var result = await _api.getUserPermitsApi().userPermitsNotificationIdPost(
           id: userPermitId!,
           notificationDto: NotificationDto(title: title, body: body));
 

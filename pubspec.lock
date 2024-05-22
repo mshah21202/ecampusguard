@@ -182,7 +182,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "142186dc141a2456b62f1200b43cf3b2110a3b62"
+      resolved-ref: "3997433fda571cc6ee20813be71c632d80dd9074"
       url: "https://github.com/mshah21202/ecampusguard_api.git"
     source: git
     version: "1.0.19"
