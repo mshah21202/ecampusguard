@@ -51,8 +51,10 @@ class ApplicationSummary extends StatelessWidget {
                     borderRadius: BorderRadius.circular(48),
                   ),
                   child: Icon(
-                    IconData(int.parse(applicationSummary.icon ?? "0"),
-                        fontFamily: 'MaterialIcons'),
+                    IconData(
+                      int.parse(applicationSummary.icon ?? "0"),
+                      fontFamily: 'MaterialIcons',
+                    ),
                     size: 32,
                     color: theme.colorScheme.onPrimaryContainer,
                   ),

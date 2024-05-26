@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecampusguard/features/authentication/authentication.dart';
 import 'package:ecampusguard/firebase_options.dart';
 import 'package:ecampusguard/global/router/router.dart';
@@ -18,7 +19,16 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   var getIt = GetIt.instance;
-  var api = Ecampusguardapi(basePathOverride: "https://localhost:7136");
+  var api = Ecampusguardapi(
+    dio: Dio(
+      BaseOptions(
+        baseUrl: "https://ecampusguardapi-the7i2jl6q-ez.a.run.app",
+        // baseUrl: "http://0.0.0.0:8080",
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 150),
+      ),
+    ),
+  );
   var phoneNumberValidator = PhoneNumberValidator();
   var prefs = await SharedPreferences.getInstance();
   setPathUrlStrategy();

@@ -73,8 +73,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
         "First Year",
         "Second Year",
         "Third Year",
-        "Forth Year",
-        "Fifth Year (Engineering Students)"
+        "Forth+ Year",
       ];
   List<Country> countries = [];
   PermitApplicationDto? permitApplication;
@@ -106,7 +105,7 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
     if (applicationsDataSource.selectionState == SelectionState.none) {
       selectedApplications = [];
     }
- 
+
     emit(PermitApplicationsRowSelection(
         selectedApplications: selectedApplications));
   }
@@ -239,7 +238,6 @@ class PermitApplicationsCubit extends Cubit<PermitApplicationsState> {
 
     emit(const LoadedPermitApplications());
   }
-
 
   void setQueryParams({
     required PermitApplicationsParams updatedParams,

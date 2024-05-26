@@ -68,17 +68,19 @@ class _PermitApplicationStatusWidgetState
                         ],
                       ),
                     )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        // _PermitType(cubit, theme),
-                        _applicationDetails(cubit, theme),
-                        _applicationActions(cubit, theme),
-                        // _applicationInfo(cubit, theme),
-                      ].addElementBetweenElements(
-                        SizedBox(
-                          height: ResponsiveWidget.xLargePadding(context),
+                  : IntrinsicHeight(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          // _PermitType(cubit, theme),
+                          _applicationDetails(cubit, theme),
+                          _applicationActions(cubit, theme),
+                          // _applicationInfo(cubit, theme),
+                        ].addElementBetweenElements(
+                          SizedBox(
+                            height: ResponsiveWidget.smallPadding(context),
+                          ),
                         ),
                       ),
                     ));
@@ -94,7 +96,7 @@ class _PermitApplicationStatusWidgetState
       flex: ResponsiveWidget.isLargeScreen(context) ||
               ResponsiveWidget.isMediumScreen(context)
           ? 4
-          : 12,
+          : 9,
       fit: FlexFit.tight,
       child: Padding(
         padding: const EdgeInsets.all(24.0),
