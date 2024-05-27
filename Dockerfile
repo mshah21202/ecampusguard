@@ -29,12 +29,13 @@ COPY . /app
 RUN flutter pub get --offline
 RUN flutter clean
 RUN flutter build web --release --no-tree-shake-icons
+RUN dart pub global activate webdev
 
 # Expose port
 EXPOSE 8080
 
 # make server startup script executable and start the web server
-RUN ["chmod", "+x", "/app/server/server.sh"]
+# RUN ["chmod", "+x", "/app/server/server.sh"]
 
-ENTRYPOINT [ "/app/server/server.sh"]
+ENTRYPOINT [ "webdev serve --release --no-launch-in-chrome --hostname 0.0.0.0"]
 
